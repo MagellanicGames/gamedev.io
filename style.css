@@ -42,7 +42,7 @@ body{
 	color: #d5c9c9;
 }
 
-img.notgallery{
+img{
 	border-radius: 8px;
 	max-width: 90%;
 }
@@ -51,36 +51,25 @@ a{
 	color: hotpink;
 }
 
-img.gallery{
-	/*border: 1px solid hotpink;
-    border-radius: 4px;*/
-    padding: 1px;
-    width: 95%;
-    height:50%;
+.paddingLeft{
+	padding-left: 10%;
 }
 
-div.gallery{
-	float: left;
-    width: 50%;
+.paddingRight{
+	padding-right: 10%;
 }
 
-img.gallery:hover {
-    /*border: 1px solid #68e9f8;*/
+.paddingBottom{
+	padding-bottom: 40px;
 }
 
-.container{
-	position: relative; 
-	top:50%; 
-	-webkit-transform: translateY(-50%);
-  	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-}
 
 .center{
-	padding-left: 200px;
+	padding-left: 10%;
+	padding-right: 10%;
 }
-.col-100 {width: 100%; float: left; padding: 10px;}
+.col-100 {width: 100%; float: left; padding: 20%;}
 .col-25 {width: 25%;float:left;}
-.col-75 {width: 75%;float:left; padding-bottom: 100px;}
+.col-75 {width: 75%;float:left; padding-left: 15%;padding-bottom: 100px;}
 .col-50 {width: 50%;float: left;}
 .col-50-right{width: 50%;float: right;}
