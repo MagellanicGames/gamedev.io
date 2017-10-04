@@ -1,7 +1,7 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var the_score = 0;
-
+var currentBulletDmg = 2;
 var zombieSpawnTimer = 3000;
 var keyboard = {
 	up:38,left:37,right:39,down:40
@@ -16,6 +16,8 @@ function Bullet(dir) {
 	this.pos = new vec(player.pos.x,player.pos.y,0);
 	this.speed = 20;
 	this.dir = dir;
+	this.dmg = currentBulletDmg;
+	this.destroy = false;
 }
 
 Bullet.prototype.draw = function(){
@@ -28,7 +30,7 @@ Bullet.prototype.draw = function(){
 			ctx.lineWidth = "1";
 			ctx.strokeStyle = "black";			
 			ctx.stroke();
-	ctx.closePath();
+	ctx.closePath();	
 }
 
 var zombieArray = [];
@@ -40,6 +42,7 @@ function Zombie(position){
 	this.speed = 1.5;
 	this.dir = new vec(0,1,0);
 	this.dead = false;
+	this.health = 10
 }
 
 Zombie.prototype.draw = function(){
@@ -55,6 +58,29 @@ Zombie.prototype.draw = function(){
 			ctx.strokeStyle = "black";			
 			ctx.stroke();
 	ctx.closePath();
+
+	for(i = 0; i < bulletsArray.length; i++){
+		var b = bulletsArray[i];
+		if(b != null){
+			if(this.withinBounds(b.pos)){
+				this.health -= b.dmg;
+				b.destroy = true;
+			}
+		}
+	}
+	if(this.health < 0){
+		this.dead = true;
+	}
+}
+
+Zombie.prototype.withinBounds = function(point){
+	if(point.x > this.pos.x && point.x < this.pos.x + this.size.x &&
+		point.y > this.pos.y && point.y < this.pos.y + this.size.y){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 var mouseClickPos = new vec(0,0,0);
@@ -135,7 +161,7 @@ function cleanUpBullets(){
 			continue;
 		}
 		if(bulletsArray[i].pos.x > canvas.width || bulletsArray[i].y > canvas.height
-			|| bulletsArray[i].pos.x < 0 || bulletsArray[i].y < 0){			
+			|| bulletsArray[i].pos.x < 0 || bulletsArray[i].y < 0 || bulletsArray[i].destroy == true){			
 				bulletsArray[i] = null;
 				bulletSlotsAvailable ++;
 		}		
@@ -148,7 +174,6 @@ function createNewBullet(dir){
 		bulletsArray.push(new Bullet(dir));
 		bulletSlotsAvailable --;
 	}
-	
 }
 
 function cleanUpZombies(){
@@ -213,6 +238,8 @@ function draw(){
 		}
 		
 	}
+
+
 	cleanUpBullets();
 	cleanUpZombies();
 	 //console.log("slots free: " + bulletSlotsAvailable);
