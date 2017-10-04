@@ -49,7 +49,7 @@ var border = {
 
 var player = {
 	color:"blue",
-	size:new vec(canvas.width/20,canvas.height/20,0),
+	size:new vec(canvas.width * 0.05,canvas.height * 0.05,0),
 	pos:new vec(canvasCenter.x,canvasCenter.y,0),
 
 	draw:function(){
@@ -114,8 +114,8 @@ function cleanUpBullets(){
 		
 }
 
-
 function createNewBullet(dir){
+	vecNormalise(dir);
 	if(bulletSlotsAvailable > 0 && bulletSlotsAvailable < 11){
 		bulletsArray.push(new Bullet(dir));
 		bulletSlotsAvailable --;
@@ -126,7 +126,7 @@ function createNewBullet(dir){
 function mousePos(event) {
     mouseClickPos.x = event.offsetX;
     mouseClickPos.y = event.offsetY; 
-    createNewBullet(new vec(1,1,0));   
+    createNewBullet(vecSub(mouseClickPos,player.pos));   
 }
 
 function draw(){	
@@ -154,7 +154,7 @@ function draw(){
 		
 	}
 	cleanUpBullets();
-	 console.log("slots free: " + bulletSlotsAvailable);
+	 //console.log("slots free: " + bulletSlotsAvailable);
 }
 
 setInterval(draw,10);
