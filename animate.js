@@ -2,7 +2,7 @@ var blinkOn = 1;
 var firstRun = 1;
 var element = document.getElementById("blink");
 
-var intervalTime = 400;
+var intervalTime = 200;
 var arrayPos = 0;
 
 var title = ["W",":","\\","M","a","g","e","l","l","a","n","i","c"," ","G","a","m","e","s"];
