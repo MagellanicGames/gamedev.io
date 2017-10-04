@@ -13,3 +13,5 @@ function Sound(src) {
         this.sound.pause();
     }
 } 
+
+var shotSound = new Sound("Sounds/shot.ogg");

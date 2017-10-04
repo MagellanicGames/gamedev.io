@@ -4,7 +4,9 @@ var the_score = 0;
 var currentBulletDmg = 2;
 var zombieSpawnTimer = 3000;
 
-var shotSound = new Sound("Sounds/shot.ogg");
+var drawTimer = setInterval(drawGame,10);
+var zombieTimer = setInterval(createNewZombie,zombieSpawnTimer);
+
 var keyboard = {
 	up:38,left:37,right:39,down:40
 };
@@ -14,82 +16,12 @@ var bulletsArray = [];
 var bulletSlotsAvailable = 10;
 var bulletSize = new vec(canvas.width * 0.005,canvas.width * 0.005,0);
 
-function Bullet(dir) {
-	this.pos = new vec(player.pos.x,player.pos.y,0);
-	this.speed = 20;
-	this.dir = dir;
-	this.dmg = currentBulletDmg;
-	this.destroy = false;
-}
-
-Bullet.prototype.draw = function(){
-	this.pos.x += this.dir.x * this.speed;
-	this.pos.y += this.dir.y * this.speed;
-	ctx.beginPath();
-			ctx.rect(this.pos.x,this.pos.y,bulletSize.x,bulletSize.y);			
-			ctx.fillStyle = "#0095DD";
-			ctx.fill();
-			ctx.lineWidth = "1";
-			ctx.strokeStyle = "black";			
-			ctx.stroke();
-	ctx.closePath();	
-}
-
 var zombieArray = [];
 var zombieSlotsAvailable = 25;
+var shotSound = new Sound("Sounds/shot.ogg");
 
-function Zombie(position){
-	this.pos = position;
-	this.size = new vec(canvas.width * 0.05,canvas.height * 0.05,0);
-	this.speed = 1.5;
-	this.dir = new vec(0,1,0);
-	this.dead = false;
-	this.health = 10
-}
-
-Zombie.prototype.draw = function(){
-	this.dir = vecSub(player.pos,this.pos);
-	vecNormalise(this.dir);
-	this.pos.x += this.dir.x * this.speed;
-	this.pos.y += this.dir.y * this.speed;
-	ctx.beginPath();
-			ctx.rect(this.pos.x,this.pos.y,this.size.x,this.size.y);			
-			ctx.fillStyle = "#0095DD";
-			ctx.fill();
-			ctx.lineWidth = "1";
-			ctx.strokeStyle = "black";			
-			ctx.stroke();
-	ctx.closePath();
-
-	for(i = 0; i < bulletsArray.length; i++){
-		var b = bulletsArray[i];
-		if(b != null){
-			if(this.withinBounds(b.pos)){
-				this.health -= b.dmg;
-				b.destroy = true;
-			}
-		}
-	}
-	if(this.health < 0){
-		this.dead = true;
-	}
-}
-
-Zombie.prototype.withinBounds = function(point){
-	if(point.x > this.pos.x && point.x < this.pos.x + this.size.x &&
-		point.y > this.pos.y && point.y < this.pos.y + this.size.y){
-		return true;
-	}
-	else{
-		return false;
-	}
-}
-
-var mouseClickPos = new vec(0,0,0);
 
 var canvasCenter = new vec(canvas.width / 2, canvas.height /2, 0);
-
-
 
 var border = {
 	color:"black",
@@ -124,97 +56,18 @@ var playerMoveDirection = {
 };
 
 
-
-$(document).keypress(function(e){	
-		if(e.keyCode == keyboard.down){
-			playerMoveDirection.down = true;
-		}
-		if(e.keyCode == keyboard.left ){
-			playerMoveDirection.left = true;
-		}
-		if(e.keyCode == keyboard.right){
-			playerMoveDirection.right = true;
-		}
-
-		if(e.keyCode == keyboard.up){
-			playerMoveDirection.up = true;
-		}
-	});
-
-$(document).keyup(function(e){
-		if(e.keyCode == keyboard.down){
-			playerMoveDirection.down = false;
-		}
-		if(e.keyCode == keyboard.left ){
-			playerMoveDirection.left = false;
-		}
-		if(e.keyCode == keyboard.right){
-			playerMoveDirection.right = false;
-		}
-
-		if(e.keyCode == keyboard.up){
-			playerMoveDirection.up = false;
-		}
-});
-
-function cleanUpBullets(){
-	for(i = 0; i < bulletsArray.length;i++){
-		if(bulletsArray[i] == null){
-			continue;
-		}
-		if(bulletsArray[i].pos.x > canvas.width || bulletsArray[i].y > canvas.height
-			|| bulletsArray[i].pos.x < 0 || bulletsArray[i].y < 0 || bulletsArray[i].destroy == true){			
-				bulletsArray[i] = null;
-				bulletSlotsAvailable ++;
-		}		
-	}		
-}
-
-function createNewBullet(dir){
-	vecNormalise(dir);
-	if(bulletSlotsAvailable > 0 && bulletSlotsAvailable < 11){
-		bulletsArray.push(new Bullet(dir));
-		bulletSlotsAvailable --;
-	}
-}
-
-function cleanUpZombies(){
-	for(i = 0; i < zombieArray.length; i++){
-
-		if(zombieArray[i] == null){
-			continue;
-		}
-		if(zombieArray[i].dead == true){
-			zombieArray[i] = null;
-			zombieSlotsAvailable ++;	
-			console.log("Zombie cleaned up.");
-		}
-	}
-}
-
-function createNewZombie(){
-	zombieSpawnTimer = (Math.Random * 10000) + 2000;
-	console.log("Zombie created.");
-	if(zombieSlotsAvailable > 0 && zombieSlotsAvailable < 26){
-		zombieArray.push(new Zombie(new vec(10,10,10)));
-		zombieSlotsAvailable --;
-		
-	}
-}
-
 function mousePos(event) {
     mouseClickPos.x = event.offsetX;
     mouseClickPos.y = event.offsetY; 
-    createNewBullet(vecSub(mouseClickPos,player.pos));   
+    createNewBullet(new vec(player.pos.x,player.pos.y,0),vecSub(mouseClickPos,player.pos));   
     shotSound.play();
 }
 
 
-
-function draw(){	
+function drawGame(){	
 	ctx.clearRect(0,0,canvas.width, canvas.height);
 
-	if(playerMoveDirection.up == true){
+	if(playerMoveDirection.up == true){ //controls called from controls.js
 		player.pos.y -= 1;
 	}
 	if(playerMoveDirection.down == true){
@@ -227,6 +80,8 @@ function draw(){
 		player.pos.x += 1;
 	}
 	document.getElementById("score").innerHTML = 'Score:' + the_score;
+	document.getElementById("health").innerHTML = 'Health:';
+	document.getElementById("ammo").innerHTML = 'Ammo:';
 	border.draw();
 	player.draw();
 
@@ -242,12 +97,17 @@ function draw(){
 		
 	}
 
-
-	cleanUpBullets();
-	cleanUpZombies();
+	cleanUpBullets(); //bullets.js
+	cleanUpZombies();//enemies.js
 	 //console.log("slots free: " + bulletSlotsAvailable);
 }
 
-
-var zombieTimer = setInterval(createNewZombie,zombieSpawnTimer);
-var drawTimer = setInterval(draw,10);
+function drawStartMenu(){
+	ctx.clearRect(0,0,canvas.width, canvas.height);
+	ctx.beginPath();
+			ctx.rect(player.pos.x,player.pos.y,player.size.x,player.size.y);
+			ctx.lineWidth = 4;
+			ctx.strokeStyle = "#f4a742";
+			ctx.stroke();
+		ctx.closePath();
+}

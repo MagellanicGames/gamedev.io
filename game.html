@@ -4,8 +4,10 @@
 		<meta charset="UTF-8"> 	
 		<title>Zombies</title>
 		<script src="js/jquery.js"> </script>
-		<script src="js/vec.js"></script>
-		<script src="js/sound.js"></script>
+		<script src="js/vec.js"></script>		
+		<script src="js/bullet.js"></script>
+		<script src="js/enemies.js"></script>
+		<script src="js/controls.js"></script>
 
 	</head>
 <body>
@@ -14,6 +16,9 @@
 			<tr>
 				<td><canvas id="myCanvas" onclick="mousePos(event)" width="1024" height="768"></canvas></td>
 				<td><label id="score"></label></td>
+				<td><label id="health"></label></td>
+				<td><label id="ammo"></label></td>
+				<script src="js/sound.js"></script>
 				<script src="js/zombies.js"></script>
 			</tr>
 		</table>
