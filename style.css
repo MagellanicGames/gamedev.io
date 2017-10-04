@@ -1,9 +1,9 @@
 h1.center{
-
-	text-align: center;
+	
+	/*text-align: center;*/
 	font-size: 4em;	
-	text-shadow: 2px 2px 5px blue;
-	color: #eff868;
+	/*text-shadow: 2px 2px 5px blue;*/
+	color: #38cc2a;
 }
 
 h2.center{
@@ -38,7 +38,7 @@ p{
 body{
 	/*background: url(bg.png) left top repeat;*/
 	background-color: #303533;
-	font-family: Verdana;
+	font-family: Courier;
 	color: #d5c9c9;
 }
 
