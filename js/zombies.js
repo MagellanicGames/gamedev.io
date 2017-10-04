@@ -6,10 +6,33 @@ var keyboard = {
 	up:38,left:37,right:39,down:40
 };
 
+function Bullet(dir) {
+	this.pos = new vec(player.pos.x,player.pos.y,0);
+	this.speed = 5;
+	this.dir = dir;
+}
+
+Bullet.prototype.draw = function(){
+	this.pos.x += this.dir.x * this.speed;
+	this.pos.y += this.dir.y * this.speed;
+	ctx.beginPath();
+			ctx.rect(this.pos.x,this.pos.y,bulletSize.x,bulletSize.y);			
+			ctx.fillStyle = "#0095DD";
+			ctx.fill();
+			ctx.lineWidth = "1";
+			ctx.strokeStyle = "black";			
+			ctx.stroke();
+	ctx.closePath();
+}
+
+var bulletsArray = [];
+var bulletSlotsAvailable = 10;
 
 var mouseClickPos = new vec(0,0,0);
 
 var canvasCenter = new vec(canvas.width / 2, canvas.height /2, 0);
+
+var bulletSize = new vec(canvas.width * 0.01,canvas.width * 0.01,0);
 
 var border = {
 	color:"black",
@@ -43,6 +66,8 @@ var playerMoveDirection = {
 	up:false,down:false,left:false,right:false
 };
 
+
+
 $(document).keypress(function(e){	
 		if(e.keyCode == keyboard.down){
 			playerMoveDirection.down = true;
@@ -75,12 +100,34 @@ $(document).keyup(function(e){
 		}
 });
 
-function mousePos(event) {
-    mouseClickPos.x = event.offsetX;
-    mouseClickPos.y = event.offsetY;
-    console.log("x coords: " + mouseClickPos.x + ", y coords: " + mouseClickPos.y);
+function cleanUpBullets(){
+	for(i = 0; i < bulletsArray.length;i++){
+		if(bulletsArray[i] == null){
+			continue;
+		}
+		if(bulletsArray[i].pos.x > canvas.width || bulletsArray[i].y > canvas.height
+			|| bulletsArray[i].pos.x < 0 || bulletsArray[i].y < 0){			
+				bulletsArray[i] = null;
+				bulletSlotsAvailable ++;
+		}		
+	}
+		
 }
 
+
+function createNewBullet(dir){
+	if(bulletSlotsAvailable > 0 && bulletSlotsAvailable < 11){
+		bulletsArray.push(new Bullet(dir));
+		bulletSlotsAvailable --;
+	}
+	
+}
+
+function mousePos(event) {
+    mouseClickPos.x = event.offsetX;
+    mouseClickPos.y = event.offsetY; 
+    createNewBullet(new vec(1,1,0));   
+}
 
 function draw(){	
 	ctx.clearRect(0,0,canvas.width, canvas.height);
@@ -100,6 +147,14 @@ function draw(){
 	document.getElementById("score").innerHTML = 'Score:' + the_score;
 	border.draw();
 	player.draw();
+	for(i = 0; i < bulletsArray.length;i++){
+		if(bulletsArray[i] != null){
+			bulletsArray[i].draw();
+		}
+		
+	}
+	cleanUpBullets();
+	 console.log("slots free: " + bulletSlotsAvailable);
 }
 
 setInterval(draw,10);
