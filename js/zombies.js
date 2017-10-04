@@ -3,6 +3,8 @@ var ctx = canvas.getContext("2d");
 var the_score = 0;
 var currentBulletDmg = 2;
 var zombieSpawnTimer = 3000;
+
+var shotSound = new Sound("Sounds/shot.ogg");
 var keyboard = {
 	up:38,left:37,right:39,down:40
 };
@@ -204,6 +206,7 @@ function mousePos(event) {
     mouseClickPos.x = event.offsetX;
     mouseClickPos.y = event.offsetY; 
     createNewBullet(vecSub(mouseClickPos,player.pos));   
+    shotSound.play();
 }
 
 
