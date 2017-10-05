@@ -61,10 +61,27 @@ function cleanUpZombies(){
 
 function createNewZombie(){
 	zombieSpawnTimer = (Math.Random * 10000) + 2000;
-	console.log("Zombie created.");
 	if(zombieSlotsAvailable > 0 && zombieSlotsAvailable < 26){
-		zombieArray.push(new Zombie(new vec(-10,-10,10)));
+		zombieArray.push(new Zombie(generateRandomSpawn()));
 		zombieSlotsAvailable --;
 		
 	}
+}
+
+
+function randomNumber(min,max){
+	return Math.random() * (max - min) + min;
+}
+
+function generateRandomSpawn(){
+	var x = randomNumber(0,1024);
+	var chance = randomNumber(0,100);
+	var y = 0;
+	if(chance < 50){
+		y = randomNumber(-300,0);
+	}
+	else if( chance > 50){
+		y = randomNumber(768,1068);
+	}	
+	return new vec(x,y,0);
 }
