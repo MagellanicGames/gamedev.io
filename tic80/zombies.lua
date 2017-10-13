@@ -3,6 +3,12 @@
 -- desc:   Kill the zombies
 -- script: lua
 
+sound={
+	shot=0,
+	hit=1,
+	playerHit=2
+}
+
 upSpr=17
 rightSpr=18
 downSpr=19
@@ -63,6 +69,10 @@ function createZ(x,y)
 	z.sprite=33
 	z.sprIndex=0
 	z.aniTimer=0
+	z.health=100
+	z.attackTimer=0
+	z.attackTime=0.5
+	z.attackDmg=8
 	return z
 end
 
@@ -89,13 +99,14 @@ function createBullet(x,y)
 	b.speed=4
 	b.destroy=false
 	b.area={x=currentArea.x,y=currentArea.y}
+	b.dmg=25
 	return b
 end
 
 function shoot()
 
 	if btn(5)and shotTimer>1 then
-		sfx(0,3*12+6,30)
+		sfx(sound.shot,3*12+6,25)
 		shotTimer=0
 		table.insert(bullets,createBullet(player.x,player.y))
 	end
@@ -198,7 +209,7 @@ end
 --------------------------------
 function chasePlayer(entity)	
 	
-	if withinCurrentArea(entity) == false then return end
+	if withinCurrentArea(entity) == false then return end --don't update unless entity is in same area as player
 
 	if entity.x<player.x then
 	 entity.x=entity.x+entity.speed
@@ -221,10 +232,24 @@ function chasePlayer(entity)
 		else entity.rot=2 end
 	end
 
-	local i=1
+	local i=1 ------------------------------------------------------------check if hit by a bullet
 	while i <=#bullets do
-		if withinBounds(entity,bullets[i].x,bullets[i].y) and withinSameArea(entity,bullets[i]) then bullets[i].destroy=true end
+		if withinBounds(entity,bullets[i].x,bullets[i].y) and withinSameArea(entity,bullets[i]) then
+		 entity.health=entity.health-bullets[i].dmg
+		 bullets[i].destroy=true		
+		 sfx(sound.hit,2*12+3,5,1) 
+		end
 		i=i+1
+	end
+
+	if entity.attackTimer>0 then entity.attackTimer=entity.attackTimer-deltaTime end
+
+	if withinBounds(entity,player.x,player.y) then ---------------------if within range, attack player
+		if entity.attackTimer<=0 then 
+			player.health=player.health-entity.attackDmg
+			entity.attackTimer=entity.attackTime
+			sfx(sound.playerHit,2*12+3,5,2) 		
+		end
 	end
 end
 -------------------------------------------------
@@ -278,24 +303,21 @@ function TIC()
 	move()
 	shoot()
 
-	
-	--chasePlayer(enemy)
-	--animateEntity(enemy)
-
-
-
 	shotTimer=shotTimer+deltaTime	
 	cls(0)
  	map(areaInTiles.w*currentArea.x,areaInTiles.h*currentArea.y,30,16)
-	spr(player.sprite,player.x,player.y,0)
-	--spr(enemy.sprite+enemy.sprIndex,enemy.x,enemy.y,0,1,0,enemy.rot)
+	spr(player.sprite,player.x,player.y,0)sfx(sound.hit,2*12+3,5,1) 	
 
 	local i=1
 	while i<=#entities do
 		chasePlayer(entities[i])
 		animateEntity(entities[i])
 		drawEntity(entities[i])
-		i=i+1
+		if entities[i].health<=0 then --if removed then don't need to increment index
+		 table.remove(entities,i) 
+		else
+		  i=i+1
+		end		
 	end
 	updateBullets()
 
