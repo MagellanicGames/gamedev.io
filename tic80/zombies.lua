@@ -7,10 +7,24 @@ Utils= {}
 
 particles={}
 
+sprites={
+	bullet=65
+}
+
 sound={
 	shot=0,
 	hit=1,
-	playerHit=2
+	playerHit=2,
+	misFire=3,
+	reload=4,
+	healthUp=5
+}
+
+colours={
+	red=6,
+	white=15,
+	yellow=14,
+	blue=13
 }
 
 upSpr=17
@@ -19,8 +33,6 @@ downSpr=19
 leftSpr=20
 
 FRAMETIME=0.5
-
-shotTimer=1
 
 currentArea={
 	x=0,y=0
@@ -38,14 +50,14 @@ buttons={
 }
 
 directions={
-	up={x=0,y=-1,degrees=0},
-	upRight={x=0.707106769,y=-0.707106769,degrees=45},
-	right={x=0.707106769,y=0,degrees=90},
-	downRight={x=0.707106769,y=0.707106769,degrees=90+45},
-	down={x=0,y=1,degrees=180},
-	downLeft={x=-0.707106769,y=0.707106769,degrees=180+45},
-	left={x=-1,y=0,degrees=180+90},
-	upLeft={x=-0.707106769,y=-0.707106769,degrees=360-45}
+	up={x=0,y=-1,degrees=0,sprIndex=0}, --sprIndex refers to a frame if it has multple orientations
+	upRight={x=0.707106769,y=-0.707106769,degrees=45,sprIndex=1}, --ie first sprite plus this index will give correct orientation
+	right={x=0.707106769,y=0,degrees=90,sprIndex=2},
+	downRight={x=0.707106769,y=0.707106769,degrees=90+45,sprIndex=3},
+	down={x=0,y=1,degrees=180,sprIndex=4},
+	downLeft={x=-0.707106769,y=0.707106769,degrees=180+45,sprIndex=5},
+	left={x=-1,y=0,degrees=180+90,sprIndex=6},
+	upLeft={x=-0.707106769,y=-0.707106769,degrees=360-45,sprIndex=7}
 }
 
 bullets={}
@@ -59,13 +71,15 @@ player={
 	speed=1,
 	sprite=upSpr,
 	health=100,
-	score=0
+	score=0,
+	shotTimer=0,
+	reloadTime=2
 }
 
 player.inventory={
 	ammo=40,
-	clipSize=10,
-	clip=10
+	clipSize=4,
+	clip=4
 }
 
 area={w=240,h=128}
@@ -128,15 +142,35 @@ function createBullet(x,y)
 	b.destroy=false
 	b.area={x=currentArea.x,y=currentArea.y}
 	b.dmg=25
+	b.firstSpr=49
 	return b
 end
 
 player.shoot=function()
 
-	if btn(5)and shotTimer>1 then
+	if btn(5)and player.shotTimer<0 and player.inventory.clip>0 then
 		sfx(sound.shot,3*12+6,25)
-		shotTimer=0
+		player.shotTimer=1
+		player.inventory.clip=player.inventory.clip-1
 		table.insert(bullets,createBullet(player.x,player.y))
+	end
+
+	if btn(5) and player.inventory.clip<1 and player.shotTimer<0 then
+	 sfx(sound.misFire,4*12+6,10)
+	 player.shotTimer=1
+	end
+
+end
+
+player.reload=function()
+	if btn(4) and player.inventory.ammo>0 and player.inventory.clip < player.inventory.clipSize then
+		local numBulletsNeeded=player.inventory.clipSize-player.inventory.clip
+		if player.inventory.ammo-numBulletsNeeded>-1 then 
+			player.inventory.ammo=player.inventory.ammo-numBulletsNeeded
+			player.inventory.clip=player.inventory.clip+numBulletsNeeded
+			player.shotTimer=player.reloadTime
+			sfx(sound.reload,4*12+6,20)
+		end
 	end
 end
 
@@ -233,8 +267,8 @@ Utils.keepTime = function()
 	deltaTime=(theTime-lastTime)/1000
 end
 -------------------------------------------------
-Utils.generateParticleHit=function(entity,bullet)
-	local numParticles=math.random(5,10)
+Utils.generateParticleHit=function(entity,bullet,colour)
+	local numParticles=math.random(10,20)
 	local i=1
 	while i<=numParticles do
 		local particle={}
@@ -245,8 +279,8 @@ Utils.generateParticleHit=function(entity,bullet)
 		particle.direction.x=math.cos(math.deg(particle.angle))
 		particle.direction.y=math.sin(math.deg(particle.angle))
 		particle.speed = math.random(1,2)
-		particle.lifetime=math.random(1,5) / 10
-		particle.colour=6
+		particle.lifetime=math.random(1,3) / 10
+		particle.colour=colour--6=red
 		table.insert(particles, particle)
 	i=i+1
 	end
@@ -295,7 +329,7 @@ function chasePlayer(entity)
 		 entity.health=entity.health-bullets[i].dmg
 		 bullets[i].destroy=true		
 		 entity.hasAggro=true
-		 Utils.generateParticleHit(entity,bullets[i])
+		 Utils.generateParticleHit(entity,bullets[i],colours.red)
 		 table.insert(floatingText,Utils.createFloatingText(entity.x,entity.y,bullets[i].dmg,15))
 		 sfx(sound.hit,2*12+3,5,1) 
 		end
@@ -334,7 +368,7 @@ function chasePlayer(entity)
 			player.health=player.health-entity.attackDmg
 			entity.attackTimer=entity.attackTime
 			sfx(sound.playerHit,2*12+3,5,2) 		
-			table.insert(floatingText,Utils.createFloatingText(player.x-4,player.y,"-"..entity.attackDmg,6))
+			table.insert(floatingText,Utils.createFloatingText(player.x-4,player.y,"-"..entity.attackDmg,colours.red))
 		end
 	end
 end
@@ -399,7 +433,7 @@ function updateBullets()
 			else
 			bullets[i].x=bullets[i].x + (bullets[i].direction.x * bullets[i].speed) --update
 			bullets[i].y=bullets[i].y + (bullets[i].direction.y * bullets[i].speed)
-			spr(49,bullets[i].x,bullets[i].y,0)
+			spr(bullets[i].firstSpr+bullets[i].direction.sprIndex,bullets[i].x,bullets[i].y,0,1,0,0,1,1)
 			i=i+1	
 			end			
 	end
@@ -407,8 +441,14 @@ function updateBullets()
 end
 ------------------------------------
 function drawHUD()
-	print("Health: "..player.health,0,area.h)
+	print("Health: "..player.health,0,area.h,colours.red)
 	print("Score: " ..player.score)
+	print("Ammo: "..player.inventory.ammo,area.w - 64,0,colours.blue)
+	local i=1
+	while i<=player.inventory.clip do
+		spr(sprites.bullet,(area.w/2) +(8*i),-1,0)
+		i=i+1
+	end
 	print("Kill the zombies",84,130)
 	--print("Time: ".. time()/1000)
 end
@@ -425,8 +465,9 @@ function TIC()
 	Utils.keepTime()
 	player.move()
 	player.shoot()
+	player.reload()
 
-	shotTimer=shotTimer+deltaTime	
+	player.shotTimer=player.shotTimer-deltaTime	
 	cls(0)
  	map(areaInTiles.w*currentArea.x,areaInTiles.h*currentArea.y,30,16)
 	spr(player.sprite,player.x,player.y,0)
