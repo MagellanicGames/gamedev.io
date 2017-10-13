@@ -24,7 +24,8 @@ colours={
 	red=6,
 	white=15,
 	yellow=14,
-	blue=13
+	blue=13,
+	green=11
 }
 
 upSpr=17
@@ -158,6 +159,7 @@ player.shoot=function()
 	if btn(5) and player.inventory.clip<1 and player.shotTimer<0 then
 	 sfx(sound.misFire,4*12+6,10)
 	 player.shotTimer=1
+	 table.insert(floatingText,Utils.createFloatingText(player.x,player.y,"Reload!!",colours.blue))
 	end
 
 end
@@ -440,6 +442,7 @@ function updateBullets()
 	
 end
 ------------------------------------
+flashTimer=0.5
 function drawHUD()
 	print("Health: "..player.health,0,area.h,colours.red)
 	print("Score: " ..player.score)
@@ -450,6 +453,16 @@ function drawHUD()
 		i=i+1
 	end
 	print("Kill the zombies",84,130)
+
+	flashTimer=flashTimer-deltaTime
+
+	if flashTimer<-0.5 then flashTimer=0.5 end
+	if #entities>0 then
+		if flashTimer>0 then print("!!Danger!!",area.w-50,130,colours.red) end 
+	else
+	 	print("Safe =D",area.w-50,130,colours.green)
+	end
+
 	--print("Time: ".. time()/1000)
 end
 --------------------------------------
