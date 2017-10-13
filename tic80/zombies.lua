@@ -47,7 +47,9 @@ buttons={
 	up=0,
 	down=1,
 	left=2,
-	right=3
+	right=3,
+	reload=4,
+	shoot=5
 }
 
 directions={
@@ -149,14 +151,14 @@ end
 
 player.shoot=function()
 
-	if btn(5)and player.shotTimer<0 and player.inventory.clip>0 then
+	if btn(buttons.shoot)and player.shotTimer<0 and player.inventory.clip>0 then
 		sfx(sound.shot,3*12+6,25)
 		player.shotTimer=1
 		player.inventory.clip=player.inventory.clip-1
 		table.insert(bullets,createBullet(player.x,player.y))
 	end
 
-	if btn(5) and player.inventory.clip<1 and player.shotTimer<0 then
+	if btn(buttons.shoot) and player.inventory.clip<1 and player.shotTimer<0 then
 	 sfx(sound.misFire,4*12+6,10)
 	 player.shotTimer=1
 	 table.insert(floatingText,Utils.createFloatingText(player.x,player.y,"Reload!!",colours.blue))
@@ -165,7 +167,7 @@ player.shoot=function()
 end
 
 player.reload=function()
-	if btn(4) and player.inventory.ammo>0 and player.inventory.clip < player.inventory.clipSize then
+	if btn(buttons.reload) and player.inventory.ammo>0 and player.inventory.clip < player.inventory.clipSize then
 		local numBulletsNeeded=player.inventory.clipSize-player.inventory.clip
 		if player.inventory.ammo-numBulletsNeeded>-1 then 
 			player.inventory.ammo=player.inventory.ammo-numBulletsNeeded
@@ -471,8 +473,8 @@ table.insert(entities,createZ(84,100))
 table.insert(entities,createZ(150,80))
 table.insert(entities,createZ(10,20))
 table.insert(entities,createZ(212,100))
-function TIC()
 
+function gameState()
 	if #entities==0 then currentAreaClear=true end
 
 	Utils.keepTime()
@@ -502,4 +504,37 @@ function TIC()
 
 	Utils.drawParticles()
 	drawHUD()	
+end
+
+
+titleXpos=(area.w/2)-print("Zombie Apocalyp-tic-80",area.w/2,area.h/2,colours.green)/2
+titleYpos=area.h/2
+startGame=false
+startTimer=1
+startTextColor=colours.green
+function startScreenState()
+	Utils.keepTime()
+	cls(0)
+	print("Zombie Apocalyp-tic-80",titleXpos,titleYpos,startTextColor)
+	print("Press A (Z key) to start!",titleXpos-4,titleYpos+32,colours.blue)
+	print("\'A\' to reload, \'B\' to shoot,  Arrows to move.",0,titleYpos+64)
+
+	if btn(buttons.reload) and startGame==false then
+	 startGame=true
+	 startTextColor=colours.red
+	 sfx(sound.healthUp,4*12+3,20,2)
+	end
+
+	if startGame then 
+		startTimer=startTimer-deltaTime	 
+	end
+	if startTimer<0 then currentState.run=gameState end
+end
+
+currentState={run=startScreenState}
+
+
+
+function TIC()		
+	currentState.run()	
 end
