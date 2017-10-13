@@ -3,6 +3,10 @@
 -- desc:   Kill the zombies
 -- script: lua
 
+Utils= {}
+
+particles={}
+
 sound={
 	shot=0,
 	hit=1,
@@ -34,14 +38,14 @@ buttons={
 }
 
 directions={
-	up={x=0,y=-1},
-	upRight={x=0.707106769,y=-0.707106769},
-	right={x=0.707106769,y=0},
-	downRight={x=0.707106769,y=0.707106769},
-	down={x=0,y=1},
-	downLeft={x=-0.707106769,y=0.707106769},
-	left={x=-1,y=0},
-	upLeft={x=-0.707106769,y=-0.707106769}
+	up={x=0,y=-1,degrees=0},
+	upRight={x=0.707106769,y=-0.707106769,degrees=45},
+	right={x=0.707106769,y=0,degrees=90},
+	downRight={x=0.707106769,y=0.707106769,degrees=90+45},
+	down={x=0,y=1,degrees=180},
+	downLeft={x=-0.707106769,y=0.707106769,degrees=180+45},
+	left={x=-1,y=0,degrees=180+90},
+	upLeft={x=-0.707106769,y=-0.707106769,degrees=360-45}
 }
 
 bullets={}
@@ -50,23 +54,31 @@ floatingText={}
 
 player={
 	x=96,y=24,
+	w=4,h=4,
 	direction=directions.up,
 	speed=1,
 	sprite=upSpr,
 	health=100,
 	score=0
-	}
+}
+
+player.inventory={
+	ammo=40,
+	clipSize=10,
+	clip=10
+}
 
 area={w=240,h=128}
 --display is 240x136
 
-function createFloatingText(x,y,val)
+Utils.createFloatingText = function(x,y,val,colour)
 	local text={}
 	text.x=x
 	text.y=y
 	text.val=val
 	text.lifeTime=1
 	text.speed=10
+	text.colour=colour
 	return text
 end
 
@@ -119,7 +131,7 @@ function createBullet(x,y)
 	return b
 end
 
-function shoot()
+player.shoot=function()
 
 	if btn(5)and shotTimer>1 then
 		sfx(sound.shot,3*12+6,25)
@@ -128,23 +140,23 @@ function shoot()
 	end
 end
 
-function move()
-	if btn(0) and not btn(1) and not btn(2) and not btn(3) then--up
+player.move=function()
+	if btn(buttons.up) and not btn(buttons.down) and not btn(buttons.left) and not btn(buttons.right) then--up
 	
 		player.direction=directions.up
 		player.sprite=upSpr
 	end
-	if btn(1) and not btn(0) and not btn(2) and not btn(3)then--down
+	if not btn(buttons.up) and btn(buttons.down) and not btn(buttons.left) and not btn(buttons.right) then--down
 	
 		player.direction=directions.down
 		player.sprite=downSpr
 	end
-	if btn(2) and not btn(1) and not btn(0) and not btn(3)then--left
+	if not btn(buttons.up) and not btn(buttons.down) and btn(buttons.left) and not btn(buttons.right)then--left
 	
 		player.direction=directions.left
 		player.sprite=leftSpr
 	end
-	if btn(3) and not btn(1) and not btn(2) and not btn(0)then--right
+	if not btn(buttons.up) and not btn(buttons.down) and not btn(buttons.left) and btn(buttons.right)then--right
 	 
 		player.direction=directions.right
 		player.sprite=rightSpr
@@ -215,11 +227,31 @@ lastTime=theTime
 deltaTime=0
 
 ------------------------------
-function keepTime()
+Utils.keepTime = function()
 	lastTime=theTime
 	theTime=time()
 	deltaTime=(theTime-lastTime)/1000
 end
+-------------------------------------------------
+Utils.generateParticleHit=function(entity,bullet)
+	local numParticles=math.random(5,10)
+	local i=1
+	while i<=numParticles do
+		local particle={}
+		particle.x=entity.x
+		particle.y=entity.y	
+		particle.angle=bullet.direction.degrees + (math.random(45,90)-45)
+		particle.direction={x=0,y=0}
+		particle.direction.x=math.cos(math.deg(particle.angle))
+		particle.direction.y=math.sin(math.deg(particle.angle))
+		particle.speed = math.random(1,2)
+		particle.lifetime=math.random(1,5) / 10
+		particle.colour=6
+		table.insert(particles, particle)
+	i=i+1
+	end
+end
+
 -----------------------------------------------
 function updateFloatingText()
 	if #floatingText<1 then return end
@@ -228,7 +260,7 @@ function updateFloatingText()
 		if floatingText[i].lifeTime>0 then 
 			floatingText[i].lifeTime=floatingText[i].lifeTime-deltaTime --countdown life time
 			floatingText[i].y=floatingText[i].y-(floatingText[i].speed*deltaTime)--move text
-			print(floatingText[i].val,floatingText[i].x,floatingText[i].y,15,true,1)--print text
+			print(floatingText[i].val,floatingText[i].x,floatingText[i].y,floatingText[i].colour,true,1)--print text
 			i=i+1
 		else
 		  table.remove(floatingText,i)
@@ -263,7 +295,8 @@ function chasePlayer(entity)
 		 entity.health=entity.health-bullets[i].dmg
 		 bullets[i].destroy=true		
 		 entity.hasAggro=true
-		 table.insert(floatingText,createFloatingText(entity.x,entity.y,bullets[i].dmg))
+		 Utils.generateParticleHit(entity,bullets[i])
+		 table.insert(floatingText,Utils.createFloatingText(entity.x,entity.y,bullets[i].dmg,15))
 		 sfx(sound.hit,2*12+3,5,1) 
 		end
 		i=i+1
@@ -301,6 +334,7 @@ function chasePlayer(entity)
 			player.health=player.health-entity.attackDmg
 			entity.attackTimer=entity.attackTime
 			sfx(sound.playerHit,2*12+3,5,2) 		
+			table.insert(floatingText,Utils.createFloatingText(player.x-4,player.y,"-"..entity.attackDmg,6))
 		end
 	end
 end
@@ -321,10 +355,38 @@ end
 function drawEntity(entity)
 	if withinCurrentArea(entity) == false then return end
 	spr(entity.sprite+entity.sprIndex,entity.x,entity.y,0,1,0,entity.rot)
+	Utils.drawHealthBar(entity,true)
 end
 ------------------------------------
-function drawHealthBar(entity)
+Utils.drawHealthBar=function(entity,above)
+	local barWidth=(entity.w * 3)
+	local barMissing=((100-entity.health) / 100) * barWidth
+	local sx=entity.x - entity.w
+	local y
+	if above then y=entity.y-entity.h else y=entity.y+entity.h * 2 end
+	local ex=sx + barWidth - barMissing
+	local colour=11
 
+	if entity.health<=50 then colour=9 end
+	if entity.health<=25 then colour=6 end 
+
+	line(sx,y,ex,y,colour)	
+end
+-------------------------------------------------
+Utils.drawParticles=function()
+	local i=1
+	while i<=#particles do	
+		local p=particles[i]
+		if p.lifetime>0 then
+			p.x=p.x + (p.direction.x*p.speed)
+			p.y=p.y + (p.direction.y*p.speed)
+			p.lifetime=p.lifetime-deltaTime
+			line(p.x,p.y,p.x,p.y,p.colour)
+			i=i+1
+		else
+	  		table.remove(particles,i)
+		end
+	end	
 end
 -------------------------------------------------
 function updateBullets()
@@ -360,15 +422,15 @@ function TIC()
 
 	if #entities==0 then currentAreaClear=true end
 
-	keepTime()
-	move()
-	shoot()
+	Utils.keepTime()
+	player.move()
+	player.shoot()
 
 	shotTimer=shotTimer+deltaTime	
 	cls(0)
  	map(areaInTiles.w*currentArea.x,areaInTiles.h*currentArea.y,30,16)
 	spr(player.sprite,player.x,player.y,0)
-
+	Utils.drawHealthBar(player,false)
 	local i=1
 	while i<=#entities do
 		chasePlayer(entities[i])
@@ -383,5 +445,7 @@ function TIC()
 	end
 	updateBullets()
 	updateFloatingText()
+
+	Utils.drawParticles()
 	drawHUD()	
 end
