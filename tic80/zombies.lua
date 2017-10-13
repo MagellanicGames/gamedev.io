@@ -313,10 +313,17 @@ function withinCurrentArea(entity)
 	end
 end
 -------------------------------------
+function aggroEntity(entity)
+	if entity.hasAggro==false then
+		table.insert(floatingText,Utils.createFloatingText(entity.x + entity.w,entity.y+8,"!",colours.red))	
+	end
+	entity.hasAggro=true
+end
+-------------------------------------
 function aggroed(entity)
 
 	if player.x>entity.x - entity.aggroDist and player.x< entity.x + entity.aggroDist and 
-		player.y>entity.y - entity.aggroDist and player.y<entity.y + entity.aggroDist then		
+		player.y>entity.y - entity.aggroDist and player.y<entity.y + entity.aggroDist then	
 		return true
 	else		
 		return false
@@ -331,8 +338,8 @@ function chasePlayer(entity)
 	while i <=#bullets do
 		if withinBounds(entity,bullets[i].x,bullets[i].y) and withinSameArea(entity,bullets[i]) then
 		 entity.health=entity.health-bullets[i].dmg
-		 bullets[i].destroy=true		
-		 entity.hasAggro=true
+		 bullets[i].destroy=true
+		 aggroEntity(entity)
 		 Utils.generateParticleHit(entity,bullets[i],colours.red)
 		 table.insert(floatingText,Utils.createFloatingText(entity.x,entity.y,bullets[i].dmg,15))
 		 sfx(sound.hit,2*12+3,5,1) 
@@ -340,7 +347,7 @@ function chasePlayer(entity)
 		i=i+1
 	end
 
-	if aggroed(entity)==true then entity.hasAggro=true end
+	if aggroed(entity)==true then aggroEntity(entity) end
 
 	if entity.hasAggro==false then return end --exit early if not aggroed
 
