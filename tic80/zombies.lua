@@ -22,6 +22,8 @@ currentArea={
 	x=0,y=0
 }
 
+currentAreaClear=false
+
 areaInTiles={w=30,h=16}
 
 buttons={
@@ -44,6 +46,7 @@ directions={
 
 bullets={}
 entities={}
+floatingText={}
 
 player={
 	x=96,y=24,
@@ -57,22 +60,35 @@ player={
 area={w=240,h=128}
 --display is 240x136
 
+function createFloatingText(x,y,val)
+	local text={}
+	text.x=x
+	text.y=y
+	text.val=val
+	text.lifeTime=1
+	text.speed=10
+	return text
+end
+
 function createZ(x,y)
 	local z={}
 	z.x=x
 	z.y=y
-	z.rot=0
+	z.rot=0 --rotation per tic80 api
 	z.speed=0.5
-	z.w=4
-	z.h=4
-	z.area={x=0,y=0}
-	z.sprite=33
-	z.sprIndex=0
-	z.aniTimer=0
+	z.w=4 --width
+	z.h=4 --height
+	z.area={x=0,y=0} --area that entity resides in
+	z.sprite=33 --index of the first animation frame
+	z.sprIndex=0 --current frame of animation
+	z.aniTimer=0 --timer for animations
 	z.health=100
-	z.attackTimer=0
-	z.attackTime=0.5
-	z.attackDmg=8
+	z.attackTimer=0 --timer for attacks
+	z.attackTime=0.5 --reset value for attack timer
+	z.attackDmg=8 
+	z.hasAggro=false
+	z.aggroDist=32 --distance player has to be before chasing/aggro
+	z.scoreValue=25
 	return z
 end
 
@@ -161,12 +177,17 @@ function move()
 end
 
 function changeArea()
+
 	if player.x>area.w then --move to next area to the right
-	 player.x=0
-	 currentArea.x=currentArea.x+1
+		if currentAreaClear then
+	 		player.x=0
+	 		currentArea.x=currentArea.x+1
+	 	else
+	 	  player.x=area.w
+	 	end
 	end
 	if player.x<0 then --move to next area to the left
-	 if currentArea.x>0 then
+	 if currentArea.x>0 and currentAreaClear then
 	 	player.x=area.w
 	 	currentArea.x=currentArea.x-1
 	 else
@@ -179,7 +200,7 @@ function changeArea()
 	 currentArea.y=currentArea.y+1
 	end 
 	if player.y<0 then --area to the top
-		if currentArea.y>0 then
+		if currentArea.y>0 and currentAreaClear then
 	 		player.y=area.h
 	 		currentArea.y=currentArea.y-1
 	 	else
@@ -199,6 +220,21 @@ function keepTime()
 	theTime=time()
 	deltaTime=(theTime-lastTime)/1000
 end
+-----------------------------------------------
+function updateFloatingText()
+	if #floatingText<1 then return end
+	local i=1
+	while i<= #floatingText do
+		if floatingText[i].lifeTime>0 then 
+			floatingText[i].lifeTime=floatingText[i].lifeTime-deltaTime --countdown life time
+			floatingText[i].y=floatingText[i].y-(floatingText[i].speed*deltaTime)--move text
+			print(floatingText[i].val,floatingText[i].x,floatingText[i].y,15,true,1)--print text
+			i=i+1
+		else
+		  table.remove(floatingText,i)
+		end
+	end
+end
 -------------------------------
 function withinCurrentArea(entity)
 	if entity.area.x ~= currentArea.x or entity.area.y ~= currentArea.y then return false
@@ -206,12 +242,38 @@ function withinCurrentArea(entity)
 	  return true
 	end
 end
+-------------------------------------
+function aggroed(entity)
+
+	if player.x>entity.x - entity.aggroDist and player.x< entity.x + entity.aggroDist and 
+		player.y>entity.y - entity.aggroDist and player.y<entity.y + entity.aggroDist then		
+		return true
+	else		
+		return false
+	end
+end
 --------------------------------
 function chasePlayer(entity)	
 	
 	if withinCurrentArea(entity) == false then return end --don't update unless entity is in same area as player
 
-	if entity.x<player.x then
+	local i=1 ------------------------------------------------------------check if hit by a bullet
+	while i <=#bullets do
+		if withinBounds(entity,bullets[i].x,bullets[i].y) and withinSameArea(entity,bullets[i]) then
+		 entity.health=entity.health-bullets[i].dmg
+		 bullets[i].destroy=true		
+		 entity.hasAggro=true
+		 table.insert(floatingText,createFloatingText(entity.x,entity.y,bullets[i].dmg))
+		 sfx(sound.hit,2*12+3,5,1) 
+		end
+		i=i+1
+	end
+
+	if aggroed(entity)==true then entity.hasAggro=true end
+
+	if entity.hasAggro==false then return end --exit early if not aggroed
+
+	if entity.x<player.x then ----------------------------move towards player
 	 entity.x=entity.x+entity.speed
 	end
 	if entity.x>player.x then
@@ -222,9 +284,9 @@ function chasePlayer(entity)
 	end
 	if entity.y>player.y then
 	 entity.y=entity.y-entity.speed
- end
-	
-	if math.abs(entity.x-player.x) > math.abs(entity.y-player.y) then
+ 	end
+
+ 	if math.abs(entity.x-player.x) > math.abs(entity.y-player.y) then --change rotation depending on pos compared to player
 		if entity.x > player.x then entity.rot=3
 		else entity.rot=1 end
 	else
@@ -232,17 +294,7 @@ function chasePlayer(entity)
 		else entity.rot=2 end
 	end
 
-	local i=1 ------------------------------------------------------------check if hit by a bullet
-	while i <=#bullets do
-		if withinBounds(entity,bullets[i].x,bullets[i].y) and withinSameArea(entity,bullets[i]) then
-		 entity.health=entity.health-bullets[i].dmg
-		 bullets[i].destroy=true		
-		 sfx(sound.hit,2*12+3,5,1) 
-		end
-		i=i+1
-	end
-
-	if entity.attackTimer>0 then entity.attackTimer=entity.attackTimer-deltaTime end
+	if entity.attackTimer>0 then entity.attackTimer=entity.attackTimer-deltaTime end --decrement attack timer
 
 	if withinBounds(entity,player.x,player.y) then ---------------------if within range, attack player
 		if entity.attackTimer<=0 then 
@@ -271,6 +323,10 @@ function drawEntity(entity)
 	spr(entity.sprite+entity.sprIndex,entity.x,entity.y,0,1,0,entity.rot)
 end
 ------------------------------------
+function drawHealthBar(entity)
+
+end
+-------------------------------------------------
 function updateBullets()
 
 	local i=1
@@ -290,14 +346,19 @@ end
 ------------------------------------
 function drawHUD()
 	print("Health: "..player.health,0,area.h)
+	print("Score: " ..player.score)
 	print("Kill the zombies",84,130)
-	print("Time: ".. time()/1000)
+	--print("Time: ".. time()/1000)
 end
 --------------------------------------
 
 table.insert(entities,createZ(84,100))
-
+table.insert(entities,createZ(150,80))
+table.insert(entities,createZ(10,20))
+table.insert(entities,createZ(212,100))
 function TIC()
+
+	if #entities==0 then currentAreaClear=true end
 
 	keepTime()
 	move()
@@ -306,7 +367,7 @@ function TIC()
 	shotTimer=shotTimer+deltaTime	
 	cls(0)
  	map(areaInTiles.w*currentArea.x,areaInTiles.h*currentArea.y,30,16)
-	spr(player.sprite,player.x,player.y,0)sfx(sound.hit,2*12+3,5,1) 	
+	spr(player.sprite,player.x,player.y,0)
 
 	local i=1
 	while i<=#entities do
@@ -314,12 +375,13 @@ function TIC()
 		animateEntity(entities[i])
 		drawEntity(entities[i])
 		if entities[i].health<=0 then --if removed then don't need to increment index
+			player.score=player.score+entities[i].scoreValue
 		 table.remove(entities,i) 
 		else
 		  i=i+1
 		end		
 	end
 	updateBullets()
-
+	updateFloatingText()
 	drawHUD()	
 end
