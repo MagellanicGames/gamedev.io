@@ -8,6 +8,16 @@ rightSpr=18
 downSpr=19
 leftSpr=20
 
+FRAMETIME=0.5
+
+shotTimer=1
+
+currentArea={
+	x=0,y=0
+}
+
+areaInTiles={w=30,h=16}
+
 buttons={
 	up=0,
 	down=1,
@@ -27,6 +37,7 @@ directions={
 }
 
 bullets={}
+entities={}
 
 player={
 	x=96,y=24,
@@ -40,22 +51,35 @@ player={
 area={w=240,h=128}
 --display is 240x136
 
-zombie={
-	x=84,y=100,
-	rot=0,
-	speed=0.5,
-	w=4,h=4
-}
+function createZ(x,y)
+	local z={}
+	z.x=x
+	z.y=y
+	z.rot=0
+	z.speed=0.5
+	z.w=4
+	z.h=4
+	z.area={x=0,y=0}
+	z.sprite=33
+	z.sprIndex=0
+	z.aniTimer=0
+	return z
+end
 
-function zombie.withinBounds(self,x,y)
-	if x>self.x-self.w and x<self.x+self.w and y>self.y-self.h and y<self.y+self.h then
+function withinSameArea(entity1,entity2)
+	if withinCurrentArea(entity1) and withinCurrentArea(entity2) then return true
+	else
+	  return false
+	end
+end
+
+function withinBounds(entity,x,y)
+	if x>entity.x-entity.w and x<entity.x+entity.w and y>entity.y-entity.h and y<entity.y+entity.h then
 		return true
 	else
 	   return false
 	 end 
 end
-
-shotTimer=1
 
 function createBullet(x,y)
 	local b={}
@@ -64,6 +88,7 @@ function createBullet(x,y)
 	b.direction=player.direction
 	b.speed=4
 	b.destroy=false
+	b.area={x=currentArea.x,y=currentArea.y}
 	return b
 end
 
@@ -119,23 +144,44 @@ function move()
 	
 		player.x = player.x + (player.direction.x * player.speed)
 		player.y = player.y + (player.direction.y * player.speed)
-	end
+	end	
 
-	if player.x>area.w then player.x=0 end
-	if player.x<0 then player.x=area.w end
-	if player.y>area.h then player.y=0 end
-	if player.y<0 then player.y=area.h end
+	changeArea()
 end
 
+function changeArea()
+	if player.x>area.w then --move to next area to the right
+	 player.x=0
+	 currentArea.x=currentArea.x+1
+	end
+	if player.x<0 then --move to next area to the left
+	 if currentArea.x>0 then
+	 	player.x=area.w
+	 	currentArea.x=currentArea.x-1
+	 else
+	   player.x=0
+	 end
+	end
 
-z=33
-zIndex=0
+	if player.y>area.h then--area to the bottom
+	 player.y=0
+	 currentArea.y=currentArea.y+1
+	end 
+	if player.y<0 then --area to the top
+		if currentArea.y>0 then
+	 		player.y=area.h
+	 		currentArea.y=currentArea.y-1
+	 	else
+	 	  player.y=0
+	 	end
+	end 
+end
+
 
 theTime=time()
 lastTime=theTime
 deltaTime=0
 
-aniTimer=0
 ------------------------------
 function keepTime()
 	lastTime=theTime
@@ -143,47 +189,61 @@ function keepTime()
 	deltaTime=(theTime-lastTime)/1000
 end
 -------------------------------
-function chasePlayer()	
+function withinCurrentArea(entity)
+	if entity.area.x ~= currentArea.x or entity.area.y ~= currentArea.y then return false
+	else
+	  return true
+	end
+end
+--------------------------------
+function chasePlayer(entity)	
 	
-	if zombie.x<player.x then
-	 zombie.x=zombie.x+zombie.speed
+	if withinCurrentArea(entity) == false then return end
+
+	if entity.x<player.x then
+	 entity.x=entity.x+entity.speed
 	end
-	if zombie.x>player.x then
-	 zombie.x=zombie.x-zombie.speed
+	if entity.x>player.x then
+	 entity.x=entity.x-entity.speed
 	end
-	if zombie.y<player.y then
-	 zombie.y=zombie.y+zombie.speed
+	if entity.y<player.y then
+	 entity.y=entity.y+entity.speed
 	end
-	if zombie.y>player.y then
-	 zombie.y=zombie.y-zombie.speed
+	if entity.y>player.y then
+	 entity.y=entity.y-entity.speed
  end
 	
-	if math.abs(zombie.x-player.x) > math.abs(zombie.y-player.y) then
-		if zombie.x > player.x then zombie.rot=3
-		else zombie.rot=1 end
+	if math.abs(entity.x-player.x) > math.abs(entity.y-player.y) then
+		if entity.x > player.x then entity.rot=3
+		else entity.rot=1 end
 	else
-		if zombie.y>player.y then zombie.rot=0
-		else zombie.rot=2 end
+		if entity.y>player.y then entity.rot=0
+		else entity.rot=2 end
 	end
 
 	local i=1
 	while i <=#bullets do
-		if zombie.withinBounds(zombie,bullets[i].x,bullets[i].y) then bullets[i].destroy=true end
+		if withinBounds(entity,bullets[i].x,bullets[i].y) and withinSameArea(entity,bullets[i]) then bullets[i].destroy=true end
 		i=i+1
 	end
 end
--------------------------------------
-function animateZombie()
-aniTimer=aniTimer+deltaTime
+-------------------------------------------------
+function animateEntity(entity)
+entity.aniTimer=entity.aniTimer+deltaTime
 	
-	if aniTimer > 0.5 then	
-		if zIndex==3 then
-		 zIndex=0
+	if entity.aniTimer > FRAMETIME then	
+		if entity.sprIndex==3 then
+		 entity.sprIndex=0
 		else
-			zIndex=zIndex+1
+			entity.sprIndex=entity.sprIndex+1
 		end
-		aniTimer=0
+		entity.aniTimer=0
 	end
+end
+-----------------------------------------------
+function drawEntity(entity)
+	if withinCurrentArea(entity) == false then return end
+	spr(entity.sprite+entity.sprIndex,entity.x,entity.y,0,1,0,entity.rot)
 end
 ------------------------------------
 function updateBullets()
@@ -209,22 +269,34 @@ function drawHUD()
 	print("Time: ".. time()/1000)
 end
 --------------------------------------
+
+table.insert(entities,createZ(84,100))
+
 function TIC()
 
 	keepTime()
 	move()
 	shoot()
-	chasePlayer()
-	animateZombie()
+
+	
+	--chasePlayer(enemy)
+	--animateEntity(enemy)
 
 
 
 	shotTimer=shotTimer+deltaTime	
 	cls(0)
- 	map(0,0,30,16)
+ 	map(areaInTiles.w*currentArea.x,areaInTiles.h*currentArea.y,30,16)
 	spr(player.sprite,player.x,player.y,0)
-	spr(z+zIndex,zombie.x,zombie.y,0,1,0,zombie.rot)
+	--spr(enemy.sprite+enemy.sprIndex,enemy.x,enemy.y,0,1,0,enemy.rot)
 
+	local i=1
+	while i<=#entities do
+		chasePlayer(entities[i])
+		animateEntity(entities[i])
+		drawEntity(entities[i])
+		i=i+1
+	end
 	updateBullets()
 
 	drawHUD()	
