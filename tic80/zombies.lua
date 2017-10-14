@@ -3,14 +3,6 @@
 -- desc:   Kill the zombies
 -- script: lua
 
-Utils= {}
-
-particles={}
-
-sprites={
-	bullet=65
-}
-
 sound={
 	shot=0,
 	hit=1,
@@ -28,20 +20,22 @@ colours={
 	green=11
 }
 
+currentArea={
+	x=0,y=0,
+	waves={},
+	numWaves=1,
+	currentWave=1,	
+	clear=false
+}
+
+sprites={bullet=65}
+
 upSpr=17
 rightSpr=18
 downSpr=19
 leftSpr=20
 
 FRAMETIME=0.5
-
-currentArea={
-	x=0,y=0
-}
-
-currentAreaClear=false
-
-areaInTiles={w=30,h=16}
 
 buttons={
 	up=0,
@@ -66,7 +60,36 @@ directions={
 bullets={}
 entities={}
 floatingText={}
+particles={}
 
+Waves={}
+Utils= {}
+
+area={w=240,h=128} --display is 240x136
+areaInTiles={w=30,h=16}
+
+spawnPoints={}
+spawnPoints[1]={x=-8,y=-8}
+spawnPoints[2]={x=area.w*0.5,y=-8}
+spawnPoints[3]={x=area.w+8,y=-8} --top
+spawnPoints[4]={x=-8,y=area.h*0.5}
+spawnPoints[5]={x=area.w+8,y=area.h*0.5} --middle
+spawnPoints[6]={x=-8,y=area.h+8}
+spawnPoints[7]={x=area.w*0.5,y=area.h+8}
+spawnPoints[8]={x=area.w+8,y=area.h+8}--bottom
+
+--------------------------------------------------------------------------------------------
+theTime=time()
+lastTime=theTime
+deltaTime=0
+
+Utils.keepTime = function()
+	lastTime=theTime
+	theTime=time()
+	deltaTime=(theTime-lastTime)/1000
+end
+
+-----------------------------------------------------------------------------------
 player={
 	x=96,y=24,
 	w=4,h=4,
@@ -85,70 +108,6 @@ player.inventory={
 	clip=4
 }
 
-area={w=240,h=128}
---display is 240x136
-
-Utils.createFloatingText = function(x,y,val,colour)
-	local text={}
-	text.x=x
-	text.y=y
-	text.val=val
-	text.lifeTime=1
-	text.speed=10
-	text.colour=colour
-	return text
-end
-
-function createZ(x,y)
-	local z={}
-	z.x=x
-	z.y=y
-	z.rot=0 --rotation per tic80 api
-	z.speed=0.5
-	z.w=4 --width
-	z.h=4 --height
-	z.area={x=0,y=0} --area that entity resides in
-	z.sprite=33 --index of the first animation frame
-	z.sprIndex=0 --current frame of animation
-	z.aniTimer=0 --timer for animations
-	z.health=100
-	z.attackTimer=0 --timer for attacks
-	z.attackTime=0.5 --reset value for attack timer
-	z.attackDmg=8 
-	z.hasAggro=false
-	z.aggroDist=32 --distance player has to be before chasing/aggro
-	z.scoreValue=25
-	return z
-end
-
-function withinSameArea(entity1,entity2)
-	if withinCurrentArea(entity1) and withinCurrentArea(entity2) then return true
-	else
-	  return false
-	end
-end
-
-function withinBounds(entity,x,y)
-	if x>entity.x-entity.w and x<entity.x+entity.w and y>entity.y-entity.h and y<entity.y+entity.h then
-		return true
-	else
-	   return false
-	 end 
-end
-
-function createBullet(x,y)
-	local b={}
-	b.x=x
-	b.y=y
-	b.direction=player.direction
-	b.speed=4
-	b.destroy=false
-	b.area={x=currentArea.x,y=currentArea.y}
-	b.dmg=25
-	b.firstSpr=49
-	return b
-end
-
 player.shoot=function()
 
 	if btn(buttons.shoot)and player.shotTimer<0 and player.inventory.clip>0 then
@@ -161,8 +120,10 @@ player.shoot=function()
 	if btn(buttons.shoot) and player.inventory.clip<1 and player.shotTimer<0 then
 	 sfx(sound.misFire,4*12+6,10)
 	 player.shotTimer=1
-	 table.insert(floatingText,Utils.createFloatingText(player.x,player.y,"Reload!!",colours.blue))
+	 table.insert(floatingText,createFloatingText(player.x,player.y,"Reload!!",colours.blue))
 	end
+
+	player.shotTimer=player.shotTimer-deltaTime	
 
 end
 
@@ -226,52 +187,80 @@ player.move=function()
 	changeArea()
 end
 
-function changeArea()
-
-	if player.x>area.w then --move to next area to the right
-		if currentAreaClear then
-	 		player.x=0
-	 		currentArea.x=currentArea.x+1
-	 	else
-	 	  player.x=area.w
-	 	end
-	end
-	if player.x<0 then --move to next area to the left
-	 if currentArea.x>0 and currentAreaClear then
-	 	player.x=area.w
-	 	currentArea.x=currentArea.x-1
-	 else
-	   player.x=0
-	 end
-	end
-
-	if player.y>area.h then--area to the bottom
-	 player.y=0
-	 currentArea.y=currentArea.y+1
-	end 
-	if player.y<0 then --area to the top
-		if currentArea.y>0 and currentAreaClear then
-	 		player.y=area.h
-	 		currentArea.y=currentArea.y-1
-	 	else
-	 	  player.y=0
-	 	end
-	end 
+player.draw=function()
+	spr(player.sprite,player.x,player.y,0)
+	drawHealthBar(player,false)
+end
+----------------------------------------------------------------------------------------
+Waves.createWave=function(numWaves,minMobs,maxMobs)--list of waves for an area
+	local w={}
+	w.numMobs=math.random(minMobs,maxMobs)
+	w.complete=false
+	return w
 end
 
-
-theTime=time()
-lastTime=theTime
-deltaTime=0
-
-------------------------------
-Utils.keepTime = function()
-	lastTime=theTime
-	theTime=time()
-	deltaTime=(theTime-lastTime)/1000
+Waves.generateWaves=function(area,numWaves)	
+	for i=1,numWaves do
+		table.insert(area.waves,Waves.createWave(5,2,5))
+		area.numWaves=area.numWaves+1
+	end
 end
--------------------------------------------------
-Utils.generateParticleHit=function(entity,bullet,colour)
+
+Waves.generateMobs=function(wave)	
+	local spawnPoint=math.random(1,8)--there are 8 spawn points		
+	table.insert(entities,createZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
+	wave.numMobs=wave.numMobs-1
+end
+
+-----------------------------------------------------------------------------------------
+
+function createZ(x,y,aggroed)
+	local z={}
+	z.x=x
+	z.y=y
+	z.rot=0 --rotation per tic80 api
+	z.speed=0.5
+	z.w=4 --width
+	z.h=4 --height
+	z.area={x=0,y=0} --area that entity resides in
+	z.sprite=33 --index of the first animation frame
+	z.sprIndex=0 --current frame of animation
+	z.aniTimer=0 --timer for animations
+	z.health=100
+	z.attackTimer=0 --timer for attacks
+	z.attackTime=0.5 --reset value for attack timer
+	z.attackDmg=8 
+	z.hasAggro=aggroed
+	z.aggroDist=32 --distance player has to be before chasing/aggro
+	z.scoreValue=25
+	return z
+end
+
+function createBullet(x,y)
+	local b={}
+	b.x=x
+	b.y=y
+	b.direction=player.direction
+	b.speed=4
+	b.destroy=false
+	b.area={x=currentArea.x,y=currentArea.y}
+	b.dmg=25
+	b.firstSpr=49
+	return b
+end
+
+function createFloatingText(x,y,val,colour)
+	local text={}
+	text.x=x
+	text.y=y
+	text.val=val
+	text.lifeTime=1
+	text.speed=10
+	text.colour=colour
+	return text
+end
+
+function generateParticleHit(entity,bullet,colour)
 	local numParticles=math.random(10,20)
 	local i=1
 	while i<=numParticles do
@@ -289,6 +278,125 @@ Utils.generateParticleHit=function(entity,bullet,colour)
 	i=i+1
 	end
 end
+--------------------------------------------------------------------------------------------
+function withinSameArea(entity1,entity2)
+	if withinCurrentArea(entity1) and withinCurrentArea(entity2) then return true
+	else
+	  return false
+	end
+end
+
+function withinBounds(entity,x,y)
+	if x>entity.x-entity.w and x<entity.x+entity.w and y>entity.y-entity.h and y<entity.y+entity.h then
+		return true
+	else
+	   return false
+	 end 
+end
+
+
+function withinCurrentArea(entity)
+	if entity.area.x ~= currentArea.x or entity.area.y ~= currentArea.y then return false
+	else
+	  return true
+	end
+end
+---------------------------------------------------------------------------------------
+
+function changeArea()
+
+	if player.x>area.w then --move to next area to the right
+		if currentArea.clear then
+	 		player.x=0
+	 		currentArea.x=currentArea.x+1
+	 	else
+	 	  player.x=area.w
+	 	end
+	end
+	if player.x<0 then --move to next area to the left
+	 if currentArea.x>0 and currentArea.clear then
+	 	player.x=area.w
+	 	currentArea.x=currentArea.x-1
+	 else
+	   player.x=0
+	 end
+	end
+
+	if player.y>area.h then--area to the bottom
+	 if currentArea.clear then 
+	 	player.y=0
+	 	currentArea.y=currentArea.y+1
+	 else
+	   player.y=area.h
+	 end
+	end 
+
+	if player.y<0 then --area to the top
+		if currentArea.y>0 and currentArea.clear then
+	 		player.y=area.h
+	 		currentArea.y=currentArea.y-1
+	 	else
+	 	  player.y=0
+	 	end
+	end 
+end
+
+-------------------------------------
+function aggroEntity(entity)
+	if entity.hasAggro==false then
+		table.insert(floatingText,Utils.createFloatingText(entity.x + entity.w,entity.y+8,"!",colours.red))	
+	end
+	entity.hasAggro=true
+end
+
+function aggroed(entity)
+
+	if player.x>entity.x - entity.aggroDist and player.x< entity.x + entity.aggroDist and 
+		player.y>entity.y - entity.aggroDist and player.y<entity.y + entity.aggroDist then	
+		return true
+	else		
+		return false
+	end
+end
+
+-------------------------------------------------------------------------------------------------
+
+function drawEntity(entity)
+	if withinCurrentArea(entity) == false then return end
+	spr(entity.sprite+entity.sprIndex,entity.x,entity.y,0,1,0,entity.rot)
+	drawHealthBar(entity,true)
+end
+
+function drawHealthBar(entity,above)
+	local barWidth=(entity.w * 3)
+	local barMissing=((100-entity.health) / 100) * barWidth
+	local sx=entity.x - entity.w
+	local y
+	if above then y=entity.y-entity.h else y=entity.y+entity.h * 2 end
+	local ex=sx + barWidth - barMissing
+	local colour=11
+
+	if entity.health<=50 then colour=9 end
+	if entity.health<=25 then colour=6 end 
+
+	line(sx,y,ex,y,colour)	
+end
+
+function drawParticles()
+	local i=1
+	while i<=#particles do	
+		local p=particles[i]
+		if p.lifetime>0 then
+			p.x=p.x + (p.direction.x*p.speed)
+			p.y=p.y + (p.direction.y*p.speed)
+			p.lifetime=p.lifetime-deltaTime
+			line(p.x,p.y,p.x,p.y,p.colour)
+			i=i+1
+		else
+	  		table.remove(particles,i)
+		end
+	end	
+end
 
 -----------------------------------------------
 function updateFloatingText()
@@ -305,32 +413,38 @@ function updateFloatingText()
 		end
 	end
 end
--------------------------------
-function withinCurrentArea(entity)
-	if entity.area.x ~= currentArea.x or entity.area.y ~= currentArea.y then return false
-	else
-	  return true
-	end
-end
--------------------------------------
-function aggroEntity(entity)
-	if entity.hasAggro==false then
-		table.insert(floatingText,Utils.createFloatingText(entity.x + entity.w,entity.y+8,"!",colours.red))	
-	end
-	entity.hasAggro=true
-end
--------------------------------------
-function aggroed(entity)
 
-	if player.x>entity.x - entity.aggroDist and player.x< entity.x + entity.aggroDist and 
-		player.y>entity.y - entity.aggroDist and player.y<entity.y + entity.aggroDist then	
-		return true
-	else		
-		return false
+function updateBullets()
+
+	local i=1
+	while i <=#bullets do
+
+			if bullets[i].x < 0 or bullets[i].x>area.w or bullets[i].y<0 or bullets[i].y>area.h or bullets[i].destroy then --out of bounds, destroy
+				table.remove(bullets,i)
+			else
+			bullets[i].x=bullets[i].x + (bullets[i].direction.x * bullets[i].speed) --update
+			bullets[i].y=bullets[i].y + (bullets[i].direction.y * bullets[i].speed)
+			spr(bullets[i].firstSpr+bullets[i].direction.sprIndex,bullets[i].x,bullets[i].y,0,1,0,0,1,1)
+			i=i+1	
+			end			
+	end
+	
+end
+
+function animateEntity(entity)
+entity.aniTimer=entity.aniTimer+deltaTime
+	
+	if entity.aniTimer > FRAMETIME then	
+		if entity.sprIndex==3 then
+		 entity.sprIndex=0
+		else
+			entity.sprIndex=entity.sprIndex+1
+		end
+		entity.aniTimer=0
 	end
 end
---------------------------------
-function chasePlayer(entity)	
+
+function updateZ(entity)	
 	
 	if withinCurrentArea(entity) == false then return end --don't update unless entity is in same area as player
 
@@ -340,8 +454,8 @@ function chasePlayer(entity)
 		 entity.health=entity.health-bullets[i].dmg
 		 bullets[i].destroy=true
 		 aggroEntity(entity)
-		 Utils.generateParticleHit(entity,bullets[i],colours.red)
-		 table.insert(floatingText,Utils.createFloatingText(entity.x,entity.y,bullets[i].dmg,15))
+		 generateParticleHit(entity,bullets[i],colours.red)
+		 table.insert(floatingText,createFloatingText(entity.x,entity.y,bullets[i].dmg,15))
 		 sfx(sound.hit,2*12+3,5,1) 
 		end
 		i=i+1
@@ -379,78 +493,12 @@ function chasePlayer(entity)
 			player.health=player.health-entity.attackDmg
 			entity.attackTimer=entity.attackTime
 			sfx(sound.playerHit,2*12+3,5,2) 		
-			table.insert(floatingText,Utils.createFloatingText(player.x-4,player.y,"-"..entity.attackDmg,colours.red))
+			table.insert(floatingText,createFloatingText(player.x-4,player.y,"-"..entity.attackDmg,colours.red))
 		end
 	end
 end
 -------------------------------------------------
-function animateEntity(entity)
-entity.aniTimer=entity.aniTimer+deltaTime
-	
-	if entity.aniTimer > FRAMETIME then	
-		if entity.sprIndex==3 then
-		 entity.sprIndex=0
-		else
-			entity.sprIndex=entity.sprIndex+1
-		end
-		entity.aniTimer=0
-	end
-end
------------------------------------------------
-function drawEntity(entity)
-	if withinCurrentArea(entity) == false then return end
-	spr(entity.sprite+entity.sprIndex,entity.x,entity.y,0,1,0,entity.rot)
-	Utils.drawHealthBar(entity,true)
-end
-------------------------------------
-Utils.drawHealthBar=function(entity,above)
-	local barWidth=(entity.w * 3)
-	local barMissing=((100-entity.health) / 100) * barWidth
-	local sx=entity.x - entity.w
-	local y
-	if above then y=entity.y-entity.h else y=entity.y+entity.h * 2 end
-	local ex=sx + barWidth - barMissing
-	local colour=11
 
-	if entity.health<=50 then colour=9 end
-	if entity.health<=25 then colour=6 end 
-
-	line(sx,y,ex,y,colour)	
-end
--------------------------------------------------
-Utils.drawParticles=function()
-	local i=1
-	while i<=#particles do	
-		local p=particles[i]
-		if p.lifetime>0 then
-			p.x=p.x + (p.direction.x*p.speed)
-			p.y=p.y + (p.direction.y*p.speed)
-			p.lifetime=p.lifetime-deltaTime
-			line(p.x,p.y,p.x,p.y,p.colour)
-			i=i+1
-		else
-	  		table.remove(particles,i)
-		end
-	end	
-end
--------------------------------------------------
-function updateBullets()
-
-	local i=1
-	while i <=#bullets do
-
-			if bullets[i].x < 0 or bullets[i].x>area.w or bullets[i].y<0 or bullets[i].y>area.h or bullets[i].destroy then --out of bounds, destroy
-				table.remove(bullets,i)
-			else
-			bullets[i].x=bullets[i].x + (bullets[i].direction.x * bullets[i].speed) --update
-			bullets[i].y=bullets[i].y + (bullets[i].direction.y * bullets[i].speed)
-			spr(bullets[i].firstSpr+bullets[i].direction.sprIndex,bullets[i].x,bullets[i].y,0,1,0,0,1,1)
-			i=i+1	
-			end			
-	end
-	
-end
-------------------------------------
 flashTimer=0.5
 function drawHUD()
 	print("Health: "..player.health,0,area.h,colours.red)
@@ -466,7 +514,7 @@ function drawHUD()
 	flashTimer=flashTimer-deltaTime
 
 	if flashTimer<-0.5 then flashTimer=0.5 end
-	if #entities>0 then
+	if currentArea.clear==false then
 		if flashTimer>0 then print("!!Danger!!",area.w-50,130,colours.red) end 
 	else
 	 	print("Safe =D",area.w-50,130,colours.green)
@@ -476,27 +524,42 @@ function drawHUD()
 end
 --------------------------------------
 
-table.insert(entities,createZ(84,100))
-table.insert(entities,createZ(150,80))
-table.insert(entities,createZ(10,20))
-table.insert(entities,createZ(212,100))
+spawnTimer=2
+Waves.generateWaves(currentArea,currentArea.numWaves)
+
+Waves.generateMobs(currentArea.waves[currentArea.currentWave])
 
 function gameState()
-	if #entities==0 then currentAreaClear=true end
+
+	if currentArea.numWaves<1 then
+		currentArea.clear=true
+	else
+		spawnTimer=spawnTimer-deltaTime
+		if spawnTimer<0 and currentArea.waves[currentArea.currentWave].numMobs>0 then
+			Waves.generateMobs(currentArea.waves[currentArea.currentWave])
+			spawnTimer=2
+		elseif spawnTimer<0 and currentArea.waves[currentArea.currentWave].numMobs<1 and #entities<1 then	   		
+	   		if currentArea.currentWave<#currentArea.waves then
+	   			currentArea.currentWave=currentArea.currentWave+1
+	   			currentArea.numWaves=currentArea.numWaves-1
+	   		end 		
+		else
+	    	trace("End")
+		end
+	end
 
 	Utils.keepTime()
 	player.move()
 	player.shoot()
-	player.reload()
+	player.reload()	
 
-	player.shotTimer=player.shotTimer-deltaTime	
 	cls(0)
  	map(areaInTiles.w*currentArea.x,areaInTiles.h*currentArea.y,30,16)
-	spr(player.sprite,player.x,player.y,0)
-	Utils.drawHealthBar(player,false)
+	player.draw()
+
 	local i=1
 	while i<=#entities do
-		chasePlayer(entities[i])
+		updateZ(entities[i])
 		animateEntity(entities[i])
 		drawEntity(entities[i])
 		if entities[i].health<=0 then --if removed then don't need to increment index
@@ -506,10 +569,11 @@ function gameState()
 		  i=i+1
 		end		
 	end
+
 	updateBullets()
 	updateFloatingText()
 
-	Utils.drawParticles()
+	drawParticles()
 	drawHUD()	
 end
 
@@ -519,6 +583,7 @@ titleYpos=area.h/2
 startGame=false
 startTimer=1
 startTextColor=colours.green
+
 function startScreenState()
 	Utils.keepTime()
 	cls(0)
