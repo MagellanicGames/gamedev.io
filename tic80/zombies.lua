@@ -20,13 +20,17 @@ colours={
 	green=11
 }
 
-currentArea={
+area={
 	x=0,y=0,
+	w=240,h=128,
 	waves={},
-	numWaves=1,
+	numWaves=2,
 	currentWave=1,	
 	clear=false
 }
+
+
+areaInTiles={w=30,h=16}
 
 sprites={bullet=65}
 
@@ -65,9 +69,6 @@ particles={}
 Waves={}
 Utils= {}
 
-area={w=240,h=128} --display is 240x136
-areaInTiles={w=30,h=16}
-
 spawnPoints={}
 spawnPoints[1]={x=-8,y=-8}
 spawnPoints[2]={x=area.w*0.5,y=-8}
@@ -99,10 +100,11 @@ player={
 	health=100,
 	score=0,
 	shotTimer=0,
-	reloadTime=2
+	reloadTime=1,
+	shootSpeed=1
 }
 
-player.inventory={
+inventory={
 	ammo=40,
 	clipSize=4,
 	clip=4
@@ -110,29 +112,29 @@ player.inventory={
 
 player.shoot=function()
 
-	if btn(buttons.shoot)and player.shotTimer<0 and player.inventory.clip>0 then
+	if btn(buttons.shoot)and player.shotTimer<0 and inventory.clip>0 then --shoot if have bullets in clip
 		sfx(sound.shot,3*12+6,25)
-		player.shotTimer=1
-		player.inventory.clip=player.inventory.clip-1
+		player.shotTimer=player.shootSpeed
+		inventory.clip=inventory.clip-1
 		table.insert(bullets,createBullet(player.x,player.y))
 	end
 
-	if btn(buttons.shoot) and player.inventory.clip<1 and player.shotTimer<0 then
+	if btn(buttons.shoot) and inventory.clip<1 and player.shotTimer<0 then --shoot but no bullets in clip
 	 sfx(sound.misFire,4*12+6,10)
-	 player.shotTimer=1
+	 player.shotTimer=player.shootSpeed * 0.5
 	 table.insert(floatingText,createFloatingText(player.x,player.y,"Reload!!",colours.blue))
 	end
 
-	player.shotTimer=player.shotTimer-deltaTime	
+	player.shotTimer=player.shotTimer-deltaTime	--decrement timer for being able to shoot
 
 end
 
 player.reload=function()
-	if btn(buttons.reload) and player.inventory.ammo>0 and player.inventory.clip < player.inventory.clipSize then
-		local numBulletsNeeded=player.inventory.clipSize-player.inventory.clip
-		if player.inventory.ammo-numBulletsNeeded>-1 then 
-			player.inventory.ammo=player.inventory.ammo-numBulletsNeeded
-			player.inventory.clip=player.inventory.clip+numBulletsNeeded
+	if btn(buttons.reload) and inventory.ammo>0 and inventory.clip < inventory.clipSize then
+		local numBulletsNeeded=inventory.clipSize-inventory.clip
+		if inventory.ammo-numBulletsNeeded>-1 then 
+			inventory.ammo=inventory.ammo-numBulletsNeeded
+			inventory.clip=inventory.clip+numBulletsNeeded
 			player.shotTimer=player.reloadTime
 			sfx(sound.reload,4*12+6,20)
 		end
@@ -192,21 +194,21 @@ player.draw=function()
 	drawHealthBar(player,false)
 end
 ----------------------------------------------------------------------------------------
-Waves.createWave=function(numWaves,minMobs,maxMobs)--list of waves for an area
+Waves.createWave=function(numWaves,minMobs,maxMobs)--add to list of waves for an area
 	local w={}
 	w.numMobs=math.random(minMobs,maxMobs)
 	w.complete=false
 	return w
 end
 
-Waves.generateWaves=function(area,numWaves)	
+Waves.generateWaves=function(area,numWaves)	--creates desired number of waves for an area
 	for i=1,numWaves do
 		table.insert(area.waves,Waves.createWave(5,2,5))
 		area.numWaves=area.numWaves+1
 	end
 end
 
-Waves.generateMobs=function(wave)	
+Waves.generateMobs=function(wave) --creates mobs based on wave data created in functions above
 	local spawnPoint=math.random(1,8)--there are 8 spawn points		
 	table.insert(entities,createZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
 	wave.numMobs=wave.numMobs-1
@@ -219,7 +221,7 @@ function createZ(x,y,aggroed)
 	z.x=x
 	z.y=y
 	z.rot=0 --rotation per tic80 api
-	z.speed=0.5
+	z.speed=0.25
 	z.w=4 --width
 	z.h=4 --height
 	z.area={x=0,y=0} --area that entity resides in
@@ -241,9 +243,9 @@ function createBullet(x,y)
 	b.x=x
 	b.y=y
 	b.direction=player.direction
-	b.speed=4
+	b.speed=8
 	b.destroy=false
-	b.area={x=currentArea.x,y=currentArea.y}
+	b.area={x=area.x,y=area.y}
 	b.dmg=25
 	b.firstSpr=49
 	return b
@@ -280,7 +282,7 @@ function generateParticleHit(entity,bullet,colour)
 end
 --------------------------------------------------------------------------------------------
 function withinSameArea(entity1,entity2)
-	if withinCurrentArea(entity1) and withinCurrentArea(entity2) then return true
+	if withinarea(entity1) and withinarea(entity2) then return true
 	else
 	  return false
 	end
@@ -295,8 +297,8 @@ function withinBounds(entity,x,y)
 end
 
 
-function withinCurrentArea(entity)
-	if entity.area.x ~= currentArea.x or entity.area.y ~= currentArea.y then return false
+function withinarea(entity)
+	if entity.area.x ~= area.x or entity.area.y ~= area.y then return false
 	else
 	  return true
 	end
@@ -306,35 +308,35 @@ end
 function changeArea()
 
 	if player.x>area.w then --move to next area to the right
-		if currentArea.clear then
+		if area.clear then
 	 		player.x=0
-	 		currentArea.x=currentArea.x+1
+	 		area.x=area.x+1
 	 	else
 	 	  player.x=area.w
 	 	end
 	end
 	if player.x<0 then --move to next area to the left
-	 if currentArea.x>0 and currentArea.clear then
+	 if area.x>0 and area.clear then
 	 	player.x=area.w
-	 	currentArea.x=currentArea.x-1
+	 	area.x=area.x-1
 	 else
 	   player.x=0
 	 end
 	end
 
 	if player.y>area.h then--area to the bottom
-	 if currentArea.clear then 
+	 if area.clear then 
 	 	player.y=0
-	 	currentArea.y=currentArea.y+1
+	 	area.y=area.y+1
 	 else
 	   player.y=area.h
 	 end
 	end 
 
 	if player.y<0 then --area to the top
-		if currentArea.y>0 and currentArea.clear then
+		if area.y>0 and area.clear then
 	 		player.y=area.h
-	 		currentArea.y=currentArea.y-1
+	 		area.y=area.y-1
 	 	else
 	 	  player.y=0
 	 	end
@@ -362,7 +364,7 @@ end
 -------------------------------------------------------------------------------------------------
 
 function drawEntity(entity)
-	if withinCurrentArea(entity) == false then return end
+	if withinarea(entity) == false then return end
 	spr(entity.sprite+entity.sprIndex,entity.x,entity.y,0,1,0,entity.rot)
 	drawHealthBar(entity,true)
 end
@@ -446,7 +448,7 @@ end
 
 function updateZ(entity)	
 	
-	if withinCurrentArea(entity) == false then return end --don't update unless entity is in same area as player
+	if withinarea(entity) == false then return end --don't update unless entity is in same area as player
 
 	local i=1 ------------------------------------------------------------check if hit by a bullet
 	while i <=#bullets do
@@ -503,9 +505,9 @@ flashTimer=0.5
 function drawHUD()
 	print("Health: "..player.health,0,area.h,colours.red)
 	print("Score: " ..player.score)
-	print("Ammo: "..player.inventory.ammo,area.w - 64,0,colours.blue)
+	print("Ammo: "..inventory.ammo,area.w - 64,0,colours.blue)
 	local i=1
-	while i<=player.inventory.clip do
+	while i<=inventory.clip do
 		spr(sprites.bullet,(area.w/2) +(8*i),-1,0)
 		i=i+1
 	end
@@ -514,7 +516,7 @@ function drawHUD()
 	flashTimer=flashTimer-deltaTime
 
 	if flashTimer<-0.5 then flashTimer=0.5 end
-	if currentArea.clear==false then
+	if area.clear==false then
 		if flashTimer>0 then print("!!Danger!!",area.w-50,130,colours.red) end 
 	else
 	 	print("Safe =D",area.w-50,130,colours.green)
@@ -525,27 +527,25 @@ end
 --------------------------------------
 
 spawnTimer=2
-Waves.generateWaves(currentArea,currentArea.numWaves)
 
-Waves.generateMobs(currentArea.waves[currentArea.currentWave])
+Waves.generateWaves(area,area.numWaves)
+Waves.generateMobs(area.waves[area.currentWave])
 
 function gameState()
+	
+	spawnTimer=spawnTimer-deltaTime
 
-	if currentArea.numWaves<1 then
-		currentArea.clear=true
-	else
-		spawnTimer=spawnTimer-deltaTime
-		if spawnTimer<0 and currentArea.waves[currentArea.currentWave].numMobs>0 then
-			Waves.generateMobs(currentArea.waves[currentArea.currentWave])
-			spawnTimer=2
-		elseif spawnTimer<0 and currentArea.waves[currentArea.currentWave].numMobs<1 and #entities<1 then	   		
-	   		if currentArea.currentWave<#currentArea.waves then
-	   			currentArea.currentWave=currentArea.currentWave+1
-	   			currentArea.numWaves=currentArea.numWaves-1
-	   		end 		
-		else
-	    	trace("End")
-		end
+	if spawnTimer<0 and area.waves[area.currentWave].numMobs>0 then --does the current wave still have mobs?
+		Waves.generateMobs(area.waves[area.currentWave]) --create mob
+		spawnTimer=math.random(2,4) --countdown to next mob spawn
+	end
+	if spawnTimer<0 and area.waves[area.currentWave].numMobs<1 and #entities<1 then	--is the current wave finished?   		
+	   	if area.currentWave<#area.waves then --are there still waves left?
+	   		area.currentWave=area.currentWave+1 --move to next wave
+	   		area.numWaves=area.numWaves-1 --decrement the number of waves in the area
+	   	else
+	   		area.clear=true --no waves left, area is clear
+	   	end		
 	end
 
 	Utils.keepTime()
@@ -554,7 +554,7 @@ function gameState()
 	player.reload()	
 
 	cls(0)
- 	map(areaInTiles.w*currentArea.x,areaInTiles.h*currentArea.y,30,16)
+ 	map(areaInTiles.w*area.x,areaInTiles.h*area.y,30,16)
 	player.draw()
 
 	local i=1
