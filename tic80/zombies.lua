@@ -24,7 +24,7 @@ area={
 	x=0,y=0,
 	w=240,h=128,
 	waves={},
-	numWaves=2,
+	numWaves=5,
 	currentWave=1,	
 	clear=false
 }
@@ -92,7 +92,7 @@ end
 
 -----------------------------------------------------------------------------------
 player={
-	x=96,y=24,
+	x=area.w*0.5,y=area.h*0.5,
 	w=4,h=4,
 	direction=directions.up,
 	speed=1,
@@ -100,12 +100,13 @@ player={
 	health=100,
 	score=0,
 	shotTimer=0,
-	reloadTime=1,
-	shootSpeed=1
+	reloadTime=0.5,
+	shootSpeed=0.5,
+	critChance=25
 }
 
 inventory={
-	ammo=40,
+	ammo=50,
 	clipSize=4,
 	clip=4
 }
@@ -137,6 +138,11 @@ player.reload=function()
 			inventory.clip=inventory.clip+numBulletsNeeded
 			player.shotTimer=player.reloadTime
 			sfx(sound.reload,4*12+6,20)
+		else
+			if inventory.ammo>0 and inventory.ammo<numBulletsNeeded then 
+				inventory.clip=inventory.ammo
+				inventory.ammo=0
+			end  		
 		end
 	end
 end
@@ -194,17 +200,16 @@ player.draw=function()
 	drawHealthBar(player,false)
 end
 ----------------------------------------------------------------------------------------
-Waves.createWave=function(numWaves,minMobs,maxMobs)--add to list of waves for an area
+Waves.createWave=function(minMobs,maxMobs)--add to list of waves for an area
 	local w={}
 	w.numMobs=math.random(minMobs,maxMobs)
 	w.complete=false
 	return w
 end
 
-Waves.generateWaves=function(area,numWaves)	--creates desired number of waves for an area
-	for i=1,numWaves do
-		table.insert(area.waves,Waves.createWave(5,2,5))
-		area.numWaves=area.numWaves+1
+Waves.generateWaves=function(area)	--creates desired number of waves for an area
+	for i=1,area.numWaves do
+		table.insert(area.waves,Waves.createWave(2,5))
 	end
 end
 
@@ -247,6 +252,11 @@ function createBullet(x,y)
 	b.destroy=false
 	b.area={x=area.x,y=area.y}
 	b.dmg=25
+	b.isCrit=false
+	if math.random(0,100)<player.critChance then
+	 b.dmg=b.dmg+b.dmg
+	 b.isCrit=true
+	end
 	b.firstSpr=49
 	return b
 end
@@ -454,10 +464,15 @@ function updateZ(entity)
 	while i <=#bullets do
 		if withinBounds(entity,bullets[i].x,bullets[i].y) and withinSameArea(entity,bullets[i]) then
 		 entity.health=entity.health-bullets[i].dmg
+		 local textColour=colours.white
+		 if bullets[i].isCrit then 
+		 	textColour=colours.yellow
+		 	table.insert(floatingText,createFloatingText(entity.x-12,entity.y+8,"CRITICAL!",textColour))
+		 end
 		 bullets[i].destroy=true
 		 aggroEntity(entity)
 		 generateParticleHit(entity,bullets[i],colours.red)
-		 table.insert(floatingText,createFloatingText(entity.x,entity.y,bullets[i].dmg,15))
+		 table.insert(floatingText,createFloatingText(entity.x,entity.y,bullets[i].dmg,textColour))
 		 sfx(sound.hit,2*12+3,5,1) 
 		end
 		i=i+1
@@ -505,6 +520,7 @@ flashTimer=0.5
 function drawHUD()
 	print("Health: "..player.health,0,area.h,colours.red)
 	print("Score: " ..player.score)
+	print("Waves: "..area.numWaves,64,2)
 	print("Ammo: "..inventory.ammo,area.w - 64,0,colours.blue)
 	local i=1
 	while i<=inventory.clip do
@@ -528,7 +544,7 @@ end
 
 spawnTimer=2
 
-Waves.generateWaves(area,area.numWaves)
+Waves.generateWaves(area)
 Waves.generateMobs(area.waves[area.currentWave])
 
 function gameState()
@@ -544,6 +560,7 @@ function gameState()
 	   		area.currentWave=area.currentWave+1 --move to next wave
 	   		area.numWaves=area.numWaves-1 --decrement the number of waves in the area
 	   	else
+	   		area.numWaves=area.numWaves-1 --decrement to zero
 	   		area.clear=true --no waves left, area is clear
 	   	end		
 	end
