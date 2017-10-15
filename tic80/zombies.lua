@@ -14,10 +14,12 @@ sound={
 
 colours={
 	red=6,
+	orange=9,
 	white=15,
 	yellow=14,
 	blue=13,
-	green=11
+	green=11,
+	pink=12
 }
 
 area={
@@ -102,7 +104,12 @@ player={
 	shotTimer=0,
 	reloadTime=0.5,
 	shootSpeed=0.5,
-	critChance=25
+	critChance=25,
+	experience=0,
+	experienceReq=100,
+	totalExperience=0,
+	level=1,
+
 }
 
 inventory={
@@ -110,6 +117,29 @@ inventory={
 	clipSize=4,
 	clip=4
 }
+
+expBar={
+	x=110,y=133,
+	width=1,
+	totalWidth=32,
+	expInPercent=0
+}
+
+player.experienceGain=function(amount)
+	player.experience=player.experience+amount
+	player.totalExperience=player.totalExperience+amount
+	table.insert(floatingText,createFloatingText(player.x,player.y,amount.." exp",colours.orange))
+	if player.experience>=player.experienceReq then --level up
+		player.level=player.level+1
+		local expOver=player.experience-player.experienceReq--work out if exp is over required amount
+		if expOver>0 then player.experience=expOver else player.experience=0 end --set exp to excess or zero
+		player.experienceReq=player.experienceReq+(player.experienceReq*0.5)
+		table.insert(floatingText,createFloatingText(player.x,player.y+8,"LEVEL UP!",colours.pink))
+	end
+	local percentage=(player.experience/player.experienceReq)
+	expBar.expInPercent=math.floor(percentage*100)
+	expBar.width=expBar.totalWidth*percentage
+end
 
 player.shoot=function()
 
@@ -240,6 +270,7 @@ function createZ(x,y,aggroed)
 	z.hasAggro=aggroed
 	z.aggroDist=32 --distance player has to be before chasing/aggro
 	z.scoreValue=25
+	z.expValue=10
 	return z
 end
 
@@ -462,17 +493,18 @@ function updateZ(entity)
 
 	local i=1 ------------------------------------------------------------check if hit by a bullet
 	while i <=#bullets do
-		if withinBounds(entity,bullets[i].x,bullets[i].y) and withinSameArea(entity,bullets[i]) then
-		 entity.health=entity.health-bullets[i].dmg
+		local bullet=bullets[i]
+		if withinBounds(entity,bullet.x,bullet.y) and withinSameArea(entity,bullet) then
+		 entity.health=entity.health-bullet.dmg
 		 local textColour=colours.white
-		 if bullets[i].isCrit then 
+		 if bullet.isCrit then 
 		 	textColour=colours.yellow
 		 	table.insert(floatingText,createFloatingText(entity.x-12,entity.y+8,"CRITICAL!",textColour))
 		 end
-		 bullets[i].destroy=true
+		 bullet.destroy=true
 		 aggroEntity(entity)
-		 generateParticleHit(entity,bullets[i],colours.red)
-		 table.insert(floatingText,createFloatingText(entity.x,entity.y,bullets[i].dmg,textColour))
+		 generateParticleHit(entity,bullet,colours.red)
+		 table.insert(floatingText,createFloatingText(entity.x,entity.y,bullet.dmg,textColour))
 		 sfx(sound.hit,2*12+3,5,1) 
 		end
 		i=i+1
@@ -527,8 +559,9 @@ function drawHUD()
 		spr(sprites.bullet,(area.w/2) +(8*i),-1,0)
 		i=i+1
 	end
-	print("Kill the zombies",84,130)
-
+	print("Exp: %"..expBar.expInPercent,64,130)  
+	
+	line(expBar.x,expBar.y,expBar.x+expBar.width,expBar.y,colours.orange)
 	flashTimer=flashTimer-deltaTime
 
 	if flashTimer<-0.5 then flashTimer=0.5 end
@@ -576,12 +609,14 @@ function gameState()
 
 	local i=1
 	while i<=#entities do
-		updateZ(entities[i])
-		animateEntity(entities[i])
-		drawEntity(entities[i])
-		if entities[i].health<=0 then --if removed then don't need to increment index
-			player.score=player.score+entities[i].scoreValue
-		 table.remove(entities,i) 
+		local entity=entities[i]
+		updateZ(entity)
+		animateEntity(entity)
+		drawEntity(entity)
+		if entity.health<=0 then --if removed then don't need to increment index
+			player.experienceGain(entity.expValue)
+			player.score=player.score+entity.scoreValue
+			table.remove(entities,i) 
 		else
 		  i=i+1
 		end		
@@ -605,8 +640,8 @@ function startScreenState()
 	Utils.keepTime()
 	cls(0)
 	print("Zombie Apocalyp-tic-80",titleXpos,titleYpos,startTextColor)
-	print("Press A (Z key) to start!",titleXpos-4,titleYpos+32,colours.blue)
-	print("\'A\' to reload, \'B\' to shoot,  Arrows to move.",0,titleYpos+64)
+	print("Press \'Z\' key to start!",titleXpos-4,titleYpos+32,colours.blue)
+	print("\'Z\' to reload, \'X\' to shoot,  Arrows to move.",0,titleYpos+64)
 
 	if btn(buttons.reload) and startGame==false then
 	 startGame=true
