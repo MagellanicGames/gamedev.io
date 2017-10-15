@@ -49,7 +49,9 @@ buttons={
 	left=2,
 	right=3,
 	reload=4,
-	shoot=5
+	shoot=5,
+	menu=6,
+	special=7
 }
 
 directions={
@@ -109,7 +111,7 @@ player={
 	experienceReq=100,
 	totalExperience=0,
 	level=1,
-
+	talentPoints=0
 }
 
 inventory={
@@ -125,6 +127,10 @@ expBar={
 	expInPercent=0
 }
 
+playerTalents={
+	bulletShredder=true
+}
+
 player.experienceGain=function(amount)
 	player.experience=player.experience+amount
 	player.totalExperience=player.totalExperience+amount
@@ -134,6 +140,7 @@ player.experienceGain=function(amount)
 		local expOver=player.experience-player.experienceReq--work out if exp is over required amount
 		if expOver>0 then player.experience=expOver else player.experience=0 end --set exp to excess or zero
 		player.experienceReq=player.experienceReq+(player.experienceReq*0.5)
+		player.talentPoints=player.talentPoints+1
 		table.insert(floatingText,createFloatingText(player.x,player.y+8,"LEVEL UP!",colours.pink))
 	end
 	local percentage=(player.experience/player.experienceReq)
@@ -264,6 +271,7 @@ function createZ(x,y,aggroed)
 	z.sprIndex=0 --current frame of animation
 	z.aniTimer=0 --timer for animations
 	z.health=100
+	z.totalHealth=100
 	z.attackTimer=0 --timer for attacks
 	z.attackTime=0.5 --reset value for attack timer
 	z.attackDmg=8 
@@ -271,6 +279,7 @@ function createZ(x,y,aggroed)
 	z.aggroDist=32 --distance player has to be before chasing/aggro
 	z.scoreValue=25
 	z.expValue=10
+	z.bleeding=false
 	return z
 end
 
@@ -487,6 +496,7 @@ entity.aniTimer=entity.aniTimer+deltaTime
 	end
 end
 
+bleedingTimer=1
 function updateZ(entity)	
 	
 	if withinarea(entity) == false then return end --don't update unless entity is in same area as player
@@ -495,19 +505,30 @@ function updateZ(entity)
 	while i <=#bullets do
 		local bullet=bullets[i]
 		if withinBounds(entity,bullet.x,bullet.y) and withinSameArea(entity,bullet) then
-		 entity.health=entity.health-bullet.dmg
+		 entity.health=entity.health-bullet.dmg		
 		 local textColour=colours.white
 		 if bullet.isCrit then 
 		 	textColour=colours.yellow
 		 	table.insert(floatingText,createFloatingText(entity.x-12,entity.y+8,"CRITICAL!",textColour))
 		 end
-		 bullet.destroy=true
-		 aggroEntity(entity)
-		 generateParticleHit(entity,bullet,colours.red)
-		 table.insert(floatingText,createFloatingText(entity.x,entity.y,bullet.dmg,textColour))
-		 sfx(sound.hit,2*12+3,5,1) 
+
+		if playerTalents.bulletShredder==true then entity.bleeding=true end
+
+		bullet.destroy=true
+		aggroEntity(entity)
+		generateParticleHit(entity,bullet,colours.red)
+		table.insert(floatingText,createFloatingText(entity.x,entity.y,bullet.dmg,textColour))
+		sfx(sound.hit,2*12+3,5,1) 
 		end
 		i=i+1
+	end
+
+	bleedingTimer=bleedingTimer-deltaTime
+	if entity.bleeding==true and bleedingTimer<0 then
+		local dmg=entity.totalHealth*0.05
+		entity.health=entity.health-dmg
+		table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"-"..dmg,colours.red))
+		bleedingTimer=1
 	end
 
 	if aggroed(entity)==true then aggroEntity(entity) end
@@ -551,7 +572,7 @@ end
 flashTimer=0.5
 function drawHUD()
 	print("Health: "..player.health,0,area.h,colours.red)
-	print("Score: " ..player.score)
+	print("Score: " ..player.score,0,0)
 	print("Waves: "..area.numWaves,64,2)
 	print("Ammo: "..inventory.ammo,area.w - 64,0,colours.blue)
 	local i=1
@@ -571,6 +592,7 @@ function drawHUD()
 	 	print("Safe =D",area.w-50,130,colours.green)
 	end
 
+	if player.talentPoints>0 and flashTimer>0 then print("\'A\' to Level up!",player.x - 8,player.y+8,colours.pink) end
 	--print("Time: ".. time()/1000)
 end
 --------------------------------------
@@ -579,7 +601,7 @@ spawnTimer=2
 
 Waves.generateWaves(area)
 Waves.generateMobs(area.waves[area.currentWave])
-
+menuPressed=false
 function gameState()
 	
 	spawnTimer=spawnTimer-deltaTime
@@ -626,7 +648,13 @@ function gameState()
 	updateFloatingText()
 
 	drawParticles()
-	drawHUD()	
+	drawHUD()
+	
+	if btn(buttons.menu) and menuPressed==false then menuPressed=true end
+	if btn(buttons.menu)==false and menuPressed==true then
+		menuPressed=false
+		currentState.run=inGameMenuState
+	end
 end
 
 
@@ -655,9 +683,88 @@ function startScreenState()
 	if startTimer<0 then currentState.run=gameState end
 end
 
+
+menuOptions = {}
+menuOptions[1]="Resume"
+menuOptions[2]="Level Up"
+menuOptions[3]="Inventory"
+optionSelected=1
+zPressed=false
+xPressed=false
+upPressed=false
+downPressed=false
+menuPos={x=(area.w*0.5)-24,y=(area.h*0.5)-16}
+instructionsOffset={x=-90,y=81}
+
+function inGameMenuState()
+	cls(0)--draw
+	print("Menu",menuPos.x,menuPos.y,colours.green)
+
+	for i=1,3 do
+		local colour=colours.white
+		if i==optionSelected then colour=colours.yellow end
+		print(menuOptions[i],menuPos.x,menuPos.y + (8*i),colour)
+	end
+	print("\'x\' - accept \'z\' - back",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
+	---------------------------------------------------------------------------------input
+	if btn(buttons.up)==true and upPressed==false then upPressed=true end
+	if btn(buttons.up)==false and upPressed==true then
+		upPressed=false
+		if optionSelected == 1 then optionSelected=3 
+		else
+		  optionSelected=optionSelected-1
+		end
+	end
+
+	if btn(buttons.down)==true and downPressed==false then downPressed=true end
+	if btn(buttons.down)==false and downPressed==true then
+		downPressed=false
+		if optionSelected == 3 then optionSelected=1 
+		else
+		  optionSelected=optionSelected+1
+		end
+	end
+
+	if btn(buttons.shoot)==true and xPressed==false then xPressed=true end
+	if btn(buttons.shoot)==false and xPressed==true then
+		xPressed=false
+
+		if optionSelected==1 then currentState.run=gameState end --resume
+		if optionSelected==2 then currentState.run=levelUpState end --level up
+		if optionSelected==3 then end --inventory
+		
+	end
+
+	if btn(buttons.reload)==true and zPressed==false then zPressed=true end
+	if btn(buttons.reload)==false and zPressed==true then
+		zPressed=false
+		currentState.run=gameState
+	end
+
+end
+
+talents={}
+talents[1]={name="Razor Bullets",info="Added damage over time."}
+
+function levelUpState()
+	cls(0)
+	print("Talents",menuPos.x,8,colours.green)
+	print("Points - Avl: "..player.talentPoints.." Used: "..player.level-1,0,0)
+	print("\'x\' - accept \'z\' - back",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
+
+	for i=1,#talents do
+		print(talents[i].name,0,40,colours.red)
+		print(talents[i].info,0,48,colours.green)
+	end
+
+	if btn(buttons.reload)==true and zPressed==false then zPressed=true end
+	if btn(buttons.reload)==false and zPressed==true then
+		zPressed=false
+		currentState.run=inGameMenuState
+	end
+end
+
 currentState={run=startScreenState}
-
-
 
 function TIC()		
 	currentState.run()	
