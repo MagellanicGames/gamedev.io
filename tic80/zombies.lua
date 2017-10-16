@@ -64,7 +64,8 @@ buttons={
 	reload=4,
 	shoot=5,
 	menu=6,
-	special=7
+	special=7,
+	changeAbility=8
 }
 
 directions={
@@ -180,6 +181,7 @@ player.experienceGain=function(amount)
 	expBar.width=expBar.totalWidth*percentage
 end
 
+changeBtnPressed=false
 player.shoot=function()
 
 	if btn(buttons.shoot)and player.shotTimer<0 and inventory.clip>0 then --shoot if have bullets in clip
@@ -211,6 +213,8 @@ player.shoot=function()
 		player.combo=0 --must be set after else will calculate 0 dmg
 	end
 
+
+	
 	player.shotTimer=player.shotTimer-deltaTime	--decrement timer for being able to shoot
 
 end
@@ -322,8 +326,7 @@ function createZ(x,y,aggroed)
 	z.x=x
 	z.y=y
 	z.rot=0 --rotation per tic80 api
-	z.speed=math.random(25,55) / 100
-	trace(z.speed)
+	z.speed=math.random(25,55) / 100	
 	z.w=4 --width
 	z.h=4 --height
 	z.area={x=0,y=0} --area that entity resides in
@@ -423,7 +426,6 @@ function createItem(x,y)
 	 item.id=itemId.critUp
 	 item.sprite=sprites.critUp
 	end
-	trace("itemid "..item.id)
 	item.w=8
 	item.h=8
 
