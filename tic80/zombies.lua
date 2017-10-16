@@ -32,10 +32,22 @@ area={
 	clear=false
 }
 
+itemId={
+	health=0,
+	ammo=1,
+	dmgUp=2,
+	critUp=3
+}
 
 areaInTiles={w=30,h=16}
 
-sprites={bullet=65}
+sprites={
+	bullet=65,
+	healthPack=97,
+	ammo=98,
+	dmgUp=99,
+	critUp=100
+}
 
 upSpr=17
 rightSpr=18
@@ -68,6 +80,7 @@ directions={
 
 bullets={}
 entities={}
+itemDrops={}
 floatingText={}
 particles={}
 
@@ -86,15 +99,16 @@ spawnPoints[8]={x=area.w+8,y=area.h+8}--bottom
 
 weapons={
 
-	pistol={
-	reloadTime=0.5,
-	shootSpeed=0.5,
-	critChance=15,
-	clipSize=4,
-	dmg=15,
-	comboDmg=20,
-	bleedDmg=5
-}
+	pistol=
+	{
+		reloadTime=0.5,
+		shootSpeed=0.5,
+		critChance=15,
+		clipSize=4,
+		dmg=15,
+		comboDmg=20,
+		bleedDmg=5
+	}
 	
 }
 
@@ -117,6 +131,7 @@ player={
 	speed=1,
 	sprite=upSpr,
 	health=100,
+	maxHealth=100,
 	score=0,
 	shotTimer=0,
 	weapon=weapons.pistol,
@@ -284,9 +299,20 @@ Waves.generateWaves=function(area)	--creates desired number of waves for an area
 end
 
 Waves.generateMobs=function(wave) --creates mobs based on wave data created in functions above
-	local spawnPoint=math.random(1,8)--there are 8 spawn points		
-	table.insert(entities,createZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
-	wave.numMobs=wave.numMobs-1
+	local generateMini=math.random(1,4)
+	if generateMini==3 then
+		local spawnPoint={}
+		for i=1,4 do
+			spawnPoint=math.random(1,8)
+			table.insert(entities,createMiniZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
+			wave.numMobs=wave.numMobs-1
+		end
+	else
+	  local spawnPoint=math.random(1,8)--there are 8 spawn points		
+		table.insert(entities,createZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
+		wave.numMobs=wave.numMobs-1
+	end
+	
 end
 
 -----------------------------------------------------------------------------------------
@@ -296,7 +322,8 @@ function createZ(x,y,aggroed)
 	z.x=x
 	z.y=y
 	z.rot=0 --rotation per tic80 api
-	z.speed=0.25
+	z.speed=math.random(25,55) / 100
+	trace(z.speed)
 	z.w=4 --width
 	z.h=4 --height
 	z.area={x=0,y=0} --area that entity resides in
@@ -304,17 +331,26 @@ function createZ(x,y,aggroed)
 	z.sprIndex=0 --current frame of animation
 	z.aniTimer=0 --timer for animations
 	z.health=100
-	z.totalHealth=100
+	z.maxHealth=100
 	z.attackTimer=0 --timer for attacks
-	z.attackTime=0.5 --reset value for attack timer
-	z.attackDmg=8 
+	z.attackTime=1 --reset value for attack timer
+	z.attackDmg=20 
 	z.hasAggro=aggroed
 	z.aggroDist=32 --distance player has to be before chasing/aggro
 	z.scoreValue=25
 	z.expValue=10
 	z.bleeding=false
+	z.bleedingStacks=0
 	z.stunned=false
 	z.stunTimer=0
+	return z
+end
+
+function createMiniZ(x,y,aggroed)
+	local z=createZ(x,y,aggroed)
+	z.health=30
+	z.maxHealth=30
+	z.expValue=10
 	return z
 end
 
@@ -365,6 +401,35 @@ function createFloatingText(x,y,val,colour)
 	return text
 end
 
+function createItem(x,y)
+	local itemToDrop=math.random(1,85)
+	local item={}
+	item.x=x
+	item.y=y
+
+	if itemToDrop<=50 then
+	 item.id=itemId.ammo
+	 item.sprite=sprites.ammo
+	
+	elseif itemToDrop>50 and itemToDrop<=70 then
+	 item.id=itemId.health 
+	 item.sprite=sprites.healthPack
+	
+	elseif itemToDrop>70 and itemToDrop<=80 then
+	 item.id=itemId.dmgUp
+	 item.sprite=sprites.dmgUp
+	
+	elseif itemToDrop>80 and itemToDrop<=85 then
+	 item.id=itemId.critUp
+	 item.sprite=sprites.critUp
+	end
+	trace("itemid "..item.id)
+	item.w=8
+	item.h=8
+
+	return item
+end
+
 function generateParticleHit(entity,bullet,colour)
 	local numParticles=math.random(10,20)
 	local i=1
@@ -405,6 +470,32 @@ function withinarea(entity)
 	else
 	  return true
 	end
+end
+
+function pickupItem(item)
+	
+	if item.id == itemId.health then 
+		local missingHealth=player.maxHealth-player.health
+		if missingHealth>0 then
+			if player.health+15 < player.maxHealth then
+				player.health=player.health+15
+			else
+				player.health=player.maxHealth
+			end
+		end
+		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 15,colours.green))
+	elseif item.id == itemId.ammo then
+		local pickupAmount=math.random(1,3)
+		inventory.ammo=inventory.ammo+pickupAmount
+		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. pickupAmount .." ammo",colours.yellow))
+	elseif item.id == itemId.dmgUp then
+		player.weapon.dmg=player.weapon.dmg+2
+		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 2 .." dmg",colours.blue))
+	elseif item.id==itemId.critUp then
+		player.weapon.critChance=player.weapon.critChance+5	
+		table.insert(floatingText,createFloatingText(item.x,item.y,"+" .. 5 .. "% crit",colours.blue)) 
+	end
+
 end
 ---------------------------------------------------------------------------------------
 
@@ -473,8 +564,8 @@ function drawEntity(entity)
 end
 
 function drawHealthBar(entity,above)
-	local barWidth=(entity.w * 3)
-	local barMissing=((100-entity.health) / 100) * barWidth
+	local barWidth=(entity.w * 3) --total width
+	local barMissing=((entity.maxHealth-entity.health) / entity.maxHealth) * barWidth 
 	local sx=entity.x - entity.w
 	local y
 	if above then y=entity.y-entity.h else y=entity.y+entity.h * 2 end
@@ -484,7 +575,9 @@ function drawHealthBar(entity,above)
 	if entity.health<=50 then colour=9 end
 	if entity.health<=25 then colour=6 end 
 
-	line(sx,y,ex,y,colour)	
+	line(sx,y,sx+barWidth,y,colours.white)
+	line(sx,y,ex,y,colour)
+
 end
 
 function drawParticles()
@@ -571,6 +664,7 @@ function updateZ(entity)
 
 		if bullet.shred == true then 
 			entity.bleeding=true 
+			entity.bleedingStacks=entity.bleedingStacks+1
 			table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"Bleeding",colours.red))
 		end
 
@@ -591,7 +685,7 @@ function updateZ(entity)
 
 	bleedingTimer=bleedingTimer-deltaTime
 	if entity.bleeding==true and bleedingTimer<0 then
-		local dmg=entity.totalHealth*0.05
+		local dmg=(entity.maxHealth*0.05)*entity.bleedingStacks
 		entity.health=entity.health-dmg
 		table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"-"..dmg,colours.red))
 		bleedingTimer=1
@@ -632,7 +726,13 @@ function updateZ(entity)
 
 	if withinBounds(entity,player.x,player.y) then ---------------------if within range, attack player
 		if entity.attackTimer<=0 then 
-			player.health=player.health-entity.attackDmg
+			local h=player.health-entity.attackDmg
+			if h<1 then 
+				player.health=-1
+			else
+			  player.health=player.health-entity.attackDmg
+			end
+			
 			player.combo=0
 			entity.attackTimer=entity.attackTime
 			sfx(sound.playerHit,2*12+3,5,2) 		
@@ -684,18 +784,16 @@ function gameState()
 	
 	spawnTimer=spawnTimer-deltaTime
 
-	if spawnTimer<0 and area.waves[area.currentWave].numMobs>0 then --does the current wave still have mobs?
-		Waves.generateMobs(area.waves[area.currentWave]) --create mob
-		spawnTimer=math.random(2,4) --countdown to next mob spawn
-	end
-	if spawnTimer<0 and area.waves[area.currentWave].numMobs<1 and #entities<1 then	--is the current wave finished?   		
-	   	if area.currentWave<#area.waves then --are there still waves left?
-	   		area.currentWave=area.currentWave+1 --move to next wave
-	   		area.numWaves=area.numWaves-1 --decrement the number of waves in the area
-	   	else
-	   		area.numWaves=area.numWaves-1 --decrement to zero
-	   		area.clear=true --no waves left, area is clear
-	   	end		
+	if area.clear==false then 
+		if spawnTimer<0 and area.waves[area.currentWave].numMobs>0 then --does the current wave still have mobs?
+			Waves.generateMobs(area.waves[area.currentWave]) --create mob
+			spawnTimer=math.random(2,4) --countdown to next mob spawn
+		end
+		if spawnTimer<0 and area.waves[area.currentWave].numMobs<1 and #entities<1 and area.numWaves>0 then	--is the current wave finished?   	
+			area.currentWave=area.currentWave+1
+			area.numWaves=area.numWaves-1
+			if area.numWaves<1 then area.clear=true end
+		end
 	end
 
 	Utils.keepTime()
@@ -716,10 +814,23 @@ function gameState()
 		if entity.health<=0 then --if removed then don't need to increment index
 			player.experienceGain(entity.expValue)
 			player.score=player.score+entity.scoreValue
+			table.insert(itemDrops,createItem(entity.x,entity.y))
 			table.remove(entities,i) 
 		else
 		  i=i+1
 		end		
+	end
+
+	i=1
+	while i<=#itemDrops do
+		local item=itemDrops[i]
+		spr(item.sprite,item.x,item.y,0,1,0)
+		if withinBounds(item,player.x,player.y) then
+			pickupItem(item)
+			table.remove(itemDrops,i)
+		else
+			i=i+1
+		end
 	end
 
 	updateBullets()
