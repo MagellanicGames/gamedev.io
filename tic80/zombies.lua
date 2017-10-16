@@ -9,7 +9,8 @@ sound={
 	playerHit=2,
 	misFire=3,
 	reload=4,
-	healthUp=5
+	healthUp=5,
+	menu=6
 }
 
 colours={
@@ -83,6 +84,20 @@ spawnPoints[6]={x=-8,y=area.h+8}
 spawnPoints[7]={x=area.w*0.5,y=area.h+8}
 spawnPoints[8]={x=area.w+8,y=area.h+8}--bottom
 
+weapons={
+
+	pistol={
+	reloadTime=0.5,
+	shootSpeed=0.5,
+	critChance=15,
+	clipSize=4,
+	dmg=15,
+	comboDmg=20,
+	bleedDmg=5
+}
+	
+}
+
 --------------------------------------------------------------------------------------------
 theTime=time()
 lastTime=theTime
@@ -104,9 +119,9 @@ player={
 	health=100,
 	score=0,
 	shotTimer=0,
-	reloadTime=0.5,
-	shootSpeed=0.5,
-	critChance=25,
+	weapon=weapons.pistol,
+	combo=0,
+	maxCombo=0,
 	experience=0,
 	experienceReq=100,
 	totalExperience=0,
@@ -115,20 +130,21 @@ player={
 }
 
 inventory={
-	ammo=50,
-	clipSize=4,
+	ammo=50,	
 	clip=4
 }
 
 expBar={
-	x=110,y=133,
+	x=205,y=133,
 	width=1,
 	totalWidth=32,
 	expInPercent=0
 }
 
-playerTalents={
-	bulletShredder=true
+abilities={
+	shred=false,
+	stun=false,
+	headShot=false
 }
 
 player.experienceGain=function(amount)
@@ -141,6 +157,7 @@ player.experienceGain=function(amount)
 		if expOver>0 then player.experience=expOver else player.experience=0 end --set exp to excess or zero
 		player.experienceReq=player.experienceReq+(player.experienceReq*0.5)
 		player.talentPoints=player.talentPoints+1
+		if player.maxCombo<3 then player.maxCombo=player.maxCombo+1 end
 		table.insert(floatingText,createFloatingText(player.x,player.y+8,"LEVEL UP!",colours.pink))
 	end
 	local percentage=(player.experience/player.experienceReq)
@@ -152,15 +169,31 @@ player.shoot=function()
 
 	if btn(buttons.shoot)and player.shotTimer<0 and inventory.clip>0 then --shoot if have bullets in clip
 		sfx(sound.shot,3*12+6,25)
-		player.shotTimer=player.shootSpeed
+		player.shotTimer=player.weapon.shootSpeed
 		inventory.clip=inventory.clip-1
 		table.insert(bullets,createBullet(player.x,player.y))
 	end
 
 	if btn(buttons.shoot) and inventory.clip<1 and player.shotTimer<0 then --shoot but no bullets in clip
 	 sfx(sound.misFire,4*12+6,10)
-	 player.shotTimer=player.shootSpeed * 0.5
+	 player.shotTimer=player.weapon.shootSpeed * 0.5
 	 table.insert(floatingText,createFloatingText(player.x,player.y,"Reload!!",colours.blue))
+	end
+
+	if btn(buttons.special) and player.combo>0 and player.shotTimer<0 then --shoot combo ability
+		sfx(sound.shot,3*12+6,25)
+		player.shotTimer=player.weapon.shootSpeed*3
+		local bullet =createComboBlastBullet(player.x,player.y)
+		if player.combo==1 and abilities.shred then 
+			bullet.shred=true 
+		end
+		if player.combo==2 and abilities.stun then
+			bullet.stun=true
+			bullet.dmg=player.weapon.dmg
+		end
+		--3 just damages
+		table.insert(bullets,bullet)
+		player.combo=0 --must be set after else will calculate 0 dmg
 	end
 
 	player.shotTimer=player.shotTimer-deltaTime	--decrement timer for being able to shoot
@@ -168,12 +201,12 @@ player.shoot=function()
 end
 
 player.reload=function()
-	if btn(buttons.reload) and inventory.ammo>0 and inventory.clip < inventory.clipSize then
-		local numBulletsNeeded=inventory.clipSize-inventory.clip
+	if btn(buttons.reload) and player.shotTimer<0 and inventory.ammo>0 and inventory.clip < player.weapon.clipSize then
+		local numBulletsNeeded=player.weapon.clipSize-inventory.clip
 		if inventory.ammo-numBulletsNeeded>-1 then 
 			inventory.ammo=inventory.ammo-numBulletsNeeded
 			inventory.clip=inventory.clip+numBulletsNeeded
-			player.shotTimer=player.reloadTime
+			player.shotTimer=player.weapon.reloadTime
 			sfx(sound.reload,4*12+6,20)
 		else
 			if inventory.ammo>0 and inventory.ammo<numBulletsNeeded then 
@@ -280,6 +313,8 @@ function createZ(x,y,aggroed)
 	z.scoreValue=25
 	z.expValue=10
 	z.bleeding=false
+	z.stunned=false
+	z.stunTimer=0
 	return z
 end
 
@@ -288,15 +323,33 @@ function createBullet(x,y)
 	b.x=x
 	b.y=y
 	b.direction=player.direction
-	b.speed=8
+	b.speed=6
 	b.destroy=false
 	b.area={x=area.x,y=area.y}
-	b.dmg=25
+	b.dmg=player.weapon.dmg
 	b.isCrit=false
-	if math.random(0,100)<player.critChance then
+	if math.random(0,100)<player.weapon.critChance then
 	 b.dmg=b.dmg+b.dmg
 	 b.isCrit=true
 	end
+	b.isCombo=false
+	b.firstSpr=49
+	return b
+end
+
+function createComboBlastBullet(x,y)
+	local b={}
+	b.x=x
+	b.y=y
+	b.direction=player.direction
+	b.speed=6
+	b.destroy=false
+	b.area={x=area.x,y=area.y}
+	b.dmg=player.weapon.comboDmg*(player.combo)
+	b.isCrit=false
+	b.shred=false
+	b.stun=false
+	b.isCombo=true	
 	b.firstSpr=49
 	return b
 end
@@ -472,7 +525,8 @@ function updateBullets()
 	while i <=#bullets do
 
 			if bullets[i].x < 0 or bullets[i].x>area.w or bullets[i].y<0 or bullets[i].y>area.h or bullets[i].destroy then --out of bounds, destroy
-				table.remove(bullets,i)
+				if not bullets[i].destroy then player.combo=0 end --player missed so remove combo points
+				table.remove(bullets,i)				
 			else
 			bullets[i].x=bullets[i].x + (bullets[i].direction.x * bullets[i].speed) --update
 			bullets[i].y=bullets[i].y + (bullets[i].direction.y * bullets[i].speed)
@@ -506,13 +560,25 @@ function updateZ(entity)
 		local bullet=bullets[i]
 		if withinBounds(entity,bullet.x,bullet.y) and withinSameArea(entity,bullet) then
 		 entity.health=entity.health-bullet.dmg		
+		 if player.combo<player.maxCombo and bullet.isCombo==false then		  
+		  player.combo=player.combo+1 
+		 end
 		 local textColour=colours.white
 		 if bullet.isCrit then 
 		 	textColour=colours.yellow
 		 	table.insert(floatingText,createFloatingText(entity.x-12,entity.y+8,"CRITICAL!",textColour))
 		 end
 
-		if playerTalents.bulletShredder==true then entity.bleeding=true end
+		if bullet.shred == true then 
+			entity.bleeding=true 
+			table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"Bleeding",colours.red))
+		end
+
+		if bullet.stun ==true then
+		 entity.stun=true
+		 entity.stunTimer=3
+		 table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"Stunned",colours.blue))
+		end
 
 		bullet.destroy=true
 		aggroEntity(entity)
@@ -535,19 +601,25 @@ function updateZ(entity)
 
 	if entity.hasAggro==false then return end --exit early if not aggroed
 
-	if entity.x<player.x then ----------------------------move towards player
-	 entity.x=entity.x+entity.speed
+	if entity.stun and entity.stunTimer>0 then entity.stunTimer=entity.stunTimer-deltaTime
+	else entity.stun = false
 	end
-	if entity.x>player.x then
-	 entity.x=entity.x-entity.speed
-	end
-	if entity.y<player.y then
-	 entity.y=entity.y+entity.speed
-	end
-	if entity.y>player.y then
-	 entity.y=entity.y-entity.speed
- 	end
+		
+	if entity.stun == false then
 
+		if entity.x<player.x then ----------------------------move towards player
+	 		entity.x=entity.x+entity.speed
+		end
+		if entity.x>player.x then
+			 entity.x=entity.x-entity.speed
+		end
+		if entity.y<player.y then
+	 		entity.y=entity.y+entity.speed
+		end
+		if entity.y>player.y then
+	 		entity.y=entity.y-entity.speed
+ 		end
+ 	end
  	if math.abs(entity.x-player.x) > math.abs(entity.y-player.y) then --change rotation depending on pos compared to player
 		if entity.x > player.x then entity.rot=3
 		else entity.rot=1 end
@@ -561,6 +633,7 @@ function updateZ(entity)
 	if withinBounds(entity,player.x,player.y) then ---------------------if within range, attack player
 		if entity.attackTimer<=0 then 
 			player.health=player.health-entity.attackDmg
+			player.combo=0
 			entity.attackTimer=entity.attackTime
 			sfx(sound.playerHit,2*12+3,5,2) 		
 			table.insert(floatingText,createFloatingText(player.x-4,player.y,"-"..entity.attackDmg,colours.red))
@@ -571,28 +644,33 @@ end
 
 flashTimer=0.5
 function drawHUD()
-	print("Health: "..player.health,0,area.h,colours.red)
+	
 	print("Score: " ..player.score,0,0)
 	print("Waves: "..area.numWaves,64,2)
 	print("Ammo: "..inventory.ammo,area.w - 64,0,colours.blue)
 	local i=1
 	while i<=inventory.clip do
-		spr(sprites.bullet,(area.w/2) +(8*i),-1,0)
+		spr(sprites.bullet,0 +(8*i),area.h,0)
 		i=i+1
 	end
-	print("Exp: %"..expBar.expInPercent,64,130)  
+
+	local comboPos={x=50,y=area.h+1}
+
+	print("Combo "..player.combo,comboPos.x,comboPos.y,colours.green)
+
+	print("Exp: %"..expBar.expInPercent,expBar.x-44,130)  
 	
 	line(expBar.x,expBar.y,expBar.x+expBar.width,expBar.y,colours.orange)
 	flashTimer=flashTimer-deltaTime
 
 	if flashTimer<-0.5 then flashTimer=0.5 end
 	if area.clear==false then
-		if flashTimer>0 then print("!!Danger!!",area.w-50,130,colours.red) end 
+		if flashTimer>0 then print("!!Danger!!",114,2,colours.red) end 
 	else
-	 	print("Safe =D",area.w-50,130,colours.green)
+	 	print("Safe =D",114,2,colours.green)
 	end
 
-	if player.talentPoints>0 and flashTimer>0 then print("\'A\' to Level up!",player.x - 8,player.y+8,colours.pink) end
+	if player.talentPoints>0 and flashTimer>0 then print("\'A\' to Level up!",player.x - 20,player.y+8,colours.pink) end
 	--print("Time: ".. time()/1000)
 end
 --------------------------------------
@@ -653,7 +731,7 @@ function gameState()
 	if btn(buttons.menu) and menuPressed==false then menuPressed=true end
 	if btn(buttons.menu)==false and menuPressed==true then
 		menuPressed=false
-		currentState.run=inGameMenuState
+		if player.talentPoints>0 then currentState.run=levelUpState else currentState.run=inGameMenuState end		
 	end
 end
 
@@ -669,7 +747,8 @@ function startScreenState()
 	cls(0)
 	print("Zombie Apocalyp-tic-80",titleXpos,titleYpos,startTextColor)
 	print("Press \'Z\' key to start!",titleXpos-4,titleYpos+32,colours.blue)
-	print("\'Z\' to reload, \'X\' to shoot,  Arrows to move.",0,titleYpos+64)
+	print("\'Z\' to reload, \'X\' to shoot,  Arrows to move.",0,titleYpos+56)
+	print("\'A\' to open menu, \'S\' for combo ability",0,titleYpos+64)
 
 	if btn(buttons.reload) and startGame==false then
 	 startGame=true
@@ -680,12 +759,32 @@ function startScreenState()
 	if startGame then 
 		startTimer=startTimer-deltaTime	 
 	end
-	if startTimer<0 then currentState.run=gameState end
+	if startTimer<0 then currentState.run=introductionScreenState end
+end
+
+
+introTimer=3
+introYpos=24
+textSpacing=8
+function introductionScreenState()
+	cls(0)
+	print("Kill the zombies, when clear move to",16,introYpos)
+	print("the next area.",16,introYpos+(textSpacing*1))
+	print("Find supplies to keep yourself alive",16,introYpos+(textSpacing*3))
+	print("and get out of the city.",16,introYpos+(textSpacing*4))
+
+	if introTimer<0 then print("Press \'z\' to continue.",16,introYpos+(textSpacing*6),colours.yellow) end
+
+	introTimer=introTimer-deltaTime
+	if introTimer<0 and btn(buttons.reload) then
+	 acceptSound()
+	 currentState.run=gameState
+	end
 end
 
 
 menuOptions = {}
-menuOptions[1]="Resume"
+menuOptions[1]="Help"
 menuOptions[2]="Level Up"
 menuOptions[3]="Inventory"
 optionSelected=1
@@ -714,6 +813,7 @@ function inGameMenuState()
 		else
 		  optionSelected=optionSelected-1
 		end
+		menuSound()
 	end
 
 	if btn(buttons.down)==true and downPressed==false then downPressed=true end
@@ -723,44 +823,103 @@ function inGameMenuState()
 		else
 		  optionSelected=optionSelected+1
 		end
+		menuSound()
 	end
 
 	if btn(buttons.shoot)==true and xPressed==false then xPressed=true end
 	if btn(buttons.shoot)==false and xPressed==true then
 		xPressed=false
 
-		if optionSelected==1 then currentState.run=gameState end --resume
+		if optionSelected==1 then trace("TODO") end --help
 		if optionSelected==2 then currentState.run=levelUpState end --level up
 		if optionSelected==3 then end --inventory
-		
+		acceptSound()
 	end
 
 	if btn(buttons.reload)==true and zPressed==false then zPressed=true end
 	if btn(buttons.reload)==false and zPressed==true then
 		zPressed=false
+		acceptSound()
 		currentState.run=gameState
 	end
 
 end
 
 talents={}
-talents[1]={name="Razor Bullets",info="Added damage over time."}
+talents[1]={name="Razor Bullets. Req. lvl2",info="Added damage over time. Cost: 1 combo"}
+talents[2]={name="Stun. Req. lvl3",info="Stun target for 3 secs. Cost: 2 combo"}
+talents[3]={name="Head Shot. Req. lvl4",info="Shot that does 3x weapon dmg. Cost: 3 combo"}
 
+learned={}
+learned[1]=false
+learned[2]=false
+learned[3]=false
+
+talentSelected=1
 function levelUpState()
 	cls(0)
 	print("Talents",menuPos.x,8,colours.green)
 	print("Points - Avl: "..player.talentPoints.." Used: "..player.level-1,0,0)
 	print("\'x\' - accept \'z\' - back",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
 
+	local yOffset=17
+	local nameY=5
 	for i=1,#talents do
-		print(talents[i].name,0,40,colours.red)
-		print(talents[i].info,0,48,colours.green)
+		local colour={}
+		if learned[i]==true then colour=colours.green else colour=colours.red end 
+
+		print(talents[i].name,0,nameY+(yOffset*i),colour)
+		print(talents[i].info,0,12+(yOffset*i),colours.yellow)
+	end
+
+	spr(81,128,(yOffset*talentSelected) + 4,0)
+
+	if btn(buttons.shoot)==true and xPressed==false then xPressed=true end
+	if btn(buttons.shoot)==false and xPressed==true then
+		xPressed=false
+		if player.level==2 and talentSelected==1 then 
+			player.talentPoints=0
+			abilities.shred=true
+			learned[1]=true
+		end
+		if player.level==3 and talentSelected==2 then 
+			player.talentPoints=0
+			abilities.stun=true
+			learned[2]=true
+		end
+		if player.level==4 and talentSelected==3 then 
+			player.talentPoints=0
+			abilities.headShot=true
+			learned[3]=true
+		end
+		acceptSound()
 	end
 
 	if btn(buttons.reload)==true and zPressed==false then zPressed=true end
 	if btn(buttons.reload)==false and zPressed==true then
 		zPressed=false
+		acceptSound()
 		currentState.run=inGameMenuState
+	end
+
+	if btn(buttons.up)==true and upPressed==false then upPressed=true end
+	if btn(buttons.up)==false and upPressed==true then
+		upPressed=false
+		if talentSelected == 1 then talentSelected=3 
+		else
+		  talentSelected=talentSelected-1
+		end
+		menuSound()
+	end
+
+	if btn(buttons.down)==true and downPressed==false then downPressed=true end
+	if btn(buttons.down)==false and downPressed==true then
+		downPressed=false
+		if talentSelected == 3 then talentSelected=1 
+		else
+		  talentSelected=talentSelected+1
+		end
+		menuSound()
 	end
 end
 
@@ -768,4 +927,12 @@ currentState={run=startScreenState}
 
 function TIC()		
 	currentState.run()	
+end
+
+function menuSound()
+	sfx(sound.menu,6*12+3,5,1) 
+end
+
+function acceptSound()
+	sfx(sound.menu,4*12+3,5,1)
 end
