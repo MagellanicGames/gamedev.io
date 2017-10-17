@@ -30,7 +30,20 @@ h3.red{
 	text-align: center;
 	font-size: 2em;	
 	text-shadow: 2px 2px 5px blue;
-	color: #e90666;}
+	color: #e90666;
+}
+
+h2{
+	font-size: 2em;
+	text-shadow: 2px 2px 5px blue;
+	color: #e90666;
+}
+
+h3{
+	font-size: 1.5em;
+	text-shadow: 2px 2px 5px blue;
+	color:#68e9f8;
+}
 
 p{
 	font-size: 1.4em;
@@ -38,6 +51,13 @@ p{
     margin-bottom: 100px;
     margin-right: 150px;
     margin-left: 80px;
+
+    color: #3dff44;
+}
+
+ul{
+	font-size: 1.4em;
+	
 
     color: #3dff44;
 }
@@ -52,6 +72,13 @@ img{
 	border-radius: 8px;
 	max-width: 90%;
 	margin-bottom: 100px;
+}
+
+div.gameInstructions{
+	margin-top: 100px;
+    margin-bottom: 100px;
+    margin-right: 150px;
+    margin-left: 80px;
 }
 
 a{
