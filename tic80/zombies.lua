@@ -100,18 +100,71 @@ spawnPoints[7]={x=area.w*0.5,y=area.h+8}
 spawnPoints[8]={x=area.w+8,y=area.h+8}--bottom
 
 weapons={
-
-	pistol=
-	{
-		reloadTime=0.5,
-		shootSpeed=0.5,
-		critChance=15,
-		clipSize=4,
-		dmg=15,
-		comboDmg=20,
-		bleedDmg=5
-	}
 	
+}
+
+weapons[1]=
+{
+	name="Rusty Pistol",
+	reloadTime=0.5,
+	shootSpeed=0.5,
+	critChance=15,
+	clipSize=4,
+	dmg=15,
+	comboDmg=20,
+	bleedDmg=0.33,
+	ability="Shred",
+	soundEffect=sound.shot,
+	soundEffectPitch=3*12+6,
+	menuSprite=256
+}
+
+weapons[2]=
+{
+	name="Stunning Shotun",
+	reloadTime=1.5,
+	shootSpeed=1,
+	critChance=10,
+	clipSize=5,
+	dmg=7.5,
+	comboDmg=10,
+	bleedDmg=5,
+	ability="Stun",
+	soundEffect=sound.shot,
+	soundEffectPitch=3*12+6,
+	menuSprite=258
+}
+
+weapons[3]=
+{
+	name="Between the Rifles",
+	reloadTime=1,
+	shootSpeed=1.5,
+	critChance=25,
+	clipSize=4,
+	dmg=30,
+	comboDmg=20,
+	bleedDmg=5,
+	ability="Headshot",
+	soundEffect=sound.shot,
+	soundEffectPitch=3*12+6,
+	menuSprite=262
+}
+
+weapons[4]=
+{
+	name="Dead Future",
+	reloadTime=0.75,
+	shootSpeed=0.30,
+	critChance=35,
+	clipSize=10,
+	dmg=8,
+	comboDmg=20,
+	bleedDmg=5,
+	ability="Rapidshot",
+	soundEffect=sound.shot,
+	soundEffectPitch=3*12+6,
+	menuSprite=260
 }
 
 --------------------------------------------------------------------------------------------
@@ -144,9 +197,49 @@ player={
 	totalExperience=0,
 	level=1,
 	talentPoints=0,
-	ability=1,
+	talentPointsUsed=0,
 	maxAbility=0
 }
+
+talents={
+}
+
+talents[1]={
+	name="Not Quite a Zombie",
+	numPoints=0,
+	maxPoints=5,
+	levelRequirement=2,
+	description="For each point gain 3% ",
+	description1="health regen but lose 10% total health."
+}
+
+talents[2]={
+	name="Bullet Rations",
+	numPoints=0,
+	maxPoints=3,
+	levelRequirement=2,
+	description="Crits refund 1 ammo per ",
+	description1="point but you lose 10% crit dmg per point."
+}
+
+talents[3]={
+	name="Athlete",
+	numPoints=0,
+	maxPoints=5,
+	levelRequirement=3,
+	description="Each point grants 10% movement ",
+	description1="speed but if hit you bleed."
+}
+
+talents[4]={
+name="Seasoned",
+	numPoints=0,
+	maxPoints=2,
+	levelRequirement=4,
+	description="Increase max. combo points",
+	description1="per point."
+}
+
 
 inventory={
 	ammo=50,	
@@ -158,16 +251,6 @@ expBar={
 	width=1,
 	totalWidth=32,
 	expInPercent=0
-}
-
-abilityNames={
-	"shred","stun","headshot"
-}
-
-abilities={
-	shred=false,
-	stun=false,
-	headShot=false
 }
 
 player.experienceGain=function(amount)
@@ -182,7 +265,9 @@ player.experienceGain=function(amount)
 		player.talentPoints=player.talentPoints+1
 		if player.maxAbility<3 then player.maxAbility=player.maxAbility+1 end
 		if player.level==2 then player.maxCombo=3 end
-		table.insert(floatingText,createFloatingText(player.x,player.y+8,"LEVEL UP!",colours.pink))
+		local lvlText=createFloatingText(player.x,player.y+8,"LEVEL UP!",colours.pink)
+		lvlText.lifeTime=3
+		table.insert(floatingText,lvlText)
 	end
 	local percentage=(player.experience/player.experienceReq)
 	expBar.expInPercent=math.floor(percentage*100)
@@ -193,7 +278,7 @@ changeBtnPressed=false
 player.shoot=function()
 
 	if btn(buttons.shoot) and btn(buttons.reload)==false and player.shotTimer<0 and inventory.clip>0 then --shoot if have bullets in clip
-		sfx(sound.shot,3*12+6,25)
+		sfx(player.weapon.soundEffect,3*12+6,25)
 		player.shotTimer=player.weapon.shootSpeed
 		inventory.clip=inventory.clip-1
 		table.insert(bullets,createBullet(player.x,player.y))
@@ -208,24 +293,24 @@ player.shoot=function()
 	if btn(buttons.special) and player.combo>0 and player.shotTimer<0 then --shoot combo ability
 		
 		local bullet =createComboBlastBullet(player.x,player.y)
-		if player.ability==1 and player.combo>=1 and abilities.shred then 
-			sfx(sound.shot,3*12+6,25)
+		if player.weapon.ability=="Shred" and player.combo>=1 then 
+			sfx(player.weapon.soundEffect,player.weapon.soundEffectPitch,25)
 			player.shotTimer=player.weapon.shootSpeed
 			bullet.shred=true 
 			bullet.dmg=player.weapon.dmg*0.15
 			table.insert(bullets,bullet)
 			player.combo=player.combo-1 --must be set after else will change damage
 		end
-		if player.ability==2 and player.combo>=2 and abilities.stun then
-			sfx(sound.shot,3*12+6,25)
+		if player.weapon.ability=="Stun" and player.combo>=2 and abilities.stun then
+			sfx(player.weapon.soundEffect,player.weapon.soundEffectPitch,25)
 			player.shotTimer=player.weapon.shootSpeed
 			bullet.stun=true
 			bullet.dmg=player.weapon.dmg
 			table.insert(bullets,bullet)
 			player.combo=player.combo-2
 		end
-		if player.ability==3 and player.combo>=3 and abilities.headShot then
-			sfx(sound.shot,3*12+6,25)
+		if player.weapon.abliliy=="Headshot" and player.combo>=3 and abilities.headShot then
+			sfx(player.weapon.soundEffect,player.weapon.soundEffectPitch,25)
 			player.shotTimer=player.weapon.shootSpeed
 			table.insert(bullets,bullet)
 			player.combo=player.combo-3
@@ -523,12 +608,13 @@ function pickupItem(item)
 		end
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 15,colours.green))
 	elseif item.id == itemId.ammo then
-		local pickupAmount=math.random(2,4)
+		local pickupAmount=math.random(1,player.weapon.clipSize*0.5)
 		inventory.ammo=inventory.ammo+pickupAmount
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. pickupAmount .." ammo",colours.yellow))
 	elseif item.id == itemId.dmgUp then
-		player.weapon.dmg=player.weapon.dmg+2
-		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 2 .." dmg",colours.blue))
+		local pickupAmount=player.weapon.dmg*0.15
+		player.weapon.dmg=player.weapon.dmg+pickupAmount
+		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 15 .."% dmg",colours.blue))
 	elseif item.id==itemId.critUp then
 		player.weapon.critChance=player.weapon.critChance+5	
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+" .. 5 .. "% crit",colours.blue)) 
@@ -715,7 +801,7 @@ function updateZ(entity)
 		bullet.destroy=true
 		aggroEntity(entity)
 		generateParticleHit(entity,bullet,colours.red)
-		table.insert(floatingText,createFloatingText(entity.x,entity.y,bullet.dmg,textColour))
+		table.insert(floatingText,createFloatingText(entity.x,entity.y,math.floor(bullet.dmg),textColour))
 		sfx(sound.hit,2*12+3,5,1) 
 		end
 		i=i+1
@@ -723,9 +809,9 @@ function updateZ(entity)
 
 	bleedingTimer=bleedingTimer-deltaTime
 	if entity.bleeding==true and bleedingTimer<0 then
-		local dmg=(entity.maxHealth*0.05)*entity.bleedingStacks
+		local dmg=(player.weapon.dmg*player.weapon.bleedDmg)*entity.bleedingStacks
 		entity.health=entity.health-dmg
-		table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"-"..dmg,colours.red))
+		table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"-"..math.floor(dmg),colours.red))
 		bleedingTimer=1
 	end
 
@@ -786,7 +872,7 @@ function drawHUD()
 	print("Score: " ..player.score,0,0)
 	print("Waves: "..area.numWaves,64,2)
 	print("Ammo: "..inventory.ammo,area.w - 64,0,colours.blue)
-	if player.level>1 then print(abilityNames[player.ability],comboPos.x+48,comboPos.y,colours.red) end
+
 	local i=1
 	while i<=inventory.clip do
 		spr(sprites.bullet,0 +(8*i),area.h,0)
@@ -899,11 +985,11 @@ function startScreenState()
 	Utils.keepTime()
 	cls(0)
 	print("Zombie Apocalyp-tic-80",titleXpos,titleYpos,startTextColor)
-	print("Press \'Z\' key to start!",titleXpos-4,titleYpos+32,colours.blue)
+	print("Press \'X\' key to start!",titleXpos-4,titleYpos+32,colours.blue)
 	print("\'Z\' to reload, \'X\' to shoot,  Arrows to move.",0,titleYpos+56)
 	print("\'A\' to open menu, \'S\' for combo ability",0,titleYpos+64)
 
-	if btn(buttons.reload) and startGame==false then
+	if btn(buttons.shoot) and startGame==false then
 	 startGame=true
 	 startTextColor=colours.red
 	 sfx(sound.healthUp,4*12+3,20,2)
@@ -912,7 +998,7 @@ function startScreenState()
 	if startGame then 
 		startTimer=startTimer-deltaTime	 
 	end
-	if startTimer<0 then currentState.run=introductionScreenState end
+	if startTimer<0 then currentState.run=weaponSelectState end
 end
 
 
@@ -926,10 +1012,10 @@ function introductionScreenState()
 	print("Find supplies to keep yourself alive",16,introYpos+(textSpacing*3))
 	print("and get out of the city.",16,introYpos+(textSpacing*4))
 
-	if introTimer<0 then print("Press \'z\' to continue.",16,introYpos+(textSpacing*6),colours.yellow) end
+	if introTimer<0 then print("Press \'x\' to continue.",16,introYpos+(textSpacing*6),colours.yellow) end
 
 	introTimer=introTimer-deltaTime
-	if introTimer<0 and btn(buttons.reload) then
+	if introTimer<0 and btn(buttons.shoot) then
 	 acceptSound()
 	 currentState.run=gameState
 	end
@@ -998,82 +1084,113 @@ function inGameMenuState()
 
 end
 
-talents={}
-talents[1]={name="Razor Bullets. Req. lvl2",info="Added damage over time. Cost: 1 combo"}
-talents[2]={name="Stun. Req. lvl3",info="Stun target for 3 secs. Cost: 2 combo"}
-talents[3]={name="Head Shot. Req. lvl4",info="Shot that does 3x weapon dmg. Cost: 3 combo"}
+titlePos={x=menuPos.x,y=8}
+gunNamePos={x=titlePos.x-32,y=titlePos.y+16}
+gunInfoPos={x=gunNamePos.x+72,y=gunNamePos.y+16}
+weaponIndex=1
+rightPressed=false
+leftPressed=false
+xPressed=false
 
-learned={}
-learned[1]=false
-learned[2]=false
-learned[3]=false
-
-talentSelected=1
-function levelUpState()
+function weaponSelectState()
 	cls(0)
-	print("Talents",menuPos.x,8,colours.green)
-	print("Points - Avl: "..player.talentPoints.." Used: "..player.level-1,0,0)
-	print("\'x\' - accept \'z\' - back",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
+	local numWeapons=#weapons
+	print("Weapon Select",menuPos.x,8,colours.green)
+	print(weapons[weaponIndex].name,gunNamePos.x,gunNamePos.y,colours.white)
+	print("Damage: "..weapons[weaponIndex].dmg,gunInfoPos.x,gunInfoPos.y,colours.red)
+	print("Reload: "..weapons[weaponIndex].reloadTime,gunInfoPos.x,gunInfoPos.y+8,colours.yellow)
+	print("FireRate: "..weapons[weaponIndex].shootSpeed,gunInfoPos.x,gunInfoPos.y+16,colours.yellow)
+	print("Crit: "..weapons[weaponIndex].critChance .. "%",gunInfoPos.x,gunInfoPos.y+24,colours.green)
+	print("Clip Size: "..weapons[weaponIndex].clipSize,gunInfoPos.x,gunInfoPos.y+32,colours.white)
+	print("Ability: "..weapons[weaponIndex].ability,gunInfoPos.x,gunInfoPos.y+40,colours.blue)
 
-	local yOffset=17
-	local nameY=5
-	for i=1,#talents do
-		local colour={}
-		if learned[i]==true then colour=colours.green else colour=colours.red end 
-
-		print(talents[i].name,0,nameY+(yOffset*i),colour)
-		print(talents[i].info,0,12+(yOffset*i),colours.yellow)
+	spr(weapons[weaponIndex].menuSprite,64,gunInfoPos.y,0,2,0,0,2,2)
+	spr(264,0,gunInfoPos.y+16,0,2,1,0)
+	spr(264,area.w-16,gunInfoPos.y+16,0,2,0,0)
+	if btn(buttons.left)==true and leftPressed==false then leftPressed=true end
+	if btn(buttons.left)==false and leftPressed==true then
+		leftPressed=false
+		if weaponIndex>1 then weaponIndex=weaponIndex-1 else
+		  weaponIndex=numWeapons
+		end
 	end
 
-	spr(81,128,(yOffset*talentSelected) + 4,0)
+	if btn(buttons.right)==true and rightPressed==false then rightPressed=true end
+	if btn(buttons.right)==false and rightPressed==true then
+		rightPressed=false
+		if weaponIndex<numWeapons then weaponIndex=weaponIndex+1 else
+		  weaponIndex=1
+		end		
+	end
 
 	if btn(buttons.shoot)==true and xPressed==false then xPressed=true end
 	if btn(buttons.shoot)==false and xPressed==true then
 		xPressed=false
-		if player.level==2 and talentSelected==1 then 
-			player.talentPoints=0
-			abilities.shred=true
-			learned[1]=true
+		player.weapon=weapons[weaponIndex]
+		currentState.run=introductionScreenState
+	end
+
+	print("\'x\' - accept",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
+
+end
+
+talentIndex=1
+talentNamePos={x=titlePos.x-32,y=titlePos.y+16}
+function levelUpState()
+	cls(0)
+	print("Talents",titlePos.x,titlePos.y,colours.green)
+	print("Points - Avl: "..player.talentPoints.." Used: "..player.talentPointsUsed.." Current Level: "..player.level,0,0)
+	print("\'x\' - accept \'z\' - back",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
+
+	spr(264,0,gunInfoPos.y+16,0,2,1,0)
+	spr(264,area.w-16,gunInfoPos.y+16,0,2,0,0)
+	local numTalents=#talents
+	
+	print("Name: ".. talents[talentIndex].name,talentNamePos.x,talentNamePos.y,colours.yellow)
+	print("Level Req. "..talents[talentIndex].levelRequirement,talentNamePos.x,talentNamePos.y+8,colours.red)
+	print("Current Level "..talents[talentIndex].numPoints .."/"..talents[talentIndex].maxPoints,talentNamePos.x,talentNamePos.y+16,colours.white)
+	print("Info: "..talents[talentIndex].description,talentNamePos.x-30,talentNamePos.y+46,colours.white)
+	print(talents[talentIndex].description1,talentNamePos.x-48,talentNamePos.y+54,colours.white)
+
+	if btn(buttons.left)==true and leftPressed==false then leftPressed=true end
+	if btn(buttons.left)==false and leftPressed==true then
+		leftPressed=false
+		if talentIndex==1 then talentIndex=#talents else
+		  talentIndex=talentIndex-1
 		end
-		if player.level==3 and talentSelected==2 then 
-			player.talentPoints=0
-			abilities.stun=true
-			learned[2]=true
+	end
+
+	if btn(buttons.right)==true and rightPressed==false then rightPressed=true end
+	if btn(buttons.right)==false and rightPressed==true then
+		rightPressed=false
+		if talentIndex==#talents then
+			talentIndex=1
+		else		  
+		  talentIndex=talentIndex+1
 		end
-		if player.level==4 and talentSelected==3 then 
-			player.talentPoints=0
-			abilities.headShot=true
-			learned[3]=true
+	end
+
+	if btn(buttons.shoot)==true and xPressed==false then xPressed=true end
+	if btn(buttons.shoot)==false and xPressed==true then
+		xPressed=false
+		local talent=talents[talentIndex]
+		if player.level>=talent.levelRequirement then --if meets level requirement
+			if player.talentPoints>0 and talent.numPoints<talent.maxPoints then --if player has a point and its not maxed on level
+				talent.numPoints=talent.numPoints+1
+				player.talentPoints=player.talentPoints-1
+				player.talentPointsUsed=player.talentPointsUsed+1
+			end	
 		end
-		acceptSound()
 	end
 
 	if btn(buttons.reload)==true and zPressed==false then zPressed=true end
 	if btn(buttons.reload)==false and zPressed==true then
 		zPressed=false
-		acceptSound()
 		currentState.run=inGameMenuState
 	end
 
-	if btn(buttons.up)==true and upPressed==false then upPressed=true end
-	if btn(buttons.up)==false and upPressed==true then
-		upPressed=false
-		if talentSelected == 1 then talentSelected=3 
-		else
-		  talentSelected=talentSelected-1
-		end
-		menuSound()
-	end
 
-	if btn(buttons.down)==true and downPressed==false then downPressed=true end
-	if btn(buttons.down)==false and downPressed==true then
-		downPressed=false
-		if talentSelected == 3 then talentSelected=1 
-		else
-		  talentSelected=talentSelected+1
-		end
-		menuSound()
-	end
+	print("\'x\' - accept",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
 end
 
 currentState={run=startScreenState}
