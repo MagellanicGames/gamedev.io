@@ -27,9 +27,10 @@ area={
 	x=0,y=0,
 	w=240,h=128,
 	waves={},
-	numWaves=5,
+	numWaves=10,
 	currentWave=1,	
-	clear=false
+	clear=false,
+	doodads={}
 }
 
 itemId={
@@ -139,10 +140,12 @@ player={
 	combo=0,
 	maxCombo=0,
 	experience=0,
-	experienceReq=100,
+	experienceReq=200,
 	totalExperience=0,
 	level=1,
-	talentPoints=0
+	talentPoints=0,
+	ability=1,
+	maxAbility=0
 }
 
 inventory={
@@ -155,6 +158,10 @@ expBar={
 	width=1,
 	totalWidth=32,
 	expInPercent=0
+}
+
+abilityNames={
+	"shred","stun","headshot"
 }
 
 abilities={
@@ -173,7 +180,8 @@ player.experienceGain=function(amount)
 		if expOver>0 then player.experience=expOver else player.experience=0 end --set exp to excess or zero
 		player.experienceReq=player.experienceReq+(player.experienceReq*0.5)
 		player.talentPoints=player.talentPoints+1
-		if player.maxCombo<3 then player.maxCombo=player.maxCombo+1 end
+		if player.maxAbility<3 then player.maxAbility=player.maxAbility+1 end
+		if player.level==2 then player.maxCombo=3 end
 		table.insert(floatingText,createFloatingText(player.x,player.y+8,"LEVEL UP!",colours.pink))
 	end
 	local percentage=(player.experience/player.experienceReq)
@@ -184,35 +192,54 @@ end
 changeBtnPressed=false
 player.shoot=function()
 
-	if btn(buttons.shoot)and player.shotTimer<0 and inventory.clip>0 then --shoot if have bullets in clip
+	if btn(buttons.shoot) and btn(buttons.reload)==false and player.shotTimer<0 and inventory.clip>0 then --shoot if have bullets in clip
 		sfx(sound.shot,3*12+6,25)
 		player.shotTimer=player.weapon.shootSpeed
 		inventory.clip=inventory.clip-1
 		table.insert(bullets,createBullet(player.x,player.y))
 	end
 
-	if btn(buttons.shoot) and inventory.clip<1 and player.shotTimer<0 then --shoot but no bullets in clip
+	if btn(buttons.shoot) and btn(buttons.reload)==false and inventory.clip<1 and player.shotTimer<0 then --shoot but no bullets in clip
 	 sfx(sound.misFire,4*12+6,10)
 	 player.shotTimer=player.weapon.shootSpeed * 0.5
 	 table.insert(floatingText,createFloatingText(player.x,player.y,"Reload!!",colours.blue))
 	end
 
 	if btn(buttons.special) and player.combo>0 and player.shotTimer<0 then --shoot combo ability
-		sfx(sound.shot,3*12+6,25)
-		player.shotTimer=player.weapon.shootSpeed*3
+		
 		local bullet =createComboBlastBullet(player.x,player.y)
-		if player.combo==1 and abilities.shred then 
+		if player.ability==1 and player.combo>=1 and abilities.shred then 
+			sfx(sound.shot,3*12+6,25)
+			player.shotTimer=player.weapon.shootSpeed
 			bullet.shred=true 
+			bullet.dmg=player.weapon.dmg*0.15
+			table.insert(bullets,bullet)
+			player.combo=player.combo-1 --must be set after else will change damage
 		end
-		if player.combo==2 and abilities.stun then
+		if player.ability==2 and player.combo>=2 and abilities.stun then
+			sfx(sound.shot,3*12+6,25)
+			player.shotTimer=player.weapon.shootSpeed
 			bullet.stun=true
 			bullet.dmg=player.weapon.dmg
+			table.insert(bullets,bullet)
+			player.combo=player.combo-2
 		end
-		--3 just damages
-		table.insert(bullets,bullet)
-		player.combo=0 --must be set after else will calculate 0 dmg
+		if player.ability==3 and player.combo>=3 and abilities.headShot then
+			sfx(sound.shot,3*12+6,25)
+			player.shotTimer=player.weapon.shootSpeed
+			table.insert(bullets,bullet)
+			player.combo=player.combo-3
+		end				
 	end
 
+	if btn(buttons.reload) and btn(buttons.shoot) and changeBtnPressed==false then
+		changeBtnPressed=true
+	end
+
+	if btn(buttons.reload)==false and btn(buttons.shoot)==false and changeBtnPressed==true then
+		changeBtnPressed=false
+		player.changeAbility()
+	end
 
 	
 	player.shotTimer=player.shotTimer-deltaTime	--decrement timer for being able to shoot
@@ -220,7 +247,7 @@ player.shoot=function()
 end
 
 player.reload=function()
-	if btn(buttons.reload) and player.shotTimer<0 and inventory.ammo>0 and inventory.clip < player.weapon.clipSize then
+	if btn(buttons.reload) and btn(buttons.shoot)==false and player.shotTimer<0 and inventory.ammo>0 and inventory.clip < player.weapon.clipSize then
 		local numBulletsNeeded=player.weapon.clipSize-inventory.clip
 		if inventory.ammo-numBulletsNeeded>-1 then 
 			inventory.ammo=inventory.ammo-numBulletsNeeded
@@ -234,6 +261,14 @@ player.reload=function()
 			end  		
 		end
 	end
+end
+
+player.changeAbility=function()
+	if player.ability==player.maxAbility then player.ability=1
+	else		
+	  player.ability=player.ability+1
+	end
+	trace("ability "..player.ability .."chosen", color)
 end
 
 player.move=function()
@@ -388,6 +423,7 @@ function createComboBlastBullet(x,y)
 	b.isCrit=false
 	b.shred=false
 	b.stun=false
+	b.stunTime=1*(player.combo)
 	b.isCombo=true	
 	b.firstSpr=49
 	return b
@@ -487,7 +523,7 @@ function pickupItem(item)
 		end
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 15,colours.green))
 	elseif item.id == itemId.ammo then
-		local pickupAmount=math.random(1,3)
+		local pickupAmount=math.random(2,4)
 		inventory.ammo=inventory.ammo+pickupAmount
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. pickupAmount .." ammo",colours.yellow))
 	elseif item.id == itemId.dmgUp then
@@ -672,7 +708,7 @@ function updateZ(entity)
 
 		if bullet.stun ==true then
 		 entity.stun=true
-		 entity.stunTimer=3
+		 entity.stunTimer=bullet.stunTime
 		 table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"Stunned",colours.blue))
 		end
 
@@ -746,17 +782,18 @@ end
 
 flashTimer=0.5
 function drawHUD()
-	
+	local comboPos={x=50,y=area.h+1}
 	print("Score: " ..player.score,0,0)
 	print("Waves: "..area.numWaves,64,2)
 	print("Ammo: "..inventory.ammo,area.w - 64,0,colours.blue)
+	if player.level>1 then print(abilityNames[player.ability],comboPos.x+48,comboPos.y,colours.red) end
 	local i=1
 	while i<=inventory.clip do
 		spr(sprites.bullet,0 +(8*i),area.h,0)
 		i=i+1
 	end
 
-	local comboPos={x=50,y=area.h+1}
+	
 
 	print("Combo "..player.combo,comboPos.x,comboPos.y,colours.green)
 
@@ -805,6 +842,9 @@ function gameState()
 
 	cls(0)
  	map(areaInTiles.w*area.x,areaInTiles.h*area.y,30,16)
+ 	for i=1,#area.doodads do
+ 		trace("doodads")
+ 	end
 	player.draw()
 
 	local i=1
