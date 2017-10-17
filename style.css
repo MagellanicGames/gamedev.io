@@ -45,13 +45,18 @@ h3{
 	color:#68e9f8;
 }
 
-p{
+p.main{
 	font-size: 1.4em;
 	margin-top: 100px;
     margin-bottom: 100px;
     margin-right: 150px;
     margin-left: 80px;
 
+    color: #3dff44;
+}
+
+p.instructions{
+	font-size: 1.4em;
     color: #3dff44;
 }
 
