@@ -107,8 +107,8 @@ weapons[1]=
 {
 	name="Rusty Pistol",
 	reloadTime=0.5,
-	shootSpeed=0.5,
-	critChance=15,
+	shootSpeed=0.45,
+	critChance=20,
 	clipSize=4,
 	dmg=15,
 	comboDmg=20,
@@ -121,12 +121,12 @@ weapons[1]=
 
 weapons[2]=
 {
-	name="Stunning Shotun",
+	name="Stunning Shotgun",
 	reloadTime=1.5,
-	shootSpeed=1,
+	shootSpeed=0.5,
 	critChance=10,
 	clipSize=5,
-	dmg=7.5,
+	dmg=5,
 	comboDmg=10,
 	bleedDmg=5,
 	ability="Stun",
@@ -189,16 +189,18 @@ player={
 	maxHealth=100,
 	score=0,
 	shotTimer=0,
-	weapon=weapons.pistol,
+	weapon={},
 	combo=0,
 	maxCombo=0,
 	experience=0,
-	experienceReq=200,
+	experienceReq=120,
 	totalExperience=0,
 	level=1,
 	talentPoints=0,
 	talentPointsUsed=0,
-	maxAbility=0
+	maxAbility=0,
+	bleeding=false,
+	bleedingTimeLeft=0
 }
 
 talents={
@@ -219,7 +221,7 @@ talents[2]={
 	maxPoints=3,
 	levelRequirement=2,
 	description="Crits refund 1 ammo per ",
-	description1="point but you lose 10% crit dmg per point."
+	description1="point but you lose 5% crit dmg per point."
 }
 
 talents[3]={
@@ -281,7 +283,13 @@ player.shoot=function()
 		sfx(player.weapon.soundEffect,3*12+6,25)
 		player.shotTimer=player.weapon.shootSpeed
 		inventory.clip=inventory.clip-1
-		table.insert(bullets,createBullet(player.x,player.y))
+
+		if player.weapon.name=="Stunning Shotgun" then
+		 shotgunShot(player.x,player.y)
+		else
+		  table.insert(bullets,createBullet(player.x,player.y))
+		end
+		
 	end
 
 	if btn(buttons.shoot) and btn(buttons.reload)==false and inventory.clip<1 and player.shotTimer<0 then --shoot but no bullets in clip
@@ -301,13 +309,13 @@ player.shoot=function()
 			table.insert(bullets,bullet)
 			player.combo=player.combo-1 --must be set after else will change damage
 		end
-		if player.weapon.ability=="Stun" and player.combo>=2 and abilities.stun then
+		if player.weapon.ability=="Stun" and player.combo>=1 and inventory.clip>0 then
 			sfx(player.weapon.soundEffect,player.weapon.soundEffectPitch,25)
 			player.shotTimer=player.weapon.shootSpeed
 			bullet.stun=true
-			bullet.dmg=player.weapon.dmg
+			bullet.dmg=player.weapon.dmg*3
 			table.insert(bullets,bullet)
-			player.combo=player.combo-2
+			player.combo=player.combo-1
 		end
 		if player.weapon.abliliy=="Headshot" and player.combo>=3 and abilities.headShot then
 			sfx(player.weapon.soundEffect,player.weapon.soundEffectPitch,25)
@@ -358,39 +366,43 @@ end
 
 player.move=function()
 	if btn(buttons.up) and not btn(buttons.down) and not btn(buttons.left) and not btn(buttons.right) then--up
-	
+		player.dirIndex=1
 		player.direction=directions.up
 		player.sprite=upSpr
 	end
 	if not btn(buttons.up) and btn(buttons.down) and not btn(buttons.left) and not btn(buttons.right) then--down
-	
+		player.dirIndex=5
 		player.direction=directions.down
 		player.sprite=downSpr
 	end
 	if not btn(buttons.up) and not btn(buttons.down) and btn(buttons.left) and not btn(buttons.right)then--left
-	
+		player.dirIndex=3
 		player.direction=directions.left
 		player.sprite=leftSpr
 	end
 	if not btn(buttons.up) and not btn(buttons.down) and not btn(buttons.left) and btn(buttons.right)then--right
-	 
+	 	player.dirIndex=7
 		player.direction=directions.right
 		player.sprite=rightSpr
 	end
 	
 	if btn(buttons.up) and btn(buttons.right) and not btn(buttons.down) and not btn(buttons.left) then--upright
+		player.dirIndex=2
 	 	player.direction=directions.upRight
 		player.sprite=upSpr
 	end
 	if btn(buttons.down) and btn(buttons.right) and not btn(buttons.left) and not btn(buttons.up)then--downRight
+	player.dirIndex=4
 	player.direction=directions.downRight
 		player.sprite=downSpr
 	end
 	if btn(buttons.down) and btn(buttons.left) and not btn(buttons.right) and not btn(buttons.up)then--downLeft
+	player.dirIndex=6
 	player.direction=directions.downLeft
 		player.sprite=leftSpr
 	end
 	if btn(buttons.up) and btn(buttons.left) and not btn(buttons.right) and not btn(buttons.down)then--upLeft
+	player.dirIndex=8
 	 	player.direction=directions.upLeft
 		player.sprite=leftSpr
 	end
@@ -404,9 +416,40 @@ player.move=function()
 	changeArea()
 end
 
+
+playerBleedTick=0
+player.bleed=function()
+
+	if player.bleedingTimeLeft>0 then player.bleedingTimeLeft=player.bleedingTimeLeft-deltaTime
+	else
+	  player.bleeding=false
+	end
+	playerBleedTick=playerBleedTick-deltaTime
+	if playerBleedTick<=0 then
+		playerBleedTick=1
+		local bleedAmount=player.maxHealth*0.02
+		table.insert(floatingText,createFloatingText(player.x,player.y,"-"..bleedAmount,colours.red))
+		player.health=player.health-bleedAmount		
+	end
+end
 player.draw=function()
 	spr(player.sprite,player.x,player.y,0)
+	player.regen()
 	drawHealthBar(player,false)
+	if player.bleeding==true then player.bleed() end
+end
+
+regenTimer=0
+player.regen=function()
+	if regenTimer>0 then regenTimer=regenTimer-deltaTime end
+	if talents[1].numPoints>0 and player.health<player.maxHealth and regenTimer<=0 then
+		local regenAmount=player.maxHealth*((3*talents[1].numPoints)/100)
+		regenAmount=math.ceil(regenAmount)
+		player.health=player.health+regenAmount
+		if player.health>player.maxHealth then player.health = player.maxHealth end
+		regenTimer=3
+		table.insert(floatingText,createFloatingText(player.x,player.y,"+"..regenAmount,colours.green))
+	end
 end
 ----------------------------------------------------------------------------------------
 Waves.createWave=function(minMobs,maxMobs)--add to list of waves for an area
@@ -494,6 +537,18 @@ function createBullet(x,y)
 	b.isCombo=false
 	b.firstSpr=49
 	return b
+end
+
+function shotgunShot(x,y)
+	local center=createBullet(x,y)
+	local left=createBullet(x+2,y+2)
+	local right=createBullet(x-2,y-2)
+	left.isCombo=true --stops application of multiple combo points
+	right.isCombo=true
+
+	table.insert(bullets,left)
+	table.insert(bullets,center)
+	table.insert(bullets,right)
 end
 
 function createComboBlastBullet(x,y)
@@ -608,16 +663,17 @@ function pickupItem(item)
 		end
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 15,colours.green))
 	elseif item.id == itemId.ammo then
-		local pickupAmount=math.random(1,player.weapon.clipSize*0.5)
+		local pickupAmount=math.random(1,math.ceil(player.weapon.clipSize*0.75))
+		pickupAmount=math.ceil(pickupAmount)
 		inventory.ammo=inventory.ammo+pickupAmount
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. pickupAmount .." ammo",colours.yellow))
 	elseif item.id == itemId.dmgUp then
-		local pickupAmount=player.weapon.dmg*0.15
+		local pickupAmount=player.weapon.dmg*0.05
 		player.weapon.dmg=player.weapon.dmg+pickupAmount
-		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 15 .."% dmg",colours.blue))
+		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 5 .."% dmg",colours.blue))
 	elseif item.id==itemId.critUp then
-		player.weapon.critChance=player.weapon.critChance+5	
-		table.insert(floatingText,createFloatingText(item.x,item.y,"+" .. 5 .. "% crit",colours.blue)) 
+		player.weapon.critChance=player.weapon.critChance+1
+		table.insert(floatingText,createFloatingText(item.x,item.y,"+" .. 1 .. "% crit",colours.blue)) 
 	end
 
 end
@@ -776,15 +832,31 @@ function updateZ(entity)
 	while i <=#bullets do
 		local bullet=bullets[i]
 		if withinBounds(entity,bullet.x,bullet.y) and withinSameArea(entity,bullet) then
-		 entity.health=entity.health-bullet.dmg		
+			
 		 if player.combo<player.maxCombo and bullet.isCombo==false then		  
 		  player.combo=player.combo+1 
 		 end
+
+		 if entity.stun==true and bullet.isCrit==false then
+		 	bullet.isCrit=true
+		 	bullet.dmg=bullet.dmg*2
+		 end
+
 		 local textColour=colours.white
 		 if bullet.isCrit then 
 		 	textColour=colours.yellow
 		 	table.insert(floatingText,createFloatingText(entity.x-12,entity.y+8,"CRITICAL!",textColour))
+
+		 	if talents[2].numPoints>0 and bullet.isCombo== false then --talent ability bullet rations
+		 		inventory.ammo=inventory.ammo+(talents[2].numPoints)
+		 		local percent=(talents[2].numPoints/10)*0.5
+		 		bullet.dmg=bullet.dmg-(bullet.dmg*percent)
+		 	end
 		 end
+
+
+
+		entity.health=entity.health-bullet.dmg	
 
 		if bullet.shred == true then 
 			entity.bleeding=true 
@@ -856,7 +928,10 @@ function updateZ(entity)
 			else
 			  player.health=player.health-entity.attackDmg
 			end
-			
+			if talents[3].numPoints>0 then  --athlete talentp
+				player.bleeding=true
+				player.bleedingTimeLeft=3*talents[3].numPoints
+			end
 			player.combo=0
 			entity.attackTimer=entity.attackTime
 			sfx(sound.playerHit,2*12+3,5,2) 		
@@ -1179,6 +1254,11 @@ function levelUpState()
 				talent.numPoints=talent.numPoints+1
 				player.talentPoints=player.talentPoints-1
 				player.talentPointsUsed=player.talentPointsUsed+1
+
+				if talentIndex==1 then notAzombieTalent() end
+				if talentIndex==3 then athleteTalent() end
+				if talentIndex==4 then player.maxCombo=player.maxCombo+1 end --seasoned talent
+
 			end	
 		end
 	end
@@ -1191,6 +1271,17 @@ function levelUpState()
 
 
 	print("\'x\' - accept",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
+end
+
+function notAzombieTalent()
+	player.maxHealth=player.maxHealth-((player.maxHealth*0.1))
+	player.maxHealth=math.ceil(player.maxHealth)
+	player.health=player.maxHealth
+	trace(player.health)
+end
+
+function athleteTalent()
+	player.speed=player.speed+(player.speed*0.1)
 end
 
 currentState={run=startScreenState}
