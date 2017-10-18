@@ -3,6 +3,22 @@
 -- desc:   Kill the zombies
 -- script: lua
 
+function createArea(x,y,numWaves)
+	local a={}
+	local pos={}
+	pos.x=x
+	pos.y=y
+	a.pos=pos
+	a.w=240
+	a.h=128
+	a.waves={}
+	a.numWaves=numWaves
+	a.currentWave=1	
+	a.clear=false
+	a.doodads={}
+	return a
+end
+
 sound={
 	shot=0,
 	hit=1,
@@ -23,15 +39,10 @@ colours={
 	pink=12
 }
 
-area={
-	x=0,y=0,
-	w=240,h=128,
-	waves={},
-	numWaves=10,
-	currentWave=1,	
-	clear=false,
-	doodads={}
-}
+areas={}
+
+area=createArea(0,0,1)
+areas[area.pos]=area
 
 itemId={
 	health=0,
@@ -48,6 +59,16 @@ sprites={
 	ammo=98,
 	dmgUp=99,
 	critUp=100
+}
+
+stats={
+	enemiesKilledTotal=0,
+	enemiesKilledThisLevel=0,
+	successfulShots=0,
+	missedShots=0,
+	hitsTaken=0,
+	expEarntThisLevel=0,
+	
 }
 
 upSpr=17
@@ -244,7 +265,7 @@ name="Seasoned",
 
 
 inventory={
-	ammo=50,	
+	ammo=100,	
 	clip=4
 }
 
@@ -256,6 +277,7 @@ expBar={
 }
 
 player.experienceGain=function(amount)
+	stats.expEarntThisLevel=stats.expEarntThisLevel+amount
 	player.experience=player.experience+amount
 	player.totalExperience=player.totalExperience+amount
 	table.insert(floatingText,createFloatingText(player.x,player.y,amount.." exp",colours.orange))
@@ -309,7 +331,7 @@ player.shoot=function()
 			table.insert(bullets,bullet)
 			player.combo=player.combo-1 --must be set after else will change damage
 		end
-		if player.weapon.ability=="Stun" and player.combo>=1 and inventory.clip>0 then
+		if player.weapon.ability=="Stun" and player.combo>=1 then
 			sfx(player.weapon.soundEffect,player.weapon.soundEffectPitch,25)
 			player.shotTimer=player.weapon.shootSpeed
 			bullet.stun=true
@@ -455,6 +477,7 @@ end
 Waves.createWave=function(minMobs,maxMobs)--add to list of waves for an area
 	local w={}
 	w.numMobs=math.random(minMobs,maxMobs)
+	w.numMobs=w.numMobs+level
 	w.complete=false
 	return w
 end
@@ -469,7 +492,7 @@ Waves.generateMobs=function(wave) --creates mobs based on wave data created in f
 	local generateMini=math.random(1,4)
 	if generateMini==3 then
 		local spawnPoint={}
-		for i=1,4 do
+		for i=1,4+level do
 			spawnPoint=math.random(1,8)
 			table.insert(entities,createMiniZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
 			wave.numMobs=wave.numMobs-1
@@ -483,7 +506,7 @@ Waves.generateMobs=function(wave) --creates mobs based on wave data created in f
 end
 
 -----------------------------------------------------------------------------------------
-
+difficulty=1
 function createZ(x,y,aggroed)
 	local z={}
 	z.x=x
@@ -492,19 +515,19 @@ function createZ(x,y,aggroed)
 	z.speed=math.random(25,55) / 100	
 	z.w=4 --width
 	z.h=4 --height
-	z.area={x=0,y=0} --area that entity resides in
+	z.area={x=area.pos.x,y=area.pos.y} --area that entity resides in
 	z.sprite=33 --index of the first animation frame
 	z.sprIndex=0 --current frame of animation
 	z.aniTimer=0 --timer for animations
-	z.health=100
-	z.maxHealth=100
+	z.health=100+(100*difficulty)
+	z.maxHealth=100+(100*difficulty)
 	z.attackTimer=0 --timer for attacks
 	z.attackTime=1 --reset value for attack timer
 	z.attackDmg=20 
 	z.hasAggro=aggroed
 	z.aggroDist=32 --distance player has to be before chasing/aggro
 	z.scoreValue=25
-	z.expValue=10
+	z.expValue=10+(2*difficulty)
 	z.bleeding=false
 	z.bleedingStacks=0
 	z.stunned=false
@@ -514,8 +537,8 @@ end
 
 function createMiniZ(x,y,aggroed)
 	local z=createZ(x,y,aggroed)
-	z.health=30
-	z.maxHealth=30
+	z.health=30+(level*2)
+	z.maxHealth=30+(level*2)
 	z.expValue=10
 	return z
 end
@@ -527,7 +550,7 @@ function createBullet(x,y)
 	b.direction=player.direction
 	b.speed=6
 	b.destroy=false
-	b.area={x=area.x,y=area.y}
+	b.area={x=area.pos.x,y=area.pos.y}
 	b.dmg=player.weapon.dmg
 	b.isCrit=false
 	if math.random(0,100)<player.weapon.critChance then
@@ -536,6 +559,8 @@ function createBullet(x,y)
 	end
 	b.isCombo=false
 	b.firstSpr=49
+	b.timeAlive=0
+	b.isShotgunShot=false
 	return b
 end
 
@@ -545,6 +570,9 @@ function shotgunShot(x,y)
 	local right=createBullet(x-2,y-2)
 	left.isCombo=true --stops application of multiple combo points
 	right.isCombo=true
+	center.isShotgunShot=true
+	left.isShotgunShot=true
+	right.isShotgunShot=true
 
 	table.insert(bullets,left)
 	table.insert(bullets,center)
@@ -558,7 +586,7 @@ function createComboBlastBullet(x,y)
 	b.direction=player.direction
 	b.speed=6
 	b.destroy=false
-	b.area={x=area.x,y=area.y}
+	b.area={x=area.pos.x,y=area.pos.y}
 	b.dmg=player.weapon.comboDmg*(player.combo)
 	b.isCrit=false
 	b.shred=false
@@ -566,6 +594,8 @@ function createComboBlastBullet(x,y)
 	b.stunTime=1*(player.combo)
 	b.isCombo=true	
 	b.firstSpr=49
+	b.timeAlive=0
+	b.isShotgunShot=false
 	return b
 end
 
@@ -586,11 +616,11 @@ function createItem(x,y)
 	item.x=x
 	item.y=y
 
-	if itemToDrop<=50 then
+	if itemToDrop>40 and itemToDrop<=60 then
 	 item.id=itemId.ammo
 	 item.sprite=sprites.ammo
 	
-	elseif itemToDrop>50 and itemToDrop<=70 then
+	elseif itemToDrop>60 and itemToDrop<=70 then
 	 item.id=itemId.health 
 	 item.sprite=sprites.healthPack
 	
@@ -644,7 +674,7 @@ end
 
 
 function withinarea(entity)
-	if entity.area.x ~= area.x or entity.area.y ~= area.y then return false
+	if entity.area.x ~= area.pos.x or entity.area.y ~= area.pos.y then return false
 	else
 	  return true
 	end
@@ -659,21 +689,25 @@ function pickupItem(item)
 				player.health=player.health+15
 			else
 				player.health=player.maxHealth
-			end
+			end			
 		end
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 15,colours.green))
+		healthUpSound()
 	elseif item.id == itemId.ammo then
 		local pickupAmount=math.random(1,math.ceil(player.weapon.clipSize*0.75))
 		pickupAmount=math.ceil(pickupAmount)
 		inventory.ammo=inventory.ammo+pickupAmount
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. pickupAmount .." ammo",colours.yellow))
+		sfx(sound.reload,5*12+6,20)
 	elseif item.id == itemId.dmgUp then
 		local pickupAmount=player.weapon.dmg*0.05
 		player.weapon.dmg=player.weapon.dmg+pickupAmount
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 5 .."% dmg",colours.blue))
+		acceptSound()
 	elseif item.id==itemId.critUp then
 		player.weapon.critChance=player.weapon.critChance+1
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+" .. 1 .. "% crit",colours.blue)) 
+		acceptSound()
 	end
 
 end
@@ -684,15 +718,15 @@ function changeArea()
 	if player.x>area.w then --move to next area to the right
 		if area.clear then
 	 		player.x=0
-	 		area.x=area.x+1
+	 		area.pos.x=area.pos.x+1
 	 	else
 	 	  player.x=area.w
 	 	end
 	end
 	if player.x<0 then --move to next area to the left
-	 if area.x>0 and area.clear then
+	 if area.pos.x>0 and area.clear then
 	 	player.x=area.w
-	 	area.x=area.x-1
+	 	area.pos.x=area.pos.x-1
 	 else
 	   player.x=0
 	 end
@@ -701,16 +735,16 @@ function changeArea()
 	if player.y>area.h then--area to the bottom
 	 if area.clear then 
 	 	player.y=0
-	 	area.y=area.y+1
+	 	area.pos.y=area.pos.y+1
 	 else
 	   player.y=area.h
 	 end
 	end 
 
 	if player.y<0 then --area to the top
-		if area.y>0 and area.clear then
+		if area.pos.y>0 and area.clear then
 	 		player.y=area.h
-	 		area.y=area.y-1
+	 		area.pos.y=area.pos.y-1
 	 	else
 	 	  player.y=0
 	 	end
@@ -796,16 +830,21 @@ function updateBullets()
 
 	local i=1
 	while i <=#bullets do
-
-			if bullets[i].x < 0 or bullets[i].x>area.w or bullets[i].y<0 or bullets[i].y>area.h or bullets[i].destroy then --out of bounds, destroy
-				if not bullets[i].destroy then player.combo=0 end --player missed so remove combo points
-				table.remove(bullets,i)				
-			else
-			bullets[i].x=bullets[i].x + (bullets[i].direction.x * bullets[i].speed) --update
-			bullets[i].y=bullets[i].y + (bullets[i].direction.y * bullets[i].speed)
-			spr(bullets[i].firstSpr+bullets[i].direction.sprIndex,bullets[i].x,bullets[i].y,0,1,0,0,1,1)
+		local bullet=bullets[i]
+		if bullet.x < 0 or bullet.x>area.w or bullet.y<0 or bullet.y>area.h or bullet.destroy then --out of bounds, destroy
+			if not bullet.destroy then --player missed so remove combo points
+			player.combo=0
+			stats.missedShots=stats.missedShots+1
+			end 
+			
+			table.remove(bullets,i)				
+		else
+			bullet.timeAlive=bullet.timeAlive+deltaTime
+			bullet.x=bullet.x + (bullet.direction.x * bullet.speed) --update
+			bullet.y=bullet.y + (bullet.direction.y * bullet.speed)
+			spr(bullet.firstSpr+bullet.direction.sprIndex,bullet.x,bullet.y,0,1,0,0,1,1)
 			i=i+1	
-			end			
+		end			
 	end
 	
 end
@@ -832,7 +871,7 @@ function updateZ(entity)
 	while i <=#bullets do
 		local bullet=bullets[i]
 		if withinBounds(entity,bullet.x,bullet.y) and withinSameArea(entity,bullet) then
-			
+			stats.successfulShots=stats.successfulShots+1
 		 if player.combo<player.maxCombo and bullet.isCombo==false then		  
 		  player.combo=player.combo+1 
 		 end
@@ -854,7 +893,12 @@ function updateZ(entity)
 		 	end
 		 end
 
-
+		 if bullet.isShotgunShot then --shots up close do more dmg
+			if bullet.timeAlive<=0.1 then
+				local extradmg=bullet.dmg*0.5
+				bullet.dmg=bullet.dmg+extradmg				
+			 end
+		 end
 
 		entity.health=entity.health-bullet.dmg	
 
@@ -873,7 +917,7 @@ function updateZ(entity)
 		bullet.destroy=true
 		aggroEntity(entity)
 		generateParticleHit(entity,bullet,colours.red)
-		table.insert(floatingText,createFloatingText(entity.x,entity.y,math.floor(bullet.dmg),textColour))
+		table.insert(floatingText,createFloatingText(entity.x+math.random(2,4),entity.y+math.random(2,4),math.floor(bullet.dmg),textColour))
 		sfx(sound.hit,2*12+3,5,1) 
 		end
 		i=i+1
@@ -922,6 +966,7 @@ function updateZ(entity)
 
 	if withinBounds(entity,player.x,player.y) then ---------------------if within range, attack player
 		if entity.attackTimer<=0 then 
+			stats.hitsTaken=stats.hitsTaken+1
 			local h=player.health-entity.attackDmg
 			if h<1 then 
 				player.health=-1
@@ -975,16 +1020,21 @@ function drawHUD()
 end
 --------------------------------------
 
+increaseDifficulty=true
+level=1
+numberOfWaves=1
+area=createArea(0,0,numberOfWaves)
 spawnTimer=2
-
 Waves.generateWaves(area)
 Waves.generateMobs(area.waves[area.currentWave])
 menuPressed=false
+intervalTimer=0
+isInterval=false
 function gameState()
 	
 	spawnTimer=spawnTimer-deltaTime
 
-	if area.clear==false then 
+	if area.clear==false and isInterval==false then 
 		if spawnTimer<0 and area.waves[area.currentWave].numMobs>0 then --does the current wave still have mobs?
 			Waves.generateMobs(area.waves[area.currentWave]) --create mob
 			spawnTimer=math.random(2,4) --countdown to next mob spawn
@@ -992,9 +1042,14 @@ function gameState()
 		if spawnTimer<0 and area.waves[area.currentWave].numMobs<1 and #entities<1 and area.numWaves>0 then	--is the current wave finished?   	
 			area.currentWave=area.currentWave+1
 			area.numWaves=area.numWaves-1
-			if area.numWaves<1 then area.clear=true end
+			if area.numWaves<1 then area.clear=true 
+				intervalTimer=15
+				isInterval=true
+			end
 		end
 	end
+
+	
 
 	Utils.keepTime()
 	player.move()
@@ -1002,7 +1057,7 @@ function gameState()
 	player.reload()	
 
 	cls(0)
- 	map(areaInTiles.w*area.x,areaInTiles.h*area.y,30,16)
+ 	map(areaInTiles.w*area.pos.x,areaInTiles.h*area.pos.y,30,16)
  	for i=1,#area.doodads do
  		trace("doodads")
  	end
@@ -1019,6 +1074,8 @@ function gameState()
 			player.score=player.score+entity.scoreValue
 			table.insert(itemDrops,createItem(entity.x,entity.y))
 			table.remove(entities,i) 
+			stats.enemiesKilledTotal=stats.enemiesKilledTotal+1
+			stats.enemiesKilledThisLevel=stats.enemiesKilledThisLevel+1
 		else
 		  i=i+1
 		end		
@@ -1041,6 +1098,26 @@ function gameState()
 
 	drawParticles()
 	drawHUD()
+
+	if isInterval==true then
+		intervalTimer=intervalTimer-deltaTime
+		print("Interval",(area.w*0.5)-16,area.h+2,colours.yellow)
+		statsScreen()
+		if intervalTimer<0 then 
+			area.clear=false
+			isInterval=false
+			numberOfWaves=numberOfWaves+1
+			level=level+1 
+			stats.enemiesKilledThisLevel=0
+			stats.expEarntThisLevel=0
+			stats.successfulShots=0
+			area=createArea(0,0,numberOfWaves)			
+			Waves.generateWaves(area)
+			for i=1,#itemDrops do
+				itemDrops[i]=nil
+			end
+		end
+	end
 	
 	if btn(buttons.menu) and menuPressed==false then menuPressed=true end
 	if btn(buttons.menu)==false and menuPressed==true then
@@ -1067,7 +1144,7 @@ function startScreenState()
 	if btn(buttons.shoot) and startGame==false then
 	 startGame=true
 	 startTextColor=colours.red
-	 sfx(sound.healthUp,4*12+3,20,2)
+	 healthUpSound()
 	end
 
 	if startGame then 
@@ -1080,6 +1157,10 @@ end
 introTimer=3
 introYpos=24
 textSpacing=8
+zPressed=false
+xPressed=false
+upPressed=false
+downPressed=false
 function introductionScreenState()
 	cls(0)
 	print("Kill the zombies, when clear move to",16,introYpos)
@@ -1090,9 +1171,13 @@ function introductionScreenState()
 	if introTimer<0 then print("Press \'x\' to continue.",16,introYpos+(textSpacing*6),colours.yellow) end
 
 	introTimer=introTimer-deltaTime
-	if introTimer<0 and btn(buttons.shoot) then
-	 acceptSound()
-	 currentState.run=gameState
+	if btn(buttons.shoot) and xPressed==false then xPressed=true end
+	if btn(buttons.shoot)==false and xPressed==true then
+		xPressed=false
+		if introTimer<0 then
+ 			acceptSound()
+	 		currentState.run=gameState
+		end	
 	end
 end
 
@@ -1102,10 +1187,6 @@ menuOptions[1]="Help"
 menuOptions[2]="Level Up"
 menuOptions[3]="Inventory"
 optionSelected=1
-zPressed=false
-xPressed=false
-upPressed=false
-downPressed=false
 menuPos={x=(area.w*0.5)-24,y=(area.h*0.5)-16}
 instructionsOffset={x=-90,y=81}
 
@@ -1188,6 +1269,7 @@ function weaponSelectState()
 		if weaponIndex>1 then weaponIndex=weaponIndex-1 else
 		  weaponIndex=numWeapons
 		end
+		menuSound()
 	end
 
 	if btn(buttons.right)==true and rightPressed==false then rightPressed=true end
@@ -1196,6 +1278,7 @@ function weaponSelectState()
 		if weaponIndex<numWeapons then weaponIndex=weaponIndex+1 else
 		  weaponIndex=1
 		end		
+		menuSound()
 	end
 
 	if btn(buttons.shoot)==true and xPressed==false then xPressed=true end
@@ -1203,6 +1286,7 @@ function weaponSelectState()
 		xPressed=false
 		player.weapon=weapons[weaponIndex]
 		currentState.run=introductionScreenState
+		acceptSound()
 	end
 
 	print("\'x\' - accept",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
@@ -1233,6 +1317,7 @@ function levelUpState()
 		if talentIndex==1 then talentIndex=#talents else
 		  talentIndex=talentIndex-1
 		end
+		menuSound()
 	end
 
 	if btn(buttons.right)==true and rightPressed==false then rightPressed=true end
@@ -1243,6 +1328,7 @@ function levelUpState()
 		else		  
 		  talentIndex=talentIndex+1
 		end
+		menuSound()
 	end
 
 	if btn(buttons.shoot)==true and xPressed==false then xPressed=true end
@@ -1258,7 +1344,7 @@ function levelUpState()
 				if talentIndex==1 then notAzombieTalent() end
 				if talentIndex==3 then athleteTalent() end
 				if talentIndex==4 then player.maxCombo=player.maxCombo+1 end --seasoned talent
-
+				acceptSound()
 			end	
 		end
 	end
@@ -1267,17 +1353,29 @@ function levelUpState()
 	if btn(buttons.reload)==false and zPressed==true then
 		zPressed=false
 		currentState.run=inGameMenuState
+		menuSound()
 	end
 
 
 	print("\'x\' - accept",menuPos.x +instructionsOffset.x,menuPos.y+instructionsOffset.y,colours.yellow)
 end
 
+function statsScreen()
+	local panelPos={x=40,y=32}
+	rect(panelPos.x,panelPos.y,160,80,colours.red)
+	print("Stats for level "..level-1,panelPos.x+16,panelPos.y+4,colours.white)
+	print("Enemies Killed: "..stats.enemiesKilledThisLevel,panelPos.x+2,panelPos.y+12,colours.blue)
+	print("Successful Shots: "..stats.successfulShots,panelPos.x+2,panelPos.y+20,colours.blue)
+	print("Missed Shots: "..stats.missedShots,panelPos.x+2,panelPos.y+28,colours.blue)
+	print("Hits Taken: "..stats.hitsTaken,panelPos.x+2,panelPos.y+36,colours.blue)
+	print("Experience Gained: "..stats.expEarntThisLevel,panelPos.x+2,panelPos.y+44,colours.blue)
+end
+
+
 function notAzombieTalent()
 	player.maxHealth=player.maxHealth-((player.maxHealth*0.1))
 	player.maxHealth=math.ceil(player.maxHealth)
 	player.health=player.maxHealth
-	trace(player.health)
 end
 
 function athleteTalent()
@@ -1296,4 +1394,8 @@ end
 
 function acceptSound()
 	sfx(sound.menu,4*12+3,5,1)
+end
+
+function healthUpSound()
+	sfx(sound.healthUp,4*12+3,20,2)
 end
