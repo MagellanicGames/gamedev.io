@@ -149,7 +149,7 @@ weapons[2]=
 	shootSpeed=0.5,
 	critChance=10,
 	clipSize=5,
-	startingAmmo=35,
+	startingAmmo=0,--35
 	dmg=5,
 	comboDmg=10,
 	bleedDmg=5,
@@ -193,6 +193,22 @@ weapons[4]=
 	menuSprite=260
 }
 
+meleeWeapon=
+{
+	name="Dull Knife",
+	reloadTime=0.75,
+	shootSpeed=0.30,
+	critChance=20,
+	clipSize=4,
+	startingAmmo=0,
+	dmg=8,
+	comboDmg=20,
+	bleedDmg=5,
+	ability="",
+	soundEffect=sound.shot,
+	soundEffectPitch=3*12+6
+}
+
 --------------------------------------------------------------------------------------------
 theTime=time()
 lastTime=theTime
@@ -221,6 +237,8 @@ function createPlayer()
 	p.score=0
 	p.shotTimer=0
 	p.weapon={}
+	p.storeWeapon={}
+	p.meleeWeapon=meleeWeapon
 	p.combo=0
 	p.maxCombo=1
 	p.experience=0
@@ -323,7 +341,9 @@ function playerShoot()
 		inventory.clip=inventory.clip-1
 
 		if player.weapon.name=="Stunning Shotgun" then
-		 shotgunShot(player.x,player.y)
+			shotgunShot(player.x,player.y)
+		elseif player.weapon.name=="Dull Knife" then
+			table.insert(bullets,createKnifeBullet(player.x,player.y))
 		else
 		  table.insert(bullets,createBullet(player.x,player.y))
 		end
@@ -331,10 +351,15 @@ function playerShoot()
 	end
 
 	if btn(buttons.shoot) and btn(buttons.reload)==false and inventory.clip<1 and player.shotTimer<0 then --shoot but no bullets in clip
-	 sfx(sound.misFire,4*12+6,10)
-	 player.shotTimer=player.weapon.shootSpeed * 0.5
-	 table.insert(floatingText,createFloatingText(player.x,player.y,"Reload!!",colours.blue))
+		if player.weapon.name ~= "Dull Knife" then 
+	 		sfx(sound.misFire,4*12+6,10)
+	 		player.shotTimer=player.weapon.shootSpeed * 0.5
+	 		table.insert(floatingText,createFloatingText(player.x,player.y,"Reload!!",colours.blue))
+		else
+			inventory.clip=player.weapon.clipSize
+		end
 	end
+
 
 	if btn(buttons.special) and player.combo>0 and player.shotTimer<0 then --shoot combo ability
 		
@@ -484,6 +509,18 @@ function playerDraw()
 	playerRegen()
 	drawHealthBar(player,false)
 	if player.bleeding==true then playerBleed() end
+	if inventory.ammo<1 and inventory.clip<1 and player.combo<1 and player.weapon.name ~= "Dull Knife" then 
+		table.insert(floatingText,createFloatingText(player.x,player.y,"Knife Equipped",colours.white))
+		player.storeWeapon=player.weapon
+		player.weapon=player.meleeWeapon
+	end
+
+	if player.weapon.name=="Dull Knife" and inventory.ammo>0 then
+		inventory.clip=0
+		table.insert(floatingText,createFloatingText(player.x,player.y,"Gun Equipped",colours.white))
+		player.weapon=player.storeWeapon
+		player.storeWeapon={}
+	end
 end
 
 regenTimer=0
@@ -580,6 +617,7 @@ function createBullet(x,y)
 	b.direction=player.direction
 	b.speed=6
 	b.destroy=false
+	b.lifetime=nil
 	b.area={x=area.pos.x,y=area.pos.y}
 	b.dmg=player.weapon.dmg
 	b.isCrit=false
@@ -591,6 +629,12 @@ function createBullet(x,y)
 	b.firstSpr=49
 	b.timeAlive=0
 	b.isShotgunShot=false
+	return b
+end
+
+function createKnifeBullet(x,y)
+	local b=createBullet(x,y)
+	b.lifetime=0.025
 	return b
 end
 
@@ -641,12 +685,14 @@ function createFloatingText(x,y,val,colour)
 end
 
 function createItem(x,y)
-	local itemToDrop=math.random(1,85)
+	local itemToDrop=math.random(1,100)
 	local item={}
+	item.w=8
+	item.h=8
 	item.x=x
 	item.y=y
 
-	if itemToDrop>55 and itemToDrop<=60 then
+	if itemToDrop>45 and itemToDrop<=60 then
 	 item.id=itemId.ammo
 	 item.sprite=sprites.ammo
 	
@@ -661,10 +707,10 @@ function createItem(x,y)
 	elseif itemToDrop>80 and itemToDrop<=85 then
 	 item.id=itemId.critUp
 	 item.sprite=sprites.critUp
+	else
+		item=nil
 	end
-	item.w=8
-	item.h=8
-
+	
 	return item
 end
 
@@ -830,7 +876,12 @@ function updateBullets()
 	local i=1
 	while i <=#bullets do
 		local bullet=bullets[i]
+		if bullet.lifetime ~= nil then --knife bullet
+			if bullet.lifetime<0 then bullet.destroy=true end
+			bullet.lifetime=bullet.lifetime-deltaTime
+		end
 		if bullet.x < 0 or bullet.x>area.w or bullet.y<0 or bullet.y>area.h or bullet.destroy then --out of bounds, destroy
+			
 			if not bullet.destroy then --player missed so remove combo points
 			player.combo=0
 			stats.missedShots=stats.missedShots+1
@@ -1075,7 +1126,9 @@ function gameState()
 			player.score=player.score+entity.scoreValue
 
 			if entity.isMini==false then 
-			table.insert(itemDrops,createItem(entity.x,entity.y))
+				local item={}
+				item = createItem(entity.x,entity.y)
+				if item ~= nil then table.insert(itemDrops,item) end
 			else
 			  local chance=15
 			  if math.random(1,100)<chance then 
