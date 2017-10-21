@@ -161,37 +161,39 @@ weapons[2]=
 
 weapons[3]=
 {
-	name="Between the Rifles",
-	reloadTime=1,
-	shootSpeed=1.5,
-	critChance=25,
-	clipSize=4,
-	startingAmmo=45,
-	dmg=30,
-	comboDmg=20,
-	bleedDmg=5,
-	ability="Rapidshot",
-	soundEffect=sound.shot,
-	soundEffectPitch=3*12+6,
-	menuSprite=262
-}
-
-weapons[4]=
-{
 	name="Dead Future",
 	reloadTime=0.75,
 	shootSpeed=0.30,
 	critChance=35,
 	clipSize=10,
 	startingAmmo=150,
-	dmg=8,
+	dmg=5,
 	comboDmg=20,
 	bleedDmg=5,
-	ability="Head Exploder",
+	ability="Exploder",
 	soundEffect=sound.shot,
 	soundEffectPitch=3*12+6,
 	menuSprite=260
 }
+
+--weapons[3]=
+--{
+--	name="Between the Rifles",
+--	reloadTime=1,
+--	shootSpeed=1.5,
+--	critChance=25,
+--	clipSize=4,
+--	startingAmmo=45,
+--	dmg=30,
+--	comboDmg=20,
+--	bleedDmg=5,
+--	ability="Rapidshot",
+--	soundEffect=sound.shot,
+--	soundEffectPitch=3*12+6,
+--	menuSprite=262
+--}
+
+
 
 meleeWeapon=
 {
@@ -366,7 +368,6 @@ function playerShoot()
 
 
 	if btn(buttons.special) and player.combo>0 and player.shotTimer<0 then --shoot combo ability
-		
 		local bullet =createComboBlastBullet(player.x,player.y)
 		if player.weapon.ability=="Shred" and player.combo>=1 then 
 			sfx(player.weapon.soundEffect,player.weapon.soundEffectPitch,25)
@@ -384,11 +385,12 @@ function playerShoot()
 			table.insert(bullets,bullet)
 			player.combo=player.combo-1
 		end
-		if player.weapon.abliliy=="Head Exploder" and player.combo>=3 and abilities.headShot then
+		if player.weapon.ability=="Exploder" and player.combo>=1 then			
 			sfx(player.weapon.soundEffect,player.weapon.soundEffectPitch,25)
 			player.shotTimer=player.weapon.shootSpeed
+			bullet.exploder=true
 			table.insert(bullets,bullet)
-			player.combo=player.combo-3
+			player.combo=player.combo-1
 		end		
 
 		if player.weapon.abliliy=="Rapidshot" and player.combo>=3 and abilities.headShot then
@@ -396,7 +398,9 @@ function playerShoot()
 			player.shotTimer=player.weapon.shootSpeed
 			table.insert(bullets,bullet)
 			player.combo=player.combo-3
-		end			
+		end	
+
+
 	end
 	
 	player.shotTimer=player.shotTimer-deltaTime	--decrement timer for being able to shoot
@@ -601,6 +605,7 @@ function createZ(x,y,aggroed)
 	z.stunTimer=0
 	z.isMini=false
 	z.isBossZ=false
+	z.exploderDebuff=false
 	return z
 end
 
@@ -677,6 +682,7 @@ function createComboBlastBullet(x,y)
 	b.isCrit=false
 	b.shred=false
 	b.stun=false
+	b.exploder=false
 	b.stunTime=1*(player.combo)
 	b.isCombo=true	
 	b.firstSpr=49
@@ -896,10 +902,17 @@ function updateBullets()
 		local bullet=bullets[i]		
 		if bullet.x < 0 or bullet.x>area.w or bullet.y<0 or bullet.y>area.h or bullet.destroy then --out of bounds, destroy
 			
-			if not bullet.destroy then --player missed so remove combo points
-			player.combo=0
-			stats.missedShots=stats.missedShots+1
+			if not bullet.destroy and player.weapon.name ~= "Dead Future" then --player missed so remove combo points
+				player.combo=0
+				stats.missedShots=stats.missedShots+1
 			end 
+
+			if player.weapon.name=="Dead Future" then
+				if bullet.isCombo == false and bullet.destroy ==false  then
+					player.combo=0
+					stats.missedShots=stats.missedShots+1
+				end
+			end
 			
 			table.remove(bullets,i)				
 		else
@@ -981,6 +994,11 @@ function updateZ(entity)
 		 entity.stun=true
 		 entity.stunTimer=bullet.stunTime
 		 table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"Stunned",colours.blue))
+		end
+
+		if bullet.exploder ==true then
+			entity.exploderDebuff=true
+			table.insert(floatingText,createFloatingText(entity.x+12,entity.y+8,"Explosive",colours.blue))
 		end
 
 		bullet.destroy=true
@@ -1142,9 +1160,7 @@ function gameState()
 
 	cls(0)
  	map(areaInTiles.w*area.pos.x,areaInTiles.h*area.pos.y,30,16)
- 	for i=1,#area.doodads do
- 		trace("doodads")
- 	end
+ 
 	playerDraw()
 
 	local i=1
@@ -1170,6 +1186,31 @@ function gameState()
 			if entity.isBossZ then
 				bossDead=true
 			end
+
+			if entity.exploderDebuff==true then
+				local tmp = {}
+
+				for i=1,8 do
+					tmp[i]=createBullet(entity.x,entity.y)
+					tmp[i].dmg=player.weapon.dmg*3
+					tmp[i].exploder=true
+					tmp[i].isCombo=true
+				end
+
+				tmp[1].direction=directions.up
+				tmp[2].direction=directions.upRight
+				tmp[3].direction=directions.right
+				tmp[4].direction=directions.downRight
+				tmp[5].direction=directions.down
+				tmp[6].direction=directions.downLeft
+				tmp[7].direction=directions.left
+				tmp[8].direction=directions.upLeft
+
+				for i=1,8 do
+					table.insert(bullets,tmp[i])
+				end			
+			end
+
 			table.remove(entities,i) 
 			stats.enemiesKilledTotal=stats.enemiesKilledTotal+1
 			stats.enemiesKilledThisLevel=stats.enemiesKilledThisLevel+1
