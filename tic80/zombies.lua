@@ -149,7 +149,7 @@ weapons[2]=
 	shootSpeed=0.5,
 	critChance=10,
 	clipSize=5,
-	startingAmmo=0,--35
+	startingAmmo=35,--35
 	dmg=5,
 	comboDmg=10,
 	bleedDmg=5,
@@ -195,10 +195,10 @@ weapons[4]=
 
 meleeWeapon=
 {
-	name="Dull Knife",
+	name="Spud Gun",
 	reloadTime=0.75,
-	shootSpeed=0.30,
-	critChance=20,
+	shootSpeed=0.7,
+	critChance=15,
 	clipSize=4,
 	startingAmmo=0,
 	dmg=8,
@@ -334,7 +334,8 @@ end
 
 changeBtnPressed=false
 function playerShoot()
-
+	
+	if isInterval then return end
 	if btn(buttons.shoot) and btn(buttons.reload)==false and player.shotTimer<0 and inventory.clip>0 then --shoot if have bullets in clip
 		sfx(player.weapon.soundEffect,3*12+6,25)
 		player.shotTimer=player.weapon.shootSpeed
@@ -342,16 +343,19 @@ function playerShoot()
 
 		if player.weapon.name=="Stunning Shotgun" then
 			shotgunShot(player.x,player.y)
-		elseif player.weapon.name=="Dull Knife" then
-			table.insert(bullets,createKnifeBullet(player.x,player.y))
 		else
-		  table.insert(bullets,createBullet(player.x,player.y))
+			local b=createBullet(player.x,player.y)
+			if player.weapon.name=="Spud Gun" then 
+				b.firstSpr=57 
+				b.isSpudGunShot=true
+			end
+		  	table.insert(bullets,b)
 		end
 		
 	end
 
 	if btn(buttons.shoot) and btn(buttons.reload)==false and inventory.clip<1 and player.shotTimer<0 then --shoot but no bullets in clip
-		if player.weapon.name ~= "Dull Knife" then 
+		if player.weapon.name ~= "Spud Gun" then 
 	 		sfx(sound.misFire,4*12+6,10)
 	 		player.shotTimer=player.weapon.shootSpeed * 0.5
 	 		table.insert(floatingText,createFloatingText(player.x,player.y,"Reload!!",colours.blue))
@@ -394,16 +398,6 @@ function playerShoot()
 			player.combo=player.combo-3
 		end			
 	end
-
-	if btn(buttons.reload) and btn(buttons.shoot) and changeBtnPressed==false then
-		changeBtnPressed=true
-	end
-
-	if btn(buttons.reload)==false and btn(buttons.shoot)==false and changeBtnPressed==true then
-		changeBtnPressed=false
-		player.changeAbility()
-	end
-
 	
 	player.shotTimer=player.shotTimer-deltaTime	--decrement timer for being able to shoot
 
@@ -424,14 +418,6 @@ function playerReload()
 			end  		
 		end
 	end
-end
-
-function playerChangeAbility()
-	if player.ability==player.maxAbility then player.ability=1
-	else		
-	  player.ability=player.ability+1
-	end
-	trace("ability "..player.ability .."chosen", color)
 end
 
 function playerMove()
@@ -509,13 +495,14 @@ function playerDraw()
 	playerRegen()
 	drawHealthBar(player,false)
 	if player.bleeding==true then playerBleed() end
-	if inventory.ammo<1 and inventory.clip<1 and player.combo<1 and player.weapon.name ~= "Dull Knife" then 
-		table.insert(floatingText,createFloatingText(player.x,player.y,"Knife Equipped",colours.white))
+	if inventory.ammo<1 and inventory.clip<1 and player.combo<1 and player.weapon.name ~= "Spud Gun" then 
+		table.insert(floatingText,createFloatingText(player.x,player.y,"Spud Gun Equipped",colours.white))
 		player.storeWeapon=player.weapon
 		player.weapon=player.meleeWeapon
+		player.combo=0
 	end
 
-	if player.weapon.name=="Dull Knife" and inventory.ammo>0 then
+	if player.weapon.name=="Spud Gun" and inventory.ammo>0 then
 		inventory.clip=0
 		table.insert(floatingText,createFloatingText(player.x,player.y,"Gun Equipped",colours.white))
 		player.weapon=player.storeWeapon
@@ -545,26 +532,41 @@ Waves.createWave=function(minMobs,maxMobs)--add to list of waves for an area
 end
 
 Waves.generateWaves=function(area)	--creates desired number of waves for an area
+	if level==10 then area.numWaves=1 end
 	for i=1,area.numWaves do
 		table.insert(area.waves,Waves.createWave(2,5))
 	end
 end
 
+bossSpawned=false
 Waves.generateMobs=function(wave) --creates mobs based on wave data created in functions above
-	local generateMini=5
-	if math.random(1,100)<generateMini then
+	if level==10 then --boss wave
 		local spawnPoint={}
-
-		for i=2,6 do
-			spawnPoint=math.random(1,8)
-			table.insert(entities,createMiniZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
-			wave.numMobs=wave.numMobs-1
+		spawnPoint=math.random(1,8)
+		if bossSpawned==false then
+			table.insert(entities,createBossZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y))
+			bossSpawned=true
+		else
+		  	table.insert(entities,createZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
 		end
+
 	else
-	  local spawnPoint=math.random(1,8)--there are 8 spawn points		
-		table.insert(entities,createZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
-		wave.numMobs=wave.numMobs-1
-	end
+		local generateMini=5
+		if math.random(1,100)<generateMini then
+			local spawnPoint={}
+
+			for i=2,6 do
+				spawnPoint=math.random(1,8)
+				table.insert(entities,createMiniZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
+				wave.numMobs=wave.numMobs-1
+			end--end for spawn loop
+		else
+	  		local spawnPoint=math.random(1,8)--there are 8 spawn points		
+			table.insert(entities,createZ(spawnPoints[spawnPoint].x,spawnPoints[spawnPoint].y,true))
+			wave.numMobs=wave.numMobs-1
+		end--end mini if
+	end --bosswave if
+	
 	
 end
 
@@ -598,6 +600,7 @@ function createZ(x,y,aggroed)
 	z.stunned=false
 	z.stunTimer=0
 	z.isMini=false
+	z.isBossZ=false
 	return z
 end
 
@@ -606,8 +609,22 @@ function createMiniZ(x,y,aggroed)
 	z.health=30+(level*2)
 	z.maxHealth=30+(level*2)
 	z.expValue=2+(level*2)
-	z.isMini=true
+	z.isMini=true	
 	return z
+end
+
+function createBossZ(x,y)
+	local z=createZ(x,y,true)
+	z.health=z.health*60
+	z.maxHealth=z.health
+	z.expValue=z.expValue*60
+	z.isBossZ=true
+	z.w=z.w*3
+	z.h=z.w*3
+	z.speed=0.2
+	z.expValue=z.expValue*60+inventory.ammo
+	return z
+
 end
 
 function createBullet(x,y)
@@ -629,12 +646,7 @@ function createBullet(x,y)
 	b.firstSpr=49
 	b.timeAlive=0
 	b.isShotgunShot=false
-	return b
-end
-
-function createKnifeBullet(x,y)
-	local b=createBullet(x,y)
-	b.lifetime=0.025
+	b.isSpudGunShot=false
 	return b
 end
 
@@ -778,10 +790,12 @@ function pickupItem(item)
 	elseif item.id == itemId.dmgUp then
 		local pickupAmount=player.weapon.dmg*0.05
 		player.weapon.dmg=player.weapon.dmg+pickupAmount
+		player.meleeWeapon.dmg=player.meleeWeapon.dmg+pickupAmount
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+".. 5 .."% dmg",colours.blue))
 		acceptSound()
 	elseif item.id==itemId.critUp then
 		player.weapon.critChance=player.weapon.critChance+1
+		player.meleeWeapon.critChance=player.meleeWeapon.critChance+1
 		table.insert(floatingText,createFloatingText(item.x,item.y,"+" .. 1 .. "% crit",colours.blue)) 
 		acceptSound()
 	end
@@ -818,7 +832,11 @@ end
 
 function drawEntity(entity)
 	if withinarea(entity) == false then return end
-	spr(entity.sprite+entity.sprIndex,entity.x,entity.y,0,1,0,entity.rot)
+	if entity.isBossZ==false then
+		spr(entity.sprite+entity.sprIndex,entity.x,entity.y,0,1,0,entity.rot)
+	else
+	  	spr(entity.sprite+entity.sprIndex,entity.x,entity.y,0,3,0,entity.rot)
+	end
 	drawHealthBar(entity,true)
 end
 
@@ -875,11 +893,7 @@ function updateBullets()
 
 	local i=1
 	while i <=#bullets do
-		local bullet=bullets[i]
-		if bullet.lifetime ~= nil then --knife bullet
-			if bullet.lifetime<0 then bullet.destroy=true end
-			bullet.lifetime=bullet.lifetime-deltaTime
-		end
+		local bullet=bullets[i]		
 		if bullet.x < 0 or bullet.x>area.w or bullet.y<0 or bullet.y>area.h or bullet.destroy then --out of bounds, destroy
 			
 			if not bullet.destroy then --player missed so remove combo points
@@ -892,7 +906,11 @@ function updateBullets()
 			bullet.timeAlive=bullet.timeAlive+deltaTime
 			bullet.x=bullet.x + (bullet.direction.x * bullet.speed) --update
 			bullet.y=bullet.y + (bullet.direction.y * bullet.speed)
-			spr(bullet.firstSpr+bullet.direction.sprIndex,bullet.x,bullet.y,0,1,0,0,1,1)
+			if bullet.isSpudGunShot then
+				spr(bullet.firstSpr,bullet.x,bullet.y,0,1,0,0,1,1)
+			else
+			  spr(bullet.firstSpr+bullet.direction.sprIndex,bullet.x,bullet.y,0,1,0,0,1,1)
+			end
 			i=i+1	
 		end			
 	end
@@ -922,7 +940,7 @@ function updateZ(entity)
 		local bullet=bullets[i]
 		if withinBounds(entity,bullet.x,bullet.y) and withinSameArea(entity,bullet) then
 			stats.successfulShots=stats.successfulShots+1
-		 if player.combo<player.maxCombo and bullet.isCombo==false then		  
+		 if player.combo<player.maxCombo and bullet.isCombo==false and player.weapon.name ~="Spud Gun" then		  
 		  player.combo=player.combo+1 
 		 end
 
@@ -1013,6 +1031,10 @@ function updateZ(entity)
 		else entity.rot=2 end
 	end
 
+	if entity.isBossZ then
+		if entity.health<entity.maxHealth*0.5 then entity.speed=0.5 end
+	end
+
 	if entity.attackTimer>0 then entity.attackTimer=entity.attackTimer-deltaTime end --decrement attack timer
 
 	if withinBounds(entity,player.x,player.y) then ---------------------if within range, attack player
@@ -1074,6 +1096,7 @@ end
 createTalents()
 increaseDifficulty=true
 level=1
+bossDead=false
 numberOfWaves=1
 area=createArea(0,0,numberOfWaves)
 spawnTimer=2
@@ -1089,12 +1112,21 @@ function gameState()
 	if area.clear==false and isInterval==false then 
 		if spawnTimer<0 and area.waves[area.currentWave].numMobs>0 then --does the current wave still have mobs?
 			Waves.generateMobs(area.waves[area.currentWave]) --create mob
-			spawnTimer=math.random(1,3) --countdown to next mob spawn
+			if level ~=10 then
+				spawnTimer=math.random(1,3) --countdown to next mob spawn
+			else
+				if bossDead then currentState.run=endGameState end
+			  	spawnTimer=math.random(3,4)
+			end
 		end
 		if spawnTimer<0 and area.waves[area.currentWave].numMobs<1 and #entities<1 and area.numWaves>0 then	--is the current wave finished?   	
 			area.currentWave=area.currentWave+1
 			area.numWaves=area.numWaves-1
-			if area.numWaves<1 then area.clear=true 
+			if area.numWaves<1 then 
+				area.clear=true 
+				if level==10 then 
+					currentState.run=endGameState
+				end
 				intervalTimer=15
 				isInterval=true
 			end
@@ -1134,6 +1166,9 @@ function gameState()
 			  if math.random(1,100)<chance then 
 				table.insert(itemDrops,createItem(entity.x,entity.y))
 			  end
+			end
+			if entity.isBossZ then
+				bossDead=true
 			end
 			table.remove(entities,i) 
 			stats.enemiesKilledTotal=stats.enemiesKilledTotal+1
@@ -1446,8 +1481,12 @@ end
 restartTimer=3
 function endGameState()
 	cls(0)
-
-	print("You Died!...but here's how you did: ",(area.w*0.5)-96,0,colours.red)
+	if player.dead==true then
+		print("You Died!...but here's how you did: ",(area.w*0.5)-96,0,colours.red)
+	else
+		print("You beat the game and this is how well you did: ",(area.w*0.5)-96,0,colours.green)
+	end
+	
 	local panelPos={x=40,y=32}
 	rect(panelPos.x,panelPos.y,160,80,colours.blue)
 	print("You reached level "..level,panelPos.x+16,panelPos.y+4,colours.white)
