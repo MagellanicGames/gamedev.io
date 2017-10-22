@@ -1531,7 +1531,7 @@ function statsScreen()
 	print("Experience Gained: "..stats.expEarntThisLevel,panelPos.x+2,panelPos.y+44,colours.yellow)
 end
 
-restartTimer=3
+restartTimer=5
 function endGameState()
 	cls(0)
 	if player.dead==true then
@@ -1559,8 +1559,10 @@ function endGameState()
 	if btn(buttons.shoot) and xPressed== false then xPressed= true end
 	if btn(buttons.shoot)==false and xPressed==true then 
 		xPressed=false
-		reset()
-		currentState.run=startScreenState
+		if restartTimer<0 then 
+			reset()
+			currentState.run=startScreenState
+		end
 	end
 
 end
