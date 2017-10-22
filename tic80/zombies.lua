@@ -538,7 +538,15 @@ end
 Waves.generateWaves=function(area)	--creates desired number of waves for an area
 	if level==10 then area.numWaves=1 end
 	for i=1,area.numWaves do
-		table.insert(area.waves,Waves.createWave(2,5))
+		if level<5 then
+			local min=math.random(1,2)
+			local max=math.random(4,6)
+			table.insert(area.waves,Waves.createWave(min,max))
+		else
+			local min=math.random(1,3)
+			local max=math.random(4,7)
+			table.insert(area.waves,Waves.createWave(min,max))
+		end
 	end
 end
 
@@ -1131,7 +1139,11 @@ function gameState()
 		if spawnTimer<0 and area.waves[area.currentWave].numMobs>0 then --does the current wave still have mobs?
 			Waves.generateMobs(area.waves[area.currentWave]) --create mob
 			if level ~=10 then
-				spawnTimer=math.random(1,3) --countdown to next mob spawn
+				if level>5 then 
+					spawnTimer=math.random(1,2)
+				else
+					spawnTimer=math.random(1,3) --countdown to next mob spawn
+				end
 			else
 				if bossDead then currentState.run=endGameState end
 			  	spawnTimer=math.random(3,4)
@@ -1519,7 +1531,7 @@ function statsScreen()
 	print("Experience Gained: "..stats.expEarntThisLevel,panelPos.x+2,panelPos.y+44,colours.yellow)
 end
 
-restartTimer=3
+restartTimer=5
 function endGameState()
 	cls(0)
 	if player.dead==true then
@@ -1547,8 +1559,10 @@ function endGameState()
 	if btn(buttons.shoot) and xPressed== false then xPressed= true end
 	if btn(buttons.shoot)==false and xPressed==true then 
 		xPressed=false
-		reset()
-		currentState.run=startScreenState
+		if restartTimer<0 then 
+			reset()
+			currentState.run=startScreenState
+		end
 	end
 
 end
