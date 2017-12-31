@@ -24,8 +24,8 @@ function blink(){
 }
 
 function animateBlink(){
-	blink();
-	element.innerHTML = "W:\\Magellanic Games" + blinkString;
+	
+	element.innerHTML = "W:\\Magellanic Games";
 }
 
 function animation(){	
