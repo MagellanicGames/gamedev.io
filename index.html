@@ -3,74 +3,55 @@
 	<head>
 		<title>Magellanic</title>		
 			<link rel="stylesheet" href="style.css">
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	</head>
-	<body>
-	
-		<h1 id="blink" class="center" style="margin :50px;">_</h1>
-		
-		<h3 class="blue">****************************************</h3>
 
-		<div class="gameInstructions">
-			<p class="main" style="margin : 50px;">
+	<body>
+
+		<div class="row">
+			<div class="col-sm-12">
+			<h1 id="blink" class="red" style="margin :50px;">_</h1>
+		
+			<h3 class="blue">****************************************</h3>
+			<p class="main">
 				Welcome to Magellanic Games' website.  <font color="#68e9f8">Liam Charalambous (a.k.a Magellanic)</font> is a software developer from southern England. Currently he is working on (amongst other projects) his first game: <font color="#e90666">Mr.Blocked</font> with musician, artist and general tech enthusiast <a href="https://www.protodome.com">PROTODOME</a>.  Scroll down to view both finished and current projects.				  
  			</p>
- 			
+
+ 			<h3 class="green">****************************************</h3>
  		</div>
- 				
- 		<h3 class="green">****************************************</h3>
+ 		</div>
 
- 		<div class="gameInstructions">	
- 			<h3 class="red" style="margin-top:100px;font-size: 4em;"> Projects </h3> 			 	
+ 		<div class="row"><div class="col-sm-12"><h2 class="red"> Projects </h2> </div></div>
 
- 			<center><table>	
- 				<tr> <td colspan="2"><h3 class="blue" style="text-align: left;">Mr.Blocked</h3></td></tr>
- 				<tr>
- 					<td style="width:50%;"><center> <a href="https://www.mrblocked.com">
- 						<iframe src="https://giphy.com/embed/xT1R9yeKgaJgoevYDS" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/xT1R9yeKgaJgoevYDS"></a></p></a>
- 					</center></td>			
-					<td><p class="main">		
-					Mr.Blocked is a puzzle game being developed using C# and Monogame.  Playable on Windows, Linux and Mac. The fab retro art is done by PROTODOME. Click <a href="https://www.mrblocked.com">here</a> to view the game's website and to find out more information.
- 					</p><br><br><br><br><br><br></td>
- 				</tr> 	
+		<div class="row"><div class="col-sm-12"><h3 class="blue">Mr.Blocked</h3></div></div>
+ 		<div class="row"> 		
+ 		<div class="col-sm-6"><img class="img-responsive" src="mrblocked.gif"></div>
+ 		<div class="col-sm-6"><p>Mr.Blocked is a puzzle game being developed using C# and Monogame.  Playable on Windows, Linux and Mac. The fab retro art is done by PROTODOME. Click <a href="https://www.mrblocked.com">here</a> to view the game's website and to find out more information. </p></div> 		
+ 		</div>
 
- 				<tr> <td colspan="2"><h3 class="blue" style="text-align: left;">Zombie Apocalyp-tic-80</h3></td></tr>
- 				<tr>
- 					<td style="width:50%;"><center>  <a href="https://magellanicgames.github.io/gamedev.io/zombies.html"><img src="combined_demo.gif"></a></center></td>			
-					<td><p class="main">		
-					Zombie Apocalyp-tic-80 is a prototype arena shooter developed for the open-source <a href="https://tic.computer/">Tic-80</a> fantasy console.  Choose a weapon and blast your way through 10 levels.  Earn talents and collect upgrades from fallen foes.  <font color="#e90666"><b>Play in your browser</b></font> by clicking
-					 <a href="https://magellanicgames.github.io/gamedev.io/zombies.html">here</a>.
- 					</p><br><br><br><br><br><br></td>
- 				</tr> 	
- 				
- 				<tr> <td colspan="2"><h3 class="green" style="text-align: left;">SpaceTrade Ascii Edition - C# </h3></td></tr>
- 				<tr>
- 					<td style="width:50%;"><img src="space1.png"></td>			
-					<td><p class="main">		
-					This was a small project I made to learn some basic C#. It uses the console as a canvas rather than a static wall of text. It draws in real time but is very basic. It is an ascii engine I developed to make a 'text' space game like elite. It could be used to make basic platformers, shooters etc. It uses the .Net framework with no additional libraries. 
- 					</p><br><br><br><br><br><br></td>
- 				</tr> 	
 
- 				<tr> <td colspan="2"><h3 class="red" style="text-align: left;">Raycasting 3D Engine - SFML.Net  </h3>	</td></tr>
- 				<tr>
- 					<td style="width:50%;"> <img src="raycaster1.png"></td>
- 					<td><p class="main">		
-					Originally, the dungeon crawler game I was writing was going to use this engine. It is adapted from <a href="http://lodev.org/cgtutor/raycasting.html">Lode's cg tutorials</a>. They are fantastic tutorials and found them very insightful into this particular method of rendering 3D. His examples are all in C++ but it wasn't too difficult porting it over to C#. There are a few optimizations I made to get it running at a consistent and smooth framerate.
- 					</p><br><br><br><br><br><br></td>
- 				</tr>
+ 	
+		<div class="row"><div class="col-sm-12"><h3 class="green">Zombie Apocalyp-tic-80</h3></div></div>
+ 		<div clas="row">	 		
+ 			<div class="col-sm-6"><img class="img-responsive" src="combined_demo.gif"></div>
+ 			<div class="col-sm-6"><p>Zombie Apocalyp-tic-80 is a prototype arena shooter developed for the open-source <a href="https://tic.computer/">Tic-80</a> fantasy console.  Choose a weapon and blast your way through 10 levels.  Earn talents and collect upgrades from fallen foes.  <font color="#e90666"><b>Play in your browser</b></font> by clicking  <a href="https://magellanicgames.github.io/gamedev.io/zombies.html">here</a>.<p>	</div>
+	 	</div>
 
- 			</table></center>
- 		</div>	
-
- 		<script src="animate.js"></script>
-
+ 		
+	 	<div class="row">
+	 		<div class="col-sm-12">
  		<footer>
-  			<p>Copyright: Liam Charalambous<br>
+  			<h6 class="green">Copyright: Liam Charalambous<br>
   			Feel free to mail me at MagellanicDev@gmail.com<br>
   			<a href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @MagellanicGames</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script><br>
-  			Last updated: 29/12/17</p>
-
+  			Last updated: 29/12/17</h6>
+  			<script src="animate.js"></script>
 		</footer> 
-
+	</div>
+	</div>
+		
 	</body>
 	 
 </html>
