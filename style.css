@@ -9,9 +9,13 @@ h2.red
 	color: #e90666;
 }
 
-h3.blue{
-	
-	max-width: 100%;
+h2.blue
+{
+
+}
+
+h3.blue{	
+
 	text-shadow: 2px 2px 5px blue;
 	color: #68e9f8;
 }
