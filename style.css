@@ -52,7 +52,8 @@ div.redText{
 
 div.borderBottom
 {
-	padding-bottom: 40px;
+	padding-bottom: 50px;
+	padding-top: 50px;
 	border-style: dashed;	
 	border-color: #00000000;
 	border-bottom-color: #68e9f8;
