@@ -49,6 +49,10 @@ div.blackBack
 	background-color: black;
 }
 
+b.red{
+	color: #e90666;
+}
+
 a.pinkLink{
 	color:hotpink;
 }
