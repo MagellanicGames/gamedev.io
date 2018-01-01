@@ -89,6 +89,14 @@ div.blackBack
 	background-color: black;
 }
 
+div.paddingSmall{
+	padding-top: 10px;
+}
+
+div.padding{
+	padding-top: 150px;
+}
+
 b.red{
 	color: #e90666;
 }
@@ -110,9 +118,7 @@ body.bg{
 	background-attachment: fixed;
 }
 
-div.padding{
-	padding-top: 150px;
-}
+
 
 p{		
 	padding:2px;
