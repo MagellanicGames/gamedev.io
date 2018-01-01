@@ -4,8 +4,8 @@
 		<title>Magellanic</title>		
 			<link rel="stylesheet" href="style.css">
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  			<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+  			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	</head>
 
 	<body class="bg">
@@ -22,7 +22,7 @@
 		<div class="row">
 			<div class="col-lg-2"></div><div class="col-lg-8">			
 			<p class="main">
-				Welcome to Magellanic Games' website.  <font color="#68e9f8">Liam Charalambous (a.k.a Magellanic)</font> is a software developer from southern England. Currently he is working on (amongst other projects) his first game: <font color="#e90666">Mr.Blocked</font> with musician, artist and general tech enthusiast <a class="color" href="https://www.protodome.com">PROTODOME</a>.  Scroll down to view both finished and current projects.				  
+				Welcome to Magellanic Games' website.  <font color="#68e9f8">Liam Charalambous (a.k.a Magellanic)</font> is a software developer from southern England. Currently he is working on (amongst other projects) his first game: <font color="#e90666">Mr.Blocked</font> with musician, artist and general tech enthusiast <a class="pinkLink" href="https://www.protodome.com">PROTODOME</a>.  Scroll down to view both finished and current projects.				  
  			</p>
  			</div> <div class="col-lg-2"></div>
  		</div>
@@ -39,7 +39,7 @@
  		</div>
 
 		<div class="row">
-			<div class="col-lg-2"></div> <div class="col-lg-8"><h3 class="blue">Mr.Blocked</h3></div> <div class="col-lg-2"></div>
+			<div class="col-lg-2"></div> <div class="col-lg-8"><h3 class="blue" id="blocked">Mr.Blocked</h3></div> <div class="col-lg-2"></div>
 		</div>
 		
  		<div class="row">
@@ -50,7 +50,7 @@
  			
  			 <div class="col-lg-2"></div>
  			 <div class="col-lg-8">
- 			 	<p>Mr.Blocked is a puzzle game being developed using C# and Monogame.  Playable on Windows, Linux and Mac. The fab retro art is done by PROTODOME. Click <a class="color" href="https://www.mrblocked.com">here</a> to view the game's website and find out more information. </p>
+ 			 	<p>Mr.Blocked is a puzzle game being developed using C# and Monogame.  Playable on Windows, Linux and Mac. The fab retro art is done by PROTODOME. Click <a class="pinkLink" href="https://www.mrblocked.com">here</a> to view the game's website and find out more information. </p>
  			 </div>
  			 <div class="col-lg-2"></div>
  		
@@ -60,7 +60,7 @@
 
  		<div class="container">
 		<div class="row">
-			<div class="col-lg-2"></div> <div class="col-lg-8"><h3 class="blue">Zombie Apocalyp-tic-80</h3> <small><font color="#e90666"><b>(Play in browser)</b></font></small></div> <div class="col-lg-2"></div>
+			<div class="col-lg-2"></div> <div class="col-lg-8"><h3 class="blue" id="zombie">Zombie Apocalyp-tic-80</h3> <small><font color="#e90666"><b>(Play in browser)</b></font></small></div> <div class="col-lg-2"></div>
 		</div>
 
  		<div class="row">	 		
@@ -70,9 +70,9 @@
  			<div class="col-lg-2"></div>
  			<div class="col-lg-8">
  				<p>Zombie Apocalyp-tic-80 is a prototype arena shooter developed for the open-source
- 					<a class="color" href="https://tic.computer/">Tic-80</a> fantasy console.
+ 					<a class="pinkLink" href="https://tic.computer/">Tic-80</a> fantasy console.
  					Choose a weapon and blast your way through 10 levels.  Earn talents and collect upgrades from fallen foes. Play			
- 					by clicking  <a class="color" href="https://magellanicgames.github.io/gamedev.io/zombies.html">here</a>.<p>
+ 					by clicking  <a class="pinkLink" href="https://magellanicgames.github.io/gamedev.io/zombies.html">here</a>.<p>
  				</div>
  				<div class="col-lg-2"></div>
 	 	</div>
@@ -80,7 +80,7 @@
  		
  		<div class="container">
  			<div class="row">
-				<div class="col-lg-2"></div> <div class="col-lg-8"><h3 class="blue">SpaceTrade Ascii Edition</h3></div> <div class="col-lg-2"></div>
+				<div class="col-lg-2"></div> <div class="col-lg-8"><h3 class="blue" id="spaceTrade">SpaceTrade Ascii Edition</h3></div> <div class="col-lg-2"></div>
 			</div>
 
  		<div class="row">	 		
@@ -100,7 +100,7 @@
 
  			<div class="container">
  			<div class="row">
-				<div class="col-lg-2"></div> <div class="col-lg-8"><h3 class="blue">Raycasting 3D Engine</h3></div> <div class="col-lg-2"></div>
+				<div class="col-lg-2"></div> <div class="col-lg-8"><h3 class="blue" id="raycast">Raycasting 3D Engine</h3></div> <div class="col-lg-2"></div>
 			</div>
 
  		<div class="row">	 		
@@ -110,14 +110,43 @@
  		 <div class="col-lg-2"></div>
  			 <div class="col-lg-8">
  			 	<p>This engine was intended to be used for a dungeon crawler game that never saw the light of day. </p>
- 			 	<p>It is adapted from <a class="color" href="http://lodev.org/cgtutor/raycasting.html">Lode's cg tutorials</a>. They are fantastic tutorials and found them very insightful into implementing this "3D" rendering method. Lode's examples are all in C++ but it was straight forward enough porting it to C#.
+ 			 	<p>It is adapted from <a class="pinkLink" href="http://lodev.org/cgtutor/raycasting.html">Lode's cg tutorials</a>. They are fantastic tutorials and found them very insightful into implementing this "3D" rendering method. Lode's examples are all in C++ but it was straight forward enough porting it to C#.
  			 	</p>
  			 </div>
  			 <div class="col-lg-2"></div>
 
  		</div>
 
-
+ 		<nav class="navbar navbar-inverse navbar-fixed-bottom">
+  			<div class="container-fluid blackBack">
+   				 <div class="navbar-header">
+        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>                        
+      				</button>
+      				<a class="navbar-brand" href="#blink"><div class="redText">Magellanic Games</div></a>
+    		</div>
+    		<div>
+      			<div class="collapse navbar-collapse blueText" id="myNavbar">
+      				
+        			<ul class="nav navbar-nav">        				
+          				<li><a href="#blocked">Mr. Blocked</a></li>
+          				<li><a href="#zombie">Zombie Apocalyp-tic-80</a></li>
+          				<li><a href="#spaceTrade">SpaceTrade Ascii Edition</a></li>
+          				<li><a href="#raycast">Raycasting 3D Engine</a></li>  
+          				<!--<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
+            				<ul class="dropdown-menu">
+             				 <li><a href="#"></a></li>             				 
+            				</ul>
+          				</li>-->
+          			
+        			</ul>
+        			
+      			</div>
+    		</div>
+  			</div>
+		</nav>    
 
 	 	<div class="container">
 	 	<div class="row">
@@ -133,6 +162,7 @@
 		</footer> 
 	</div> <div class="col-lg-2"></div>
 	</div>
+	<div class="row padding"></div>
 		</div>
 	</body>
 	 

@@ -12,10 +12,6 @@ h2.red
 	font-size: 300%;
 }
 
-h2.blue
-{
-
-}
 
 h3.blue{	
 
@@ -48,10 +44,25 @@ div{
 	color: #d5c9c9;
 }
 
-a.color{
+div.blackBack
+{
+	background-color: black;
+}
+
+a.pinkLink{
 	color:hotpink;
 }
 
+div.redText{
+	text-shadow: 2px 2px 5px blue;
+	color: #e90666;
+}
+
+div.blueText
+{
+	text-shadow: 2px 2px 5px blue;
+	color: #68e9f8;
+}
 div.backPanel{
 	background-color: #010d21;
 }
@@ -67,6 +78,10 @@ body.bg{
 	background-image: url("backdrop_32.gif");
 	background-repeat: repeat;
 	background-attachment: fixed;
+}
+
+div.padding{
+	padding-top: 50px;
 }
 
 p{		
