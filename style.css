@@ -1,43 +1,31 @@
-h1.red{
-	text-shadow: 2px 2px 5px blue;
+.redText{
 	color: #e90666;
-	font-weight: 800;
-	font-size: 370%;
 }
 
-h2.red
-{
-	text-shadow: 2px 2px 5px blue;
-	color: #e90666;
-	font-size: 300%;
-	font-weight:600;
-}
-
-
-h3.blue{	
-
-	text-shadow: 2px 2px 5px blue;
+.blueText{
 	color: #68e9f8;
+}
+
+.greenText{
+	color: #32e906;
+}
+
+.pinkText{
+	color: hotpink;
+}
+
+.textShadow{
+	text-shadow: 2px 2px 5px #0037df;
+}
+
+.largeFont{
+	font-size:300%;
+	font-weight: 600;
+}
+
+.mediumFont{
 	font-size: 200%;
 	font-weight:600;
-}
-
-h3.green{
-	
-	
-	text-shadow: 2px 2px 5px blue;
-	color: #32e906;
-}
-
-h3.red{
-		
-	text-shadow: 2px 2px 5px blue;
-	color: #e90666;
-}
-
-h6.green
-{
-	color: #32e906;
 }
 
 div{	
@@ -45,10 +33,6 @@ div{
 	color: #d5c9c9;
 }
 
-div.redText{
-	text-shadow: 2px 2px 5px blue;
-	color: #e90666;
-}
 
 div.borderBottom
 {
@@ -68,11 +52,7 @@ div.borderTop
 	border-top-color: #68e9f8;
 	border-width: 6px;
 }
-div.blueText
-{
-	text-shadow: 2px 2px 5px blue;
-	color: #68e9f8;
-}
+
 
 div.backPanel{
 	background-color: #00000000;
@@ -97,19 +77,6 @@ div.padding{
 	padding-top: 150px;
 }
 
-b.red{
-	color: #e90666;
-}
-
-b.blue{
-	color: #68e9f8;
-}
-
-a.pinkLink{
-	color:hotpink;
-}
-
-
 
 body.bg{
 	
@@ -119,11 +86,7 @@ body.bg{
 }
 
 
-
 p{		
 	padding:2px;
-    color: #3dff44;
     font-size: 130%
 }
-
-
