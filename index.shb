@@ -1,0 +1,103 @@
+Magellanic,style.css
+
+addContainer;
+rowStart;{class:borderBottom}
+<center><h1 id="blink" class="red">_</h1></center>
+rowEnd;
+rowStart;{class:borderBottom}
+<p class="main">
+				Welcome to Magellanic Games' website.  <b class="red">Liam Charalambous (a.k.a Magellanic)</b> is a software developer from southern England. Currently he is working on (amongst other projects) his first game: <b class="red">Mr.Blocked</b> with musician, artist and general tech enthusiast <a class="pinkLink" href="https://www.protodome.com">PROTODOME</a>.  Scroll down to view both finished and current projects.				  
+</p>
+
+rowEnd;
+
+addContainer;
+heading(text:Projects,class:red,id:);
+subHeading(text:Mr.Blocked,class:blue,id:blocked);
+addImage(mrblocked.gif);
+
+rowStart;
+<p>Mr.Blocked is a puzzle game being developed using C# and Monogame.  Playable on Windows, Linux and Mac. The fab retro art is done by PROTODOME. Click <a class="pinkLink" href="https://www.mrblocked.com">here</a> to view the game's website and find out more information. </p>
+rowEnd;
+
+addContainer;
+subHeading(text:Zombie Apocalyp-tic-80,class:blue,id:zombie);
+addImage(combined_demo.gif);
+rowStart;
+<p>Zombie Apocalyp-tic-80 is a prototype arena shooter developed for the open-source
+ 					<a class="pinkLink" href="https://tic.computer/">Tic-80</a> fantasy console.
+ 					Choose a weapon and blast your way through 10 levels.  Earn talents and collect upgrades from fallen foes. <b class="red">Play			
+ 					by clicking  <a class="pinkLink" href="https://magellanicgames.github.io/gamedev.io/zombies.html">here</a>.</b><p>
+rowEnd;
+
+addContainer;
+subHeading(text:SpaceTrade Ascii Edition,class:blue,id:spaceTrade);
+addImage(space1.png);
+rowStart;
+<p>SpaceTrader is a small project I developed to learn the basics of C#. It uses the console as a canvas and draws in real time. It came about from wanting to make 'text' space game like elite and thought Ascii graphics would be more interesting.</p>
+
+ 			 	<p>The engine could be used to make other games such as platformers, shooters etc. It uses the .Net framework with no additional libraries. 
+ 			 	Currently I am developing a full version of SpaceTrade with normal graphics using Monogame.</p>
+rowEnd;
+
+addContainer;
+subHeading(text:Raycasting 3D Engine,class:blue,id:raycast);
+addImage(raycaster1.png);
+rowStart;
+<p>This engine was intended to be used for a dungeon crawler game that never saw the light of day. </p>
+ 			 	<p>It is adapted from <a class="pinkLink" href="http://lodev.org/cgtutor/raycasting.html">Lode's cg tutorials</a>. They are fantastic tutorials and found them very insightful into implementing this "3D" rendering method. Lode's examples are all in C++ but it was straight forward enough porting it to C#.
+ 			 	</p>
+rowEnd;
+
+htmlStart;
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+  			<div class="container-fluid blackBack">
+   				 <div class="navbar-header">
+        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>                        
+      				</button>
+      				<a class="navbar-brand" href="#blink"><div class="redText">Magellanic Games</div></a>
+    		</div>
+    		<div>
+      			<div class="collapse navbar-collapse blueText" id="myNavbar">
+      				
+        			<ul class="nav navbar-nav">        				
+          				<li><a href="#blocked">Mr. Blocked</a></li>
+          				<li><a href="#zombie">Zombie Apocalyp-tic-80</a></li>
+          				<li><a href="#spaceTrade">SpaceTrade Ascii Edition</a></li>
+          				<li><a href="#raycast">Raycasting 3D Engine</a></li>  
+          				<!--<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
+            				<ul class="dropdown-menu">
+             				 <li><a href="#"></a></li>             				 
+            				</ul>
+          				</li>-->
+          			
+        			</ul>
+        			
+      			</div>
+    		</div>
+  			</div>
+		</nav>    
+htmlEnd;
+
+addContainer;
+padding;
+
+rowStart;{class:borderTop}
+rowEnd;
+
+
+addFooter(email:magellanicDev@gmail.com,date:02/01/2018,copy:Liam Charalambous,class:green);
+rowStart;
+<a href="https://www.facebook.com/MagellanicGames"><b class="blue">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a><br>
+
+<h6 class="green">
+<a href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @MagellanicGames</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></h6> <br> 
+
+
+rowEnd;
+padding;
+
+addScript(animate.js);
