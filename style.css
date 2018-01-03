@@ -40,8 +40,8 @@ div.borderBottom
 	padding-top: 50px;
 	border-style: dashed;	
 	border-color: #00000000;
-	border-bottom-color: #12bbff;
-	border-width: 6px;
+	border-bottom-color: #7577dc;
+	border-width: 2px;
 }
 
 div.borderTop
@@ -50,7 +50,7 @@ div.borderTop
 	border-style: dashed;	
 	border-color: #00000000;
 	border-top-color: #12bbff;
-	border-width: 6px;
+	border-width: 2px;
 }
 
 
@@ -77,12 +77,12 @@ div.padding{
 	padding-top: 150px;
 }
 
-
 body.bg{
 	
 	background-image: url("backdrop_32.gif");
 	background-repeat: repeat;
 	background-attachment: fixed;
+	
 }
 
 
