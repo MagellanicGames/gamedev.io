@@ -1,35 +1,35 @@
 .redText{
-	color: #e90666;
+	color: #08d66d;
 }
 
 .blueText{
-	color: #68e9f8;
+	color: #4cb6e7;
 }
 
 .greenText{
-	color: #32e906;
+	color: #60f811;
 }
 
 .pinkText{
-	color: hotpink;
+	color: #ff0080;
 }
 
 .textShadow{
-	text-shadow: 2px 2px 5px #0037df;
+	text-shadow: 2px 2px 5px #060d45;
 }
 
 .largeFont{
 	font-size:300%;
-	font-weight: 600;
+
 }
 
 .mediumFont{
 	font-size: 200%;
-	font-weight:600;
+	
 }
 
 div{	
-	font-family: Courier;
+	font-family: "Courier New", Courier, monospace;
 	color: #d5c9c9;
 }
 
@@ -40,7 +40,7 @@ div.borderBottom
 	padding-top: 50px;
 	border-style: dashed;	
 	border-color: #00000000;
-	border-bottom-color: #68e9f8;
+	border-bottom-color: #12bbff;
 	border-width: 6px;
 }
 
@@ -49,7 +49,7 @@ div.borderTop
 	padding-bottom: 40px;
 	border-style: dashed;	
 	border-color: #00000000;
-	border-top-color: #68e9f8;
+	border-top-color: #12bbff;
 	border-width: 6px;
 }
 
