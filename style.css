@@ -1,4 +1,8 @@
 .redText{
+	color: #ff0080;
+}
+
+.lightGreenText{
 	color: #08d66d;
 }
 
@@ -8,10 +12,6 @@
 
 .greenText{
 	color: #60f811;
-}
-
-.pinkText{
-	color: #ff0080;
 }
 
 .textShadow{
