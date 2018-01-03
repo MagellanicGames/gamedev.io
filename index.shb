@@ -2,6 +2,8 @@ Magellanic,style.css
 
 addContainer;
 rowStart;{class:borderBottom}
+rowEnd;
+rowStart;{class:}
 <center><h1 id="blink" class="redText largeFont textShadow">_</h1></center>
 rowEnd;
 rowStart;{class:borderBottom greenText}
