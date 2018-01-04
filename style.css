@@ -90,3 +90,16 @@ p{
 	padding:2px;
     font-size: 130%
 }
+
+a:link{
+	text-decoration: underline;
+	color: #4cb6e7;	
+}
+
+a:visited{
+	color: #7577dc;
+}
+
+a.navLink{
+	text-decoration: none;
+}

@@ -30,7 +30,7 @@ rowStart;{class:lightGreenText borderBottom}
 <p>Zombie Apocalyp-tic-80 is a prototype arena shooter developed for the open-source
  					<a class="blueText" href="https://tic.computer/">Tic-80</a> fantasy console.
  					Choose a weapon and blast your way through 10 levels.  Earn talents and collect upgrades from fallen foes. <b class="blueText">Play			
- 					by clicking  <a class="blueText" href="https://magellanicgames.github.io/gamedev.io/zombies.html">here</a>.</b><p>
+ 					by clicking  <a href="https://magellanicgames.github.io/gamedev.io/zombies.html">here</a>.</b><p>
 rowEnd;
 
 addContainer;
@@ -42,7 +42,7 @@ rowStart;{class:lightGreenText borderBottom}
   <p> It simplifies formatting across different devices and screen sizes by utilising Bootstrap, but using much more readable sourcecode.</p>
   <p>
   The tool simplifies editing and updating by using its own very simple scripting language. 
-  <b class="blueText">Check out the source code on <a class="blueText" href="https://github.com/MagellanicGames/SpeedyHtml">Github</a>. </b>
+  <b class="blueText">Check out the source code on <a href="https://github.com/MagellanicGames/SpeedyHtml">Github</a>. </b>
 </p>
 rowEnd;
 
@@ -61,7 +61,7 @@ subHeading(text:Raycasting 3D Engine,class:blueText mediumFont textShadow,id:ray
 addImage(raycaster1.png);
 rowStart;{class:lightGreenText borderBottom}
 <p>This engine was intended to be used for a dungeon crawler game that never saw the light of day. </p>
- 			 	<p>It is adapted from <a class="blueText" href="http://lodev.org/cgtutor/raycasting.html">Lode's cg tutorials</a>. They are fantastic tutorials and found them very insightful into implementing this "3D" rendering method. Lode's examples are all in C++ but it was straight forward enough porting it to C#.
+ 			 	<p>It is adapted from <a href="http://lodev.org/cgtutor/raycasting.html">Lode's cg tutorials</a>. They are fantastic tutorials and found them very insightful into implementing this "3D" rendering method. Lode's examples are all in C++ but it was straight forward enough porting it to C#.
  			 	</p>
 rowEnd;
 
@@ -76,19 +76,19 @@ htmlStart;
           				<span class="icon-bar"></span>
           				<span class="icon-bar"></span>                        
       				</button>
-      				<a class="navbar-brand" href="#blink"><div class="blueText">Magellanic Games</div></a>
+      				<a class="navLink navbar-brand" href="#blink"><div class="blueText">Magellanic Games</div></a>
     		</div>
     		<div>
       			<div class="collapse navbar-collapse blueText" id="myNavbar">
       				
         			<ul class="nav navbar-nav">        				
-          				<li><a href="#blocked">Mr. Blocked</a></li>
-          				<li><a href="#zombie">Zombie Apocalyp-tic-80</a></li>
-                  <li><a href="#builder">Speedy HTML Builder</a></li>          			        				              
-          				<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
+          				<li><a class="navLink"href="#blocked">Mr. Blocked</a></li>
+          				<li><a class="navLink"href="#zombie">Zombie Apocalyp-tic-80</a></li>
+                  <li><a class="navLink"href="#builder">Speedy HTML Builder</a></li>          			        				              
+          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
             				<ul class="dropdown-menu">
-                    <li><a href="#spaceTrade">SpaceTrade Ascii Edition</a></li>  
-             				 <li><a href="#raycast">Raycasting 3D Engine</a></li>               				 
+                    <li><a class="navLink"href="#spaceTrade">SpaceTrade Ascii Edition</a></li>  
+             				 <li><a class="navLink"href="#raycast">Raycasting 3D Engine</a></li>               				 
             				</ul>
           				</li>
           			
@@ -105,7 +105,7 @@ padding;
 
 addFooter(email:magellanicDev@gmail.com,date:02/01/2018,copy:Liam Charalambous,class:lightGreenText);
 rowStart;
-<a href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a><br>
+<a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a><br>
 
 <h6 class="lightGreenText">
 <a href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @MagellanicGames</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></h6> <br> 
