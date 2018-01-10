@@ -34,19 +34,6 @@ rowStart;{class:lightGreenText borderBottom}
 rowEnd;
 
 addContainer;
-subHeading(text:Speedy HTML Builder,class:blueText mediumFont textShadow,id:builder);
-addImage(builder.png);
-rowStart;{class:lightGreenText borderBottom}
-<p>
-  This tool came about from wanting to simplify maintenence of this website and gain familiarity with website development.</p>
-  <p> It simplifies formatting across different devices and screen sizes by utilising Bootstrap, but using much more readable sourcecode.</p>
-  <p>
-  The tool simplifies editing and updating by using its own very simple scripting language. 
-  <b class="blueText">Check out the source code on <a href="https://github.com/MagellanicGames/SpeedyHtml">Github</a>. </b>
-</p>
-rowEnd;
-
-addContainer;
 subHeading(text:SpaceTrade Ascii Edition,class:blueText mediumFont textShadow,id:spaceTrade);
 addImage(space1.png);
 rowStart;{class:lightGreenText borderBottom}
@@ -84,10 +71,9 @@ htmlStart;
         			<ul class="nav navbar-nav">        				
           				<li><a class="navLink"href="#blocked">Mr. Blocked</a></li>
           				<li><a class="navLink"href="#zombie">Zombie Apocalyp-tic-80</a></li>
-                  <li><a class="navLink"href="#builder">Speedy HTML Builder</a></li>          			        				              
+                  <li><a class="navLink"href="#spaceTrade">SpaceTrade Ascii Edition</a></li>          			        				              
           				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
-            				<ul class="dropdown-menu">
-                    <li><a class="navLink"href="#spaceTrade">SpaceTrade Ascii Edition</a></li>  
+            				<ul class="dropdown-menu">                    
              				 <li><a class="navLink"href="#raycast">Raycasting 3D Engine</a></li>               				 
             				</ul>
           				</li>
