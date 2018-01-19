@@ -9,8 +9,14 @@ rowEnd;
 rowStart;{class:borderBottom lightGreenText}
 <p class="main">
 				Welcome to Magellanic Games' website.  <b>Liam Charalambous (a.k.a Magellanic)</b> is a software developer from southern England. Currently he is working on (amongst other projects) his first game: <b>Mr.Blocked</b> with musician, artist and general tech enthusiast <a class="blueText" href="https://www.protodome.com">PROTODOME</a>.
-        You can view projects both here and on <a class="blueText" href="https://github.com/MagellanicGames">Github</a>.
+        You can view projects both here and on <a class="blueText" href="https://github.com/MagellanicGames">Github</a>.<br>  I also post art and gamedev related content on Twitter, so feel free to follow me there.
 </p>
+<br>
+<h6 class="lightGreenText">
+<a href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @MagellanicGames</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></h6>
+
+
+
 
 rowEnd;
 
@@ -89,14 +95,9 @@ htmlEnd;
 addContainer;
 padding;
 
-addFooter(email:magellanicDev@gmail.com,date:02/01/2018,copy:Liam Charalambous,class:lightGreenText);
+addFooter(email:magellanicDev@gmail.com,date:18/01/2018,copy:Liam Charalambous,class:lightGreenText);
 rowStart;
-<a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a><br>
-
-<h6 class="lightGreenText">
-<a href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @MagellanicGames</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></h6> <br> 
-
-
+<a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
 rowEnd;
 padding;
 
