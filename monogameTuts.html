@@ -19,7 +19,7 @@
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="borderBottom lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-This is a guide for those who want to learn Monogame but just want to know the bare essentials to get running.  The target audience are those who can already code or know C#.  Also if you are a developer currently using something else and is just wanting to get familiar with Monogame.				
+This is a guide for those who want to learn Monogame but just want to know the bare essentials to get running.  The target audience are those who can already code or know C#.  Also if you are a developer currently using something else and are simply wanting to get familiar with Monogame.				
 </p>
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
@@ -47,7 +47,7 @@ Run the installer and just yes through everything.  You can install through NUGE
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-So once all that is installed, simply fire up VS and create a new project.  I myself use the “Cross Platform Desktop Project” as the projects I'm developing need that.  This guide will use that, but at this basic level, there's no real difference between cross-platform and the “Windows project”.<br><br>
+So once all that is installed, simply fire up VS and create a new project.  I use the “Cross Platform Desktop Project” as the projects I'm developing require it.  This guide will use that template, but at this basic level, there's no real difference between cross-platform and the “Windows project”.<br><br>
 Simply choose cross-platform project:
 </p>
 </div>		
@@ -152,6 +152,62 @@ The complete code for <a class="blueText" href="TutorialSource/LoadingImages.cs"
 			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/05.png" ></div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="keyboard"  class="blueText mediumFont textShadow" >Controls (Keyboard)</h3></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+We'll use the keyboard input for simplicity.  I'll go through other means later on.<br><br>
+First off create a Vector2 member which is boxman's position.
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Keyboard/00.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+And make sure it is used in the draw call.
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Keyboard/01.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+Next the controls, go to the Update method ( ~line 62).
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Keyboard/02.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+I've added dt in, but this is not required.  Its simply for having everything run at a consistent speed.  All we do is query the state and modify the position based on input.  This is incredibly rough and is not ideal, but its to get you started.<br>  The Monogame functions are easy enough to wrap into On-press and On-release functions.  I'll cover this in a later guide. 
+<br><br>Full source available <a class="blueText" href="TutorialSource/KeyboardInput.cs">here.</a>
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
 </div><!--End of container-->
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
   			<div class="container-fluid blackBack">
@@ -167,7 +223,8 @@ The complete code for <a class="blueText" href="TutorialSource/LoadingImages.cs"
       			<div class="collapse navbar-collapse blueText" id="myNavbar">
         			<ul class="nav navbar-nav">        				
           				<li><a class="navLink"href="#started">Getting Started</a></li>
-          				<li><a class="navLink"href="#images">Images & Sprites</a></li>                        			        				              
+          				<li><a class="navLink"href="#images">Images & Sprites</a></li>  
+          				<li><a class="navLink"href="#keyboard">Controls (Keyboard)</a></li>                      			        				              
           				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
             				<ul class="dropdown-menu">                    
              				 <li><a class="navLink"href="http://magellanicgames.co.uk">Back to main site</a></li>               				 

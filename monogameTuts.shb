@@ -5,7 +5,7 @@ addContainer;
 heading(text:Monogame for the Impatient Developer,class:blueText largeFont textShadow,id:);
 rowStart;{class:borderBottom lightGreenText}
 <p class="main">
-This is a guide for those who want to learn Monogame but just want to know the bare essentials to get running.  The target audience are those who can already code or know C#.  Also if you are a developer currently using something else and is just wanting to get familiar with Monogame.				
+This is a guide for those who want to learn Monogame but just want to know the bare essentials to get running.  The target audience are those who can already code or know C#.  Also if you are a developer currently using something else and are simply wanting to get familiar with Monogame.				
 </p>
 rowEnd;
 
@@ -25,7 +25,7 @@ addContainer;
 subHeading(text:Project Setup,class:blueText mediumFont textShadow,id:);
 rowStart;{class:lightGreenText}
 <p class="main">
-So once all that is installed, simply fire up VS and create a new project.  I myself use the “Cross Platform Desktop Project” as the projects I'm developing need that.  This guide will use that, but at this basic level, there's no real difference between cross-platform and the “Windows project”.<br><br>
+So once all that is installed, simply fire up VS and create a new project.  I use the “Cross Platform Desktop Project” as the projects I'm developing require it.  This guide will use that template, but at this basic level, there's no real difference between cross-platform and the “Windows project”.<br><br>
 Simply choose cross-platform project:
 </p>
 rowEnd;
@@ -97,8 +97,48 @@ It should be noted that Texture2Ds need to call the Dispose() method when no lon
 The complete code for <a class="blueText" href="TutorialSource/LoadingImages.cs">Game1.cs</a>
 </p>
 rowEnd;
-addImage(TutorialImages/LoadingImages/05.png);
+addImage(TutorialImages/LoadingImages/05.png);{class:borderBottom}
+rowStart;{class:borderBottom}
+rowEnd;
 
+
+
+padding;
+addContainer;
+subHeading(text:Controls (Keyboard),class:blueText mediumFont textShadow,id:keyboard);
+rowStart;{class:lightGreenText}
+<p class="main">
+We'll use the keyboard input for simplicity.  I'll go through other means later on.<br><br>
+
+First off create a Vector2 member which is boxman's position.
+</p>
+rowEnd;
+
+addImage(TutorialImages/Keyboard/00.png);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+And make sure it is used in the draw call.
+</p>
+rowEnd;
+
+addImage(TutorialImages/Keyboard/01.png);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+Next the controls, go to the Update method ( ~line 62).
+</p>
+rowEnd;
+
+addImage(TutorialImages/Keyboard/02.png);
+
+
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+I've added dt in, but this is not required.  Its simply for having everything run at a consistent speed.  All we do is query the state and modify the position based on input.  This is incredibly rough and is not ideal, but its to get you started.<br>  The Monogame functions are easy enough to wrap into On-press and On-release functions.  I'll cover this in a later guide. 
+<br><br>Full source available <a class="blueText" href="TutorialSource/KeyboardInput.cs">here.</a>
+</p>
+rowEnd;
 
 htmlStart;
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
@@ -116,7 +156,8 @@ htmlStart;
       				
         			<ul class="nav navbar-nav">        				
           				<li><a class="navLink"href="#started">Getting Started</a></li>
-          				<li><a class="navLink"href="#images">Images & Sprites</a></li>                        			        				              
+          				<li><a class="navLink"href="#images">Images & Sprites</a></li>  
+          				<li><a class="navLink"href="#keyboard">Controls (Keyboard)</a></li>                      			        				              
           				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
             				<ul class="dropdown-menu">                    
              				 <li><a class="navLink"href="http://magellanicgames.co.uk">Back to main site</a></li>               				 
