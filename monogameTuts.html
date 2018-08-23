@@ -109,8 +109,47 @@ Right-click on “Content” and select “Add → Existing Item” and choose y
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 Then save (ctrl-s).  You can build it if you like, but this is done automatically when you build the project.<br><br>
 Now, go to Game1.cs. Create a Texture2D member:
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/02.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+In the LoadContent method(line 38) and we'll load the image as follows:
 </p>
 </div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/03.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+The file extension is omitted as its now within the content management system.  If you wish to keep track within Visual Studio of your images and such, I find it easiest to simply add them to the project (absolutely not required).<br><br>
+Finally we draw it:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/04.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+<br>Hit run and voila, we have our image on screen.<br><br>
+It should be noted that Texture2Ds need to call the Dispose() method when no longer needed as they are an unmanaged resource.  This is usually done in the UnloadContent() method.  Obviously, though, you should know when you no longer need a resource or object.<br><br>
+The complete code for <a class="blueText" href="TutorialSource/LoadingImages.cs">Game1.cs</a>
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/05.png" ></div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
 </div><!--End of container-->
