@@ -1,6 +1,7 @@
 Monogame For Impatient Developers,tutsStyle.css
 
 addContainer;
+padding;
 heading(text:Shaders,class:blueText largeFont textShadow,id:shaders);
 rowStart;{class:lightGreenText borderBottom}
 <p class="main">
@@ -60,16 +61,18 @@ The PixelShaderFunction determines the colour of the pixel based on the position
 </p>
 rowEnd;
 
-subHeading(text:Loading the shader into the Project, Outputs & Samplers,class:blueText mediumFont textShadow,id:loading);
+subHeading(text:Loading the shader into the Project,class:blueText mediumFont textShadow,id:loading);
 
 rowStart;{class:lightGreenText}
 <p class="main">
 Phew, all defined now.  If you want the full source, grab it <a class="blueText" href="TutorialSource/shader.fx">here</a>.  Time to get it into our project so we can use it.
+
+<br><br>(To be continued)
 </p>
 rowEnd;
 
 htmlStart;
-<nav class="navbar navbar-inverse navbar-fixed-bottom">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   			<div class="container-fluid blackBack">
    				 <div class="navbar-header">
         			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
