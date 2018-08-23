@@ -1,0 +1,45 @@
+About,style.css
+addContainer;
+heading(text:About,class:blueText largeFont textShadow,id:);
+rowStart;{class:borderBottom lightGreenText}
+<p class="main">
+Welcome to Magellanic Games' website.  I, Liam Charalambous (a.k.a Magellanic), am a software developer from southern England.  Currently I am working on (amongst other projects) my first game <b>Mr.Blocked</b> with <a class="blueText" href="https://www.protodome.com">PROTODOME</a>.<br>
+This website was built using my own C#-based static site generator so projects can viewed both here and on <a class="blueText" href="https://github.com/MagellanicGames">Github</a>.<br>  I also occasionally post content on Twitter, so feel free to follow me there.
+</p>
+<br>
+<h6 class="lightGreenText">
+<a href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @MagellanicGames</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></h6>
+rowEnd;
+
+htmlStart;
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+  			<div class="container-fluid blackBack">
+   				 <div class="navbar-header">
+        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>                        
+      				</button>
+      				<a class="navLink navbar-brand" href="index.html"><div class="blueText">Magellanic Games</div></a>
+    		</div>
+    		<div>
+      			<div class="collapse navbar-collapse blueText" id="myNavbar">
+      				
+        			<ul class="nav navbar-nav">          			
+                   <li><a class="navLink"href="monogameTuts.html">Monogame Guides</a></li>    
+        			</ul>
+        			
+      			</div>
+    		</div>
+  			</div>
+		</nav>    
+htmlEnd;
+
+addContainer;
+padding;
+
+addFooter(email:magellanicDev@gmail.com,date:23/08/2018,copy:Liam Charalambous,class:lightGreenText);
+rowStart;
+<a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
+rowEnd;
+padding;

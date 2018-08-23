@@ -6,27 +6,13 @@ rowEnd;
 rowStart;{class:}
 <center><h1 id="blink" class="blueText largeFont textShadow">_</h1></center>
 rowEnd;
-rowStart;{class:borderBottom lightGreenText}
-<p class="main">
-				Welcome to Magellanic Games' website.  <b>Liam Charalambous (a.k.a Magellanic)</b> is a software developer from southern England. Currently he is working on (amongst other projects) his first game: <b>Mr.Blocked</b> with musician, artist and general tech enthusiast <a class="blueText" href="https://www.protodome.com">PROTODOME</a>.
-        You can view projects both here and on <a class="blueText" href="https://github.com/MagellanicGames">Github</a>.<br>  I also post art and gamedev related content on Twitter, so feel free to follow me there.
-</p>
-<br>
-<h6 class="lightGreenText">
-<a href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @MagellanicGames</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></h6>
-
-
-
-
-rowEnd;
 
 addContainer;
-heading(text:Projects,class:blueText largeFont textShadow,id:);
 subHeading(text:Mr.Blocked,class:blueText mediumFont textShadow,id:blocked);
 addImage(mrblocked.gif);
 
 rowStart;{class:lightGreenText borderBottom}
-<p>Mr.Blocked is a puzzle game being developed using C# and Monogame.  Playable on Windows, Linux and Mac. The fab retro art is done by PROTODOME. Click <a class="blueText" href="https://www.mrblocked.com">here</a> to view the game's website and find out more information. </p>
+<p>Mr.Blocked is a puzzle game being developed using C# and Monogame.  Playable on Windows, Linux and Mac. While I squirrel away on the code, <a class="blueText" href="https://www.protodome.com">PROTODOME</a> draws the fab art and creates the levels. Click <a class="blueText" href="https://www.mrblocked.com">here</a> to view the game's website and find out more information. </p>
 rowEnd;
 
 addContainer;
@@ -75,11 +61,13 @@ htmlStart;
       			<div class="collapse navbar-collapse blueText" id="myNavbar">
       				
         			<ul class="nav navbar-nav">        				
-          				<li><a class="navLink"href="#blocked">Mr. Blocked</a></li>
-          				<li><a class="navLink"href="#zombie">Zombie Apocalyp-tic-80</a></li>
-                   <li><a class="navLink"href="monogameTuts.html">Monogame Guides</a></li>         			        				              
-          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
+          				
+                  <li><a class="navLink"href="monogameTuts.html">Monogame Guides</a></li>    
+          				 <li><a class="navLink"href="About.html">About</a></li>                        			        				              
+          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Projects<span class="caret"></span></a>
             				<ul class="dropdown-menu">
+                     <li><a class="navLink"href="#blocked">Mr. Blocked</a></li>
+                     <li><a class="navLink"href="#zombie">Zombie Apocalyp-tic-80</a></li>
                      <li><a class="navLink"href="#spaceTrade">SpaceTrade Ascii Edition</a></li>                       
              				 <li><a class="navLink"href="#raycast">Raycasting 3D Engine</a></li>               				 
             				</ul>
