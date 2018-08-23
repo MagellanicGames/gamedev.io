@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" >
+	<head>
+		<title>Monogame For Impatient Developers</title>
+		<link rel="shortcut icon"type="image/x-icon"href="favicon.ico"/>
+		<meta charset="utf-8" >
+		<meta name="viewport"  content="width=device-width, initial-scale=1 maximum-scale=1 user-scalable=no" >
+		<link rel="stylesheet"  href="tutsStyle.css" >
+		<link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+</head>
+
+<body class="bg" >
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><h1 id=""  class="blueText largeFont textShadow" >Monogame for the Impatient Developer</h1></center></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="borderBottom lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+This is a guide for those who want to learn Monogame but just want to know the bare essentials to get running.  The target audience are those who can already code or know C#.  Also if you are a developer currently using something else and is just wanting to get familiar with Monogame.				
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="started"  class="blueText mediumFont textShadow" >Getting Started</h3></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+This will focus on using Windows for development.  I myself use Win 7 (I know, I know) and Visual Studio 2015 but Visual Studio 2017 should work fine.
+Head to this link and download version <a class="blueText" href="http://www.monogame.net/downloads/">3.6</a><br><br>
+Run the installer and just yes through everything.  You can install through NUGET, I believe you can choose specific template types, where as the installer simply installs all template types.
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id=""  class="blueText mediumFont textShadow" >Project Setup</h3></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+So once all that is installed, simply fire up VS and create a new project.  I myself use the “Cross Platform Desktop Project” as the projects I'm developing need that.  This guide will use that, but at this basic level, there's no real difference between cross-platform and the “Windows project”.<br><br>
+Simply choose cross-platform project:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Setup/00.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+We now have our project.  If you run you should simply see this:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Setup/01.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+The project you'll see simply consists of <b>Program.cs</b> and <b>Game1.cs</b>.  Program simply contains the Main method and Game1.cs is where the magic happens.
+I won't run through the code as its very well documented and this is for impatient people so lets learn by doing.
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="images"  class="blueText mediumFont textShadow" >Loading and displaying Images</h3></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+So we're gonna put this lil guy on screen and make him move about:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><img src="TutorialImages/LoadingImages/00.png" ></center></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+There's a few ways we can load resources (images/audio) but we'll use the ContentManager (Pipeline Tool).  If you open up your Content Folder and double click “Content.mgcb”.  It'll open up the manager.  
+Right-click on “Content” and select “Add → Existing Item” and choose your image.
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/01.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+Then save (ctrl-s).  You can build it if you like, but this is done automatically when you build the project.<br><br>
+Now, go to Game1.cs. Create a Texture2D member:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+  			<div class="container-fluid blackBack">
+   				 <div class="navbar-header">
+        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>                        
+      				</button>
+      				<a class="navLink navbar-brand" href="#blink"><div class="blueText">Monogame Guides</div></a>
+    		</div>
+    		<div>
+      			<div class="collapse navbar-collapse blueText" id="myNavbar">
+        			<ul class="nav navbar-nav">        				
+          				<li><a class="navLink"href="#started">Getting Started</a></li>
+          				<li><a class="navLink"href="#images">Images & Sprites</a></li>                        			        				              
+          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
+            				<ul class="dropdown-menu">                    
+             				 <li><a class="navLink"href="http://magellanicgames.co.uk">Back to main site</a></li>               				 
+            				</ul>
+          				</li>
+        			</ul>
+      			</div>
+    		</div>
+  			</div>
+		</nav>    
+<!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><footer><h6 class="" >Email: myEmail@mail.com <span class="glyphicon glyphicon-envelope" ></span><br>
+Last Updated: 01/07/1999<br>
+Copyright: Web Developer</h6>
+</footer>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p style="font-size:50%" >Generated with SpeedyHtml.</p></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+</body>
+</html>

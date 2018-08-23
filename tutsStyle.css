@@ -1,0 +1,103 @@
+.redText{
+	color: #ff0080;
+}
+
+.lightGreenText{
+	color: #08d66d;
+}
+
+.blueText{
+	color: #4cb6e7;
+}
+
+.greenText{
+	color: #60f811;
+}
+
+.textShadow{
+	text-shadow: 2px 2px 5px #060d45;
+}
+
+.largeFont{
+	font-size:300%;
+
+}
+
+.mediumFont{
+	font-size: 200%;
+	
+}
+
+div{	
+	font-family: "Courier New", Courier, monospace;
+	color: #d5c9c9;
+}
+
+
+div.borderBottom
+{
+	padding-bottom: 50px;
+	padding-top: 50px;
+	border-style: dashed;	
+	border-color: #00000000;
+	border-bottom-color: #7577dc;
+	border-width: 2px;
+}
+
+div.borderTop
+{
+	padding-bottom: 40px;
+	border-style: dashed;	
+	border-color: #00000000;
+	border-top-color: #12bbff;
+	border-width: 2px;
+}
+
+
+div.backPanel{
+	background-color: #00000000;
+}
+
+div.row{
+	padding-top: 5px;
+	padding-bottom: 2px;
+	padding-left: 5px;
+}
+
+div.blackBack
+{
+	background-color: black;
+}
+
+div.paddingSmall{
+	padding-top: 10px;
+}
+
+div.padding{
+	padding-top: 150px;
+}
+
+body.bg{
+	
+	background-color: black;
+	
+}
+
+
+p{		
+	padding:2px;
+    font-size: 130%
+}
+
+a:link{
+	text-decoration: underline;
+	color: #4cb6e7;	
+}
+
+a:visited{
+	color: #7577dc;
+}
+
+a.navLink{
+	text-decoration: none;
+}
