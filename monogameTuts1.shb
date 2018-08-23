@@ -47,18 +47,12 @@ subHeading(text:Vertex and Pixel Shader Functions, Outputs & Samplers,class:blue
 
 rowStart;{class:lightGreenText}
 <p class="main">
-Next we need a texture sampler so we can colour our pixels the correct colour on screen (SpriteSheetSampler).<br>
-The VertextShaderInput is the data passed from our game through to the video card so we can calculate where things need to be drawn.<br>
-The VertexShaderOutput contains the final pixel position and that pixel's colour once our shader has finished is calculations.
+The VertexShaderFunction is where we do the calculations to determine where the pixel is on screen.  These calulations take the data from the input and we store the results in the VertexShaderOutput object.<br><br><br>
+The PixelShaderFunction determines the colour of the pixel based on the position of texture's UV co-ordinates.
 </p>
 rowEnd;
 addImage(TutorialImages/Shaders/02.png);
 rowStart;{class:lightGreenText borderBottom}
-<p class="main">
-<br>
-The VertexShaderFunction is where we do the calculations to determine where the pixel is on screen.  These calulations take the data from the input and we store the results in the VertexShaderOutput object.<br><br><br>
-The PixelShaderFunction determines the colour of the pixel based on the position of texture's UV co-ordinates.
-</p>
 rowEnd;
 
 subHeading(text:Loading the shader into the Project,class:blueText mediumFont textShadow,id:loading);
