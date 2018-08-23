@@ -1,5 +1,6 @@
 About,style.css
 addContainer;
+padding;
 heading(text:About,class:blueText largeFont textShadow,id:);
 rowStart;{class:borderBottom lightGreenText}
 <p class="main">
@@ -12,7 +13,7 @@ This website was built using my own C#-based static site generator so projects c
 rowEnd;
 
 htmlStart;
-<nav class="navbar navbar-inverse navbar-fixed-bottom">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   			<div class="container-fluid blackBack">
    				 <div class="navbar-header">
         			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">

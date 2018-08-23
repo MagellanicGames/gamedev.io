@@ -1,12 +1,26 @@
 Monogame For Impatient Developers,tutsStyle.css
 
 addContainer;
-
+padding;
 heading(text:Monogame for the Impatient Developer,class:blueText largeFont textShadow,id:blink);
 rowStart;{class:borderBottom lightGreenText}
 <p class="main">
-This is a guide for those who want to learn Monogame but just want to know the bare essentials to get running.  The target audience are those who can already code or know C#.  Also if you are a developer currently using something else and are simply wanting to get familiar with Monogame.				
-</p>
+This is a guide for those who want to learn Monogame but just want to know the bare essentials to get running.  The target audience are those who can already code or know C#.  Also if you are a game developer currently using something else and are simply wanting to get familiar with Monogame, this might be fore you.<br><br>
+Whenever I look at a framework, engine or guide I like to see the results of what can be done using it.  Below are some examples of projects I have made.
+rowEnd;
+addContainer;
+subHeading(text:Example Projects,class:blueText mediumFont textShadow,id:);
+rowStart;
+<iframe src='https://gfycat.com/ifr/ShockedHideousBobolink' frameborder='0' scrolling='no' allowfullscreen width='640' height='360'></iframe>
+rowEnd;
+addContainer;
+addImage(TutorialImages/boot.gif);
+addImage(TutorialImages/dungeon.gif);
+addImage(TutorialImages/editor.gif);
+addImage(TutorialImages/fps.gif);
+addImage(TutorialImages/modelViewer.gif);
+
+rowStart;{class:borderBottom}
 rowEnd;
 
 addContainer;
@@ -190,7 +204,7 @@ rowStart;{class:lightGreenText}
 rowEnd;
 
 htmlStart;
-<nav class="navbar navbar-inverse navbar-fixed-bottom">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   			<div class="container-fluid blackBack">
    				 <div class="navbar-header">
         			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
