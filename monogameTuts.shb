@@ -39,7 +39,7 @@ rowEnd;
 
 addImage(TutorialImages/Setup/01.png);
 
-rowStart;{class:lightGreenText}
+rowStart;{class:lightGreenText borderBottom}
 <p class="main">
 The project you'll see simply consists of <b>Program.cs</b> and <b>Game1.cs</b>.  Program simply contains the Main method and Game1.cs is where the magic happens.
 I won't run through the code as its very well documented and this is for impatient people so lets learn by doing.
