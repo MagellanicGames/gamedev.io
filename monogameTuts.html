@@ -14,7 +14,7 @@
 <body class="bg" >
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><h1 id=""  class="blueText largeFont textShadow" >Monogame for the Impatient Developer</h1></center></div>		
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><h1 id="blink"  class="blueText largeFont textShadow" >Monogame for the Impatient Developer</h1></center></div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
@@ -208,6 +208,71 @@ I've added dt in, but this is not required.  Its simply for having everything ru
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="audio"  class="blueText mediumFont textShadow" >Audio</h3></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+Here we'll be using our good friend the Pipeline Tool.  I'll be using a sound file from my game.  Most file formats are supported.  Mp3 and Ogg definitely are supported.  For this I'll be using the latter. <br>
+The process is the same as loading images. Simply open up the Pipeline Tool, right-click > add existing item and select your file.<br><br>
+Ensure you have the processor correctly set to SoundEffect:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Audio/00.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+Save before you close (ctrl-s).<br><br>
+Add a <i>SoundEffect</i> and an <i>SoundEffectInstance</i> member, for this you'll need to import “Microsoft.Xna.Framework.Audio”.
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Audio/01.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+Initialise it:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Audio/02.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+The <i>SoundEffectInstance</i> is not required.  You can simply play the <i>SoundEffect</i> but the instance allows better control and you can query the state.  They're kind of analogous to Texture and Sprite.<br> 
+All thats left to do is hook up a key to play our sound:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Audio/03.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+<br><br>Full source available <a class="blueText" href="TutorialSource/Audio.cs">here.</a>
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
 </div><!--End of container-->
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
   			<div class="container-fluid blackBack">
@@ -224,7 +289,8 @@ I've added dt in, but this is not required.  Its simply for having everything ru
         			<ul class="nav navbar-nav">        				
           				<li><a class="navLink"href="#started">Getting Started</a></li>
           				<li><a class="navLink"href="#images">Images & Sprites</a></li>  
-          				<li><a class="navLink"href="#keyboard">Controls (Keyboard)</a></li>                      			        				              
+          				<li><a class="navLink"href="#keyboard">Controls (Keyboard)</a></li>    
+          				<li><a class="navLink"href="#audio">Audio</a></li>                     			        				              
           				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
             				<ul class="dropdown-menu">                    
              				 <li><a class="navLink"href="http://magellanicgames.co.uk">Back to main site</a></li>               				 

@@ -2,7 +2,7 @@ Monogame For Impatient Developers,tutsStyle.css
 
 addContainer;
 
-heading(text:Monogame for the Impatient Developer,class:blueText largeFont textShadow,id:);
+heading(text:Monogame for the Impatient Developer,class:blueText largeFont textShadow,id:blink);
 rowStart;{class:borderBottom lightGreenText}
 <p class="main">
 This is a guide for those who want to learn Monogame but just want to know the bare essentials to get running.  The target audience are those who can already code or know C#.  Also if you are a developer currently using something else and are simply wanting to get familiar with Monogame.				
@@ -140,6 +140,55 @@ I've added dt in, but this is not required.  Its simply for having everything ru
 </p>
 rowEnd;
 
+
+padding;
+addContainer;
+subHeading(text:Audio,class:blueText mediumFont textShadow,id:audio);
+rowStart;{class:lightGreenText}
+<p class="main">
+Here we'll be using our good friend the Pipeline Tool.  I'll be using a sound file from my game.  Most file formats are supported.  Mp3 and Ogg definitely are supported.  For this I'll be using the latter. <br>
+The process is the same as loading images. Simply open up the Pipeline Tool, right-click > add existing item and select your file.<br><br>
+
+Ensure you have the processor correctly set to SoundEffect:
+</p>
+rowEnd;
+
+addImage(TutorialImages/Audio/00.png);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+Save before you close (ctrl-s).<br><br>
+Add a <i>SoundEffect</i> and an <i>SoundEffectInstance</i> member, for this you'll need to import “Microsoft.Xna.Framework.Audio”.
+</p>
+rowEnd;
+
+addImage(TutorialImages/Audio/01.png);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+Initialise it:
+</p>
+rowEnd;
+
+
+addImage(TutorialImages/Audio/02.png);
+
+
+rowStart;{class:lightGreenText}
+<p class="main">
+The <i>SoundEffectInstance</i> is not required.  You can simply play the <i>SoundEffect</i> but the instance allows better control and you can query the state.  They're kind of analogous to Texture and Sprite.<br> 
+All thats left to do is hook up a key to play our sound:
+</p>
+rowEnd;
+
+addImage(TutorialImages/Audio/03.png);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+<br><br>Full source available <a class="blueText" href="TutorialSource/Audio.cs">here.</a>
+</p>
+rowEnd;
+
 htmlStart;
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
   			<div class="container-fluid blackBack">
@@ -157,7 +206,8 @@ htmlStart;
         			<ul class="nav navbar-nav">        				
           				<li><a class="navLink"href="#started">Getting Started</a></li>
           				<li><a class="navLink"href="#images">Images & Sprites</a></li>  
-          				<li><a class="navLink"href="#keyboard">Controls (Keyboard)</a></li>                      			        				              
+          				<li><a class="navLink"href="#keyboard">Controls (Keyboard)</a></li>    
+          				<li><a class="navLink"href="#audio">Audio</a></li>                     			        				              
           				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
             				<ul class="dropdown-menu">                    
              				 <li><a class="navLink"href="http://magellanicgames.co.uk">Back to main site</a></li>               				 
