@@ -1,0 +1,105 @@
+Monogame For Impatient Developers,tutsStyle.css
+
+addContainer;
+heading(text:Shaders,class:blueText largeFont textShadow,id:shaders);
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+So in the other <a class="blueText" href="monogameTuts.html#images">guide</a> we used Monogame's in-built spritebatch to draw our sprite/texture/image on to the screen.  There is nothing wrong with using that method, but sometimes you simply want to do your own shaders.  It becomes easier to do effects, lighting and filtering.<br>
+In this tutorial we'll be using the <i>Effect</i> class.  First off, lets write a simple shader.
+</p>
+rowEnd;
+
+
+subHeading(text:Matrices,class:blueText mediumFont textShadow,id:matrices);
+rowStart;{class:lightGreenText}
+<p class="main">
+No nitty gritty about matrices here.  All I'm going to say is we need 3 of them.  They are used to calculate the point at which are pixel is drawn on screen.  We'll also define the Texture2D that gets passed to the shader.
+</p>
+rowEnd;
+
+addImage(TutorialImages/Shaders/00.png);
+
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+The three matrices purposes are as follows:
+<ul>
+  <li><b>World</b> - Also known as the Model matrix, is used for determining the position of an object in the world e.g. (0,0,0) - origin</li>
+  <li><b>View</b> - Think of this simply as where your eye/camera in the world is.  </li>
+  <li><b>Projection</b> - Usually orthographic or perspective.  If perspective then the further away something is the smaller it will appear.  Orthographic does not do this perspective divide and so no matter how "far" away something is from the View, it'll be appear the same size.  Good for 2D.</li>
+</ul>
+</p>
+rowEnd;
+
+subHeading(text:Inputs, Outputs & Samplers,class:blueText mediumFont textShadow,id:io);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+Next we need a texture sampler so we can colour our pixels the correct colour on screen (SpriteSheetSampler).<br>
+The VertextShaderInput is the data passed from our game through to the video card so we can calculate where things need to be drawn.<br>
+The VertexShaderOutput contains the final pixel position and that pixel's colour once our shader has finished is calculations.
+</p>
+rowEnd;
+addImage(TutorialImages/Shaders/01.png);
+rowStart;{class:borderBottom}
+rowEnd;
+subHeading(text:Vertex and Pixel Shader Functions, Outputs & Samplers,class:blueText mediumFont textShadow,id:shaderfuncs);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+Next we need a texture sampler so we can colour our pixels the correct colour on screen (SpriteSheetSampler).<br>
+The VertextShaderInput is the data passed from our game through to the video card so we can calculate where things need to be drawn.<br>
+The VertexShaderOutput contains the final pixel position and that pixel's colour once our shader has finished is calculations.
+</p>
+rowEnd;
+addImage(TutorialImages/Shaders/02.png);
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+<br>
+The VertexShaderFunction is where we do the calculations to determine where the pixel is on screen.  These calulations take the data from the input and we store the results in the VertexShaderOutput object.<br><br><br>
+The PixelShaderFunction determines the colour of the pixel based on the position of texture's UV co-ordinates.
+</p>
+rowEnd;
+
+subHeading(text:Loading the shader into the Project, Outputs & Samplers,class:blueText mediumFont textShadow,id:loading);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+Phew, all defined now.  If you want the full source, grab it <a class="blueText" href="TutorialSource/shader.fx">here</a>.  Time to get it into our project so we can use it.
+</p>
+rowEnd;
+
+htmlStart;
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+  			<div class="container-fluid blackBack">
+   				 <div class="navbar-header">
+        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
+          				<span class="icon-bar"></span>                        
+      				</button>
+      				<a class="navLink navbar-brand" href="monogameTuts.html"><div class="blueText">Monogame Guides</div></a>
+    		</div>
+    		<div>
+      			<div class="collapse navbar-collapse blueText" id="myNavbar">
+      				
+        			<ul class="nav navbar-nav">        				
+          				<li><a class="navLink"href="monogameTuts.html#images">Sprites, Controls & Audio</a></li>
+          				<li><a class="navLink"href="#shaders">Shaders</a></li>  
+          				<li><a class="navLink"href="#matrices">Matrices</a></li>     
+          				<li><a class="navLink"href="#io">Inputs, Outputs & Samplers</a></li>     
+          				<li><a class="navLink"href="#shaderfunctions">Shader Functions</a></li>    
+          				<li><a class="navLink"href="#loading">Loading the Shader</a></li>            			        				              
+          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
+            				<ul class="dropdown-menu">                    
+             				 <li><a class="navLink"href="index.html">Back to main site</a></li>   
+                     <li><a class="navLink"href="About.html">About</a></li>              				 
+            				</ul>
+          				</li>
+          			
+        			</ul>
+        			
+      			</div>
+    		</div>
+  			</div>
+		</nav>    
+htmlEnd;
