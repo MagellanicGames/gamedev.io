@@ -185,7 +185,7 @@ addImage(TutorialImages/Audio/03.png);
 
 rowStart;{class:lightGreenText}
 <p class="main">
-<br><br>Full source available <a class="blueText" href="TutorialSource/Audio.cs">here.</a>
+<br><br>Just like <i>Texture2D</i>, <i>SoundEffect</i>s need to be disposed of. <br>Full source available <a class="blueText" href="TutorialSource/Audio.cs">here.</a>
 </p>
 rowEnd;
 

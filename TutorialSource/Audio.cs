@@ -56,6 +56,7 @@ namespace MyAwesomeGame
 		protected override void UnloadContent()
 		{
 			boxman.Dispose();
+			sfx.Dispose();
 		}
 
 		/// <summary>
