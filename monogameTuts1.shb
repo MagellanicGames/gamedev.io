@@ -43,7 +43,7 @@ rowEnd;
 addImage(TutorialImages/Shaders/01.png);
 rowStart;{class:borderBottom}
 rowEnd;
-subHeading(text:Vertex and Pixel Shader Functions, Outputs & Samplers,class:blueText mediumFont textShadow,id:shaderfuncs);
+subHeading(text:Vertex and Pixel Shader Functions,class:blueText mediumFont textShadow,id:shaderfuncs);
 
 rowStart;{class:lightGreenText}
 <p class="main">
