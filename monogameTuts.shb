@@ -210,7 +210,8 @@ htmlStart;
           				<li><a class="navLink"href="#audio">Audio</a></li>                     			        				              
           				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
             				<ul class="dropdown-menu">                    
-             				 <li><a class="navLink"href="index.html">Back to main site</a></li>               				 
+             				 <li><a class="navLink"href="index.html">Back to main site</a></li>   
+                     <li><a class="navLink"href="About.html">About</a></li>              				 
             				</ul>
           				</li>
           			
