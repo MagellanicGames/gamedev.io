@@ -77,10 +77,17 @@ htmlStart;
       				<a class="navLink navbar-brand" href="monogameTuts.html"><div class="blueText">Monogame Guides</div></a>
     		</div>
     		<div>
-      			<div class="collapse navbar-collapse blueText" id="myNavbar">
-      				
+      			<div class="collapse navbar-collapse blueText" id="myNavbar">      				
         			<ul class="nav navbar-nav">   
-        			<li><a class="navLink"href="monogameTuts.html#images">Sprites, Controls & Audio</a></li>
+        				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Basics <span class="caret"></span></a>
+                    		<ul class="dropdown-menu">      
+                    			<li><a class="navLink"href="monogameTuts.html#examples">Example Projects</a></li>               
+                      			<li><a class="navLink"href="monogameTuts.html#started">Getting Started</a></li>
+                      			<li><a class="navLink"href="monogameTuts.html#images">Images & Sprites</a></li>  
+                      			<li><a class="navLink"href="monogameTuts.html#keyboard">Controls (Keyboard)</a></li>    
+                      			<li><a class="navLink"href="monogameTuts.html#audio">Audio</a></li>                    
+                    		</ul>
+                  		</li>  
 
         				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Shaders<span class="caret"></span></a>
             				<ul class="dropdown-menu">  
@@ -92,7 +99,7 @@ htmlStart;
             				</ul>
           				</li>     				
           							        				              
-          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
+          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Magellanic Games<span class="caret"></span></a>
             				<ul class="dropdown-menu">                    
              				 	<li><a class="navLink"href="index.html">Back to main site</a></li>   
                      			<li><a class="navLink"href="About.html">About</a></li>              				 

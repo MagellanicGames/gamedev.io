@@ -9,7 +9,7 @@ This is a guide for those who want to learn Monogame but just want to know the b
 Whenever I look at a framework, engine or guide I like to see the results of what can be done using it.  Below are some examples of projects I have made.
 rowEnd;
 addContainer;
-subHeading(text:Example Projects,class:blueText mediumFont textShadow,id:);
+subHeading(text:Example Projects,class:blueText mediumFont textShadow,id:examples);
 rowStart;
 <iframe src='https://gfycat.com/ifr/ShockedHideousBobolink' frameborder='0' scrolling='no' allowfullscreen width='640' height='360'></iframe>
 rowEnd;
@@ -218,12 +218,26 @@ htmlStart;
       			<div class="collapse navbar-collapse blueText" id="myNavbar">
       				
         			<ul class="nav navbar-nav">        				
-          				<li><a class="navLink"href="#started">Getting Started</a></li>
-          				<li><a class="navLink"href="#images">Images & Sprites</a></li>  
-          				<li><a class="navLink"href="#keyboard">Controls (Keyboard)</a></li>    
-          				<li><a class="navLink"href="#audio">Audio</a></li>     
-                  <li><a class="navLink"href="monogameTuts1.html">Shaders</a></li>                   			        				              
-          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Other <span class="caret"></span></a>
+          				
+                  <li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Basics <span class="caret"></span></a>
+                    <ul class="dropdown-menu">   
+                      <li><a class="navLink"href="#examples">Example Projects</a></li>                 
+                      <li><a class="navLink"href="#started">Getting Started</a></li>
+                      <li><a class="navLink"href="#images">Images & Sprites</a></li>  
+                      <li><a class="navLink"href="#keyboard">Controls (Keyboard)</a></li>    
+                      <li><a class="navLink"href="#audio">Audio</a></li>                    
+                    </ul>
+                  </li>  
+                  <li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Shaders<span class="caret"></span></a>
+                    <ul class="dropdown-menu">  
+                      <li><a class="navLink"href="monogameTuts1.html">Shaders</a></li>  
+                      <li><a class="navLink"href="monogameTuts1.html#matrices">Matrices</a></li>     
+                      <li><a class="navLink"href="monogameTuts1.html#io">Inputs, Outputs & Samplers</a></li>     
+                      <li><a class="navLink"href="monogameTuts1.html#shaderfuncs">Shader Functions</a></li>    
+                      <li><a class="navLink"href="monogameTuts1.html#loading">Loading the Shader</a></li>   
+                    </ul>
+                  </li>                              			        				              
+          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Magellanic Games<span class="caret"></span></a>
             				<ul class="dropdown-menu">                    
              				 <li><a class="navLink"href="index.html">Back to main site</a></li>   
                      <li><a class="navLink"href="About.html">About</a></li>              				 
