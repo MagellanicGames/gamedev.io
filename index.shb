@@ -62,7 +62,13 @@ htmlStart;
       				
         			<ul class="nav navbar-nav">        				
           				
-                  <li><a class="navLink"href="monogameTuts.html">Monogame Guides</a></li> 
+                  <li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Monogame Guides<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a class="navLink"href="monogameTuts.html">Basics</a></li>  
+                      <li><a class="navLink"href="monogameTuts1.html">Shaders</a></li>                     
+                    </ul>
+                  </li>
+
           				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Projects<span class="caret"></span></a>
             				<ul class="dropdown-menu">
                      <li><a class="navLink"href="#blocked">Mr. Blocked</a></li>
