@@ -155,10 +155,28 @@ Now, go to Game1.cs. Create a Texture2D member:
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/02.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">using</span> Microsoft.Xna.Framework;
+<span class="code-basic">using</span> Microsoft.Xna.Framework.Graphics;
+<span class="code-basic">using</span> Microsoft.Xna.Framework.Input;
+
+<span class="code-basic">namespace</span> MyAwesomeGame
+{
+
+  <span class="code-basic">public class</span> <span class="code-class">Game1</span> : <span class="code-class">Game</span>
+  {
+
+<span class=code-class>   GraphicsDeviceManager</span> graphics;
+<span class=code-class>   SpriteBatch</span> spriteBatch;
+<span class=code-class>   Texture2D</span> boxman;
+
+    <span class="code-basic">public</span> Game1()
+    {
+      graphics = <span class="code-basic">new </span> <span class="code-class">GraphicsDeviceManager</span>(<span class="code-basic">this</span>);
+      Content.RootDirectory = <span class="code-string">"Content"</span>; 
+    }
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 In the LoadContent method(line 38) and we'll load the image as follows:
@@ -166,10 +184,14 @@ In the LoadContent method(line 38) and we'll load the image as follows:
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/03.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">protected override void</span> LoadContent()
+{
+  spriteBatch = <span class="code-basic">new</span> <span class="code-class">SpriteBatch</span>(GraphicsDevice);
+  boxman = Content.Load<<span class="code-class">Texture2D</span>>(<span class="code-string">"boxman"</span>);
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 The file extension is omitted as its now within the content management system.  If you wish to keep track within Visual Studio of your images and such, I find it easiest to simply add them to the project (absolutely not required).<br><br>
@@ -178,10 +200,19 @@ Finally we draw it:
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/04.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">protected override void</span> Draw(<span class="code-class">GameTime</span> gameTime)
+{
+  GraphicsDevice.Clear(<span class="code-class">Color</span>.CornFlowerBlue);
+
+  spriteBatch.Begin();
+  spriteBatch.Draw(boxman,<span class="code-basic">new</span> <span class="code-class">Vector2</span>(200,200),<span class="code-class">Color</span>.White);
+  spriteBatch.End();
+
+  <span class="code-basic">base</span>.Draw(gameTime);
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 <br>Hit run and voila, we have our image on screen.<br><br>
@@ -217,10 +248,18 @@ First off create a Vector2 member which is boxman's position.
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Keyboard/00.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">namespace</span> MyAwesomeGame
+{
+  <span class="code-basic">public class</span> <span class="code-class">Game1</span> : <span class="code-class">Game</span>
+  {
+
+<span class=code-class>   GraphicsDeviceManager</span> graphics;
+<span class=code-class>   SpriteBatch</span> spriteBatch;
+<span class=code-class>   Texture2D</span> boxman;
+   <u><span class="code-class">Vector2</span> boxmanPos = <span class="code-basic">new</span> <span class="code-class">Vector2</span>(200,200);</u>
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 And make sure it is used in the draw call.
@@ -228,10 +267,19 @@ And make sure it is used in the draw call.
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Keyboard/01.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">protected override void</span> Draw(<span class="code-class">GameTime</span> gameTime)
+{
+  GraphicsDevice.Clear(<span class="code-class">Color</span>.CornFlowerBlue);
+
+  spriteBatch.Begin();
+  <u>spriteBatch.Draw(boxman, boxmanPos,<span class="code-class">Color</span>.White);</u>
+  spriteBatch.End();
+
+  <span class="code-basic">base</span>.Draw(gameTime);
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 Next the controls, go to the Update method ( ~line 62).
@@ -239,10 +287,20 @@ Next the controls, go to the Update method ( ~line 62).
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Keyboard/02.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">protected override void</span> Update(<span class="code-class">GameTime</span> gameTime)
+{
+  <span class="code-basic">float</span> dt = (<span class="code-basic">float</span>)gameTime.ElapsedGameTime.TotalSeconds;
+
+  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Up))
+    boxmanPos.Y -= 100.0f * dt;
+  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Down))
+    boxmanPos.Y += 100.0f * dt;
+
+  <span class="code-basic">base</span>.Update(gameTime);
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 I've added dt in, but this is not required.  Its simply for having everything run at a consistent speed.  All we do is query the state and modify the position based on input.  This is incredibly rough and is not ideal, but its to get you started.<br>  The Monogame functions are easy enough to wrap into On-press and On-release functions.  I'll cover this in a later guide. 
@@ -282,10 +340,28 @@ Add a <i>SoundEffect</i> and an <i>SoundEffectInstance</i> member, for this you'
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Audio/01.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText">
+<span class="code-basic">using</span> Microsoft.Xna.Framework;
+<span class="code-basic">using</span> Microsoft.Xna.Framework.Graphics;
+<span class="code-basic">using</span> Microsoft.Xna.Framework.Input;
+<u><span class="code-basic">using</span> Microsoft.Xna.Framework.Audio;</u>
+
+<span class="code-basic">namespace</span> MyAwesomeGame
+{
+
+  <span class="code-basic">public class</span> <span class="code-class">Game1</span> : <span class="code-class">Game</span>
+  {
+
+<span class=code-class>   GraphicsDeviceManager</span> graphics;
+<span class=code-class>   SpriteBatch</span> spriteBatch;
+<span class=code-class>   Texture2D</span> boxman;
+   <span class="code-class">Vector2</span> boxmanPos = <span class="code-basic">new</span> <span class="code-class">Vector2</span>(200,200);
+
+<span class=code-class>   SoundEffect</span> sfx;
+<span class=code-class>   SoundEffectInstance</span> sfxInstance;
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 Initialise it:
@@ -293,10 +369,16 @@ Initialise it:
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Audio/02.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">protected override void</span> LoadContent()
+{
+  spriteBatch = <span class="code-basic">new</span> <span class="code-class">SpriteBatch</span>(GraphicsDevice);
+  boxman = Content.Load<<span class="code-class">Texture2D</span>>(<span class="code-string">"boxman"</span>);
+  sfx = Content.Load<<span class="code-class">SoundEffect</span>>(<span class="code-string">"sfx_voice_00"</span>);
+  sfxInstance = sfx.CreateInstance();
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 The <i>SoundEffectInstance</i> is not required.  You can simply play the <i>SoundEffect</i> but the instance allows better control and you can query the state.  They're kind of analogous to Texture and Sprite.<br> 
@@ -305,10 +387,26 @@ All thats left to do is hook up a key to play our sound:
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Audio/03.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">protected override void</span> Update(<span class="code-class">GameTime</span> gameTime)
+{
+  <span class="code-basic">float</span> dt = (<span class="code-basic">float</span>)gameTime.ElapsedGameTime.TotalSeconds;
+
+  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Up))
+    boxmanPos.Y -= 100.0f * dt;
+  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Down))
+    boxmanPos.Y += 100.0f * dt;
+
+  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Space))
+  {
+    <span class="code-basic">if</span>(sfxInstance.State != <span class="code-basic">SoundState</span>.Playing)
+     sfxInstance.Play();
+  }
+
+  <span class="code-basic">base</span>.Update(gameTime);
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 <br><br>Just like <i>Texture2D</i>, <i>SoundEffect</i>s need to be disposed of. <br>Full source available <a class="blueText" href="TutorialSource/Audio.cs">here.</a>
