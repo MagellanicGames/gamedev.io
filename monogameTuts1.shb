@@ -58,7 +58,7 @@ addImage(TutorialImages/Shaders/02.png);
 rowStart;{class:lightGreenText}
 <p class="main">
 <br><br>
-Finally we specify the technique.  These enable use to multiple shading functions with a single draw call. I.e pass1: draw scene , pass2: draw outlines.  For this example, though, we'll just be using a single pass.
+Finally we specify the technique.  These enable us to use multiple shading functions with a single draw call. I.e pass1: draw scene , pass2: draw outlines.  For this example, though, we'll just be using a single pass.
 </p>
 rowEnd;
 
