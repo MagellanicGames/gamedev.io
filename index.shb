@@ -45,16 +45,16 @@ rowStart;{class:lightGreenText borderBottom}
 rowEnd;
 
 navBarStart(text:Magellanic Games,home:#blink);
-  navDropdown(text:Monogame Guides);
-    navLink(text:Basics,link:monogameTuts.html);
-    navLink(text:Shaders,link:monogameTuts1.html);
-  navDropdownEnd();
-  navDropdown(text:Projects);
+ navDropdown(text:Projects);
     navLink(text:Mr. Blocked,link:#blocked);
     navLink(text:Zombie Apocalyp-tic-80,link:#zombie);
     navLink(text:SpaceTrade Ascii Edition,link:#spaceTrade);
     navLink(text:Raycasting 3D Engine,link:#raycast);
   navDropdownEnd();
+  navDropdown(text:Monogame Guides);
+    navLink(text:Basics,link:monogameTuts.html);
+    navLink(text:Shaders,link:monogameTuts1.html);
+  navDropdownEnd(); 
   navLink(text:About,link:About.html);
 navBarEnd();
 
