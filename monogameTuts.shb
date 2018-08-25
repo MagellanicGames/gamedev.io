@@ -203,54 +203,24 @@ rowStart;{class:lightGreenText}
 </p>
 rowEnd;
 
-htmlStart;
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  			<div class="container-fluid blackBack">
-   				 <div class="navbar-header">
-        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          				<span class="icon-bar"></span>
-          				<span class="icon-bar"></span>
-          				<span class="icon-bar"></span>                        
-      				</button>
-      				<a class="navLink navbar-brand" href="#blink"><div class="blueText">Monogame Guides</div></a>
-    		</div>
-    		<div>
-      			<div class="collapse navbar-collapse blueText" id="myNavbar">
-      				
-        			<ul class="nav navbar-nav">        				
-          				
-                  <li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Basics <span class="caret"></span></a>
-                    <ul class="dropdown-menu">   
-                      <li><a class="navLink"href="#examples">Example Projects</a></li>                 
-                      <li><a class="navLink"href="#started">Getting Started</a></li>
-                      <li><a class="navLink"href="#images">Images & Sprites</a></li>  
-                      <li><a class="navLink"href="#keyboard">Controls (Keyboard)</a></li>    
-                      <li><a class="navLink"href="#audio">Audio</a></li>                    
-                    </ul>
-                  </li>  
-                  <li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Shaders<span class="caret"></span></a>
-                    <ul class="dropdown-menu">  
-                      <li><a class="navLink"href="monogameTuts1.html">Shaders</a></li>  
-                      <li><a class="navLink"href="monogameTuts1.html#matrices">Matrices</a></li>     
-                      <li><a class="navLink"href="monogameTuts1.html#io">Inputs, Outputs & Samplers</a></li>     
-                      <li><a class="navLink"href="monogameTuts1.html#shaderfuncs">Shader Functions</a></li>    
-                      <li><a class="navLink"href="monogameTuts1.html#loading">Loading the Shader</a></li>   
-                    </ul>
-                  </li>                              			        				              
-          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Magellanic Games<span class="caret"></span></a>
-            				<ul class="dropdown-menu">                    
-             				 <li><a class="navLink"href="index.html">Back to main site</a></li>   
-                     <li><a class="navLink"href="About.html">About</a></li>              				 
-            				</ul>
-          				</li>
-          			
-        			</ul>
-        			
-      			</div>
-    		</div>
-  			</div>
-		</nav>    
-htmlEnd;
+navBarStart(text:Monogame Guides,home:#blink);
+  navDropdown(text:Basics);
+    navLink(text:Example Projects,link:monogameTuts.html#examples);
+    navLink(text:Getting Started,link:monogameTuts.html#started);
+    navLink(text:Images & Sprites,link:monogameTuts.html#images);
+    navLink(text:Controls (Keyboard),link:monogameTuts.html#keyboard);
+    navLink(text:Audio,link:monogameTuts.html#audio);
+  navDropdownEnd();
+  navDropdown(text:Shaders);
+    navLink(text:Shaders,link:monogameTuts1.html);
+    navLink(text:Matrices,link:monogameTuts1.html#matrices);
+    navLink(text:Inputs, Outputs & Samplers,link:monogameTuts1.html#io);
+    navLink(text:Shader Functions,link:monogameTuts1.html#shaderfuncs);
+    navLink(text:Loading the Shader,link:monogameTuts1.html#loading);
+  navDropdownEnd();
+  navLink(text:Magellanic Games,link:index.html);
+  navLink(text:About,link:About.html);
+navBarEnd();
 
 addContainer;
 padding;

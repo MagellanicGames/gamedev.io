@@ -44,47 +44,19 @@ rowStart;{class:lightGreenText borderBottom}
  			 	</p>
 rowEnd;
 
-
-
-htmlStart;
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  			<div class="container-fluid blackBack">
-   				 <div class="navbar-header">
-        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          				<span class="icon-bar"></span>
-          				<span class="icon-bar"></span>
-          				<span class="icon-bar"></span>                        
-      				</button>
-      				<a class="navLink navbar-brand" href="#blink"><div class="blueText">Magellanic Games</div></a>
-    		</div>
-    		<div>
-      			<div class="collapse navbar-collapse blueText" id="myNavbar">
-      				
-        			<ul class="nav navbar-nav">        				
-          				
-                  <li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Monogame Guides<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><a class="navLink"href="monogameTuts.html">Basics</a></li>  
-                      <li><a class="navLink"href="monogameTuts1.html">Shaders</a></li>                     
-                    </ul>
-                  </li>
-
-          				<li class="dropdown"><a class="navLink" data-toggle="dropdown" href="#">Projects<span class="caret"></span></a>
-            				<ul class="dropdown-menu">
-                     <li><a class="navLink"href="#blocked">Mr. Blocked</a></li>
-                     <li><a class="navLink"href="#zombie">Zombie Apocalyp-tic-80</a></li>
-                     <li><a class="navLink"href="#spaceTrade">SpaceTrade Ascii Edition</a></li>                       
-             				 <li><a class="navLink"href="#raycast">Raycasting 3D Engine</a></li>               				 
-            				</ul>
-          				</li>
-          			  <li><a class="navLink"href="About.html">About</a></li>  
-        			</ul>
-        			
-      			</div>
-    		</div>
-  			</div>
-		</nav>    
-htmlEnd;
+navBarStart(text:Magellanic Games,home:#blink);
+  navDropdown(text:Monogame Guides);
+    navLink(text:Basics,link:monogameTuts.html);
+    navLink(text:Shaders,link:monogameTuts1.html);
+  navDropdownEnd();
+  navDropdown(text:Projects);
+    navLink(text:Mr. Blocked,link:#blocked);
+    navLink(text:Zombie Apocalyp-tic-80,link:#zombie);
+    navLink(text:SpaceTrade Ascii Edition,link:#spaceTrade);
+    navLink(text:Raycasting 3D Engine,link:#raycast);
+  navDropdownEnd();
+  navLink(text:About,link:About.html);
+navBarEnd();
 
 addContainer;
 padding;
