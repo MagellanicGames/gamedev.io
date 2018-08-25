@@ -19,8 +19,16 @@ I won't go into the nitty gritty about matrices here.  All I'll say is we need 3
 </p>
 rowEnd;
 
-addImage(TutorialImages/Shaders/00.png);
+codeStart;
+codeBasic(type:float4x4,name:World,value:);
+codeBasic(type:float4x4,name:View,value:);
+codeBasic(type:float4x4,name:Projection,value:);
 
+codeClass(type:Texture2D,name:SpriteSheet,value:);
+
+codeEnd;
+
+addContainer;
 rowStart;{class:lightGreenText borderBottom}
 <p class="main">
 The three matrices purposes are as follows:
@@ -41,7 +49,31 @@ The VertextShaderInput is the data passed from our game through to the video car
 The VertexShaderOutput contains the final pixel position and that pixel's colour once our shader has finished its calculations.
 </p>
 rowEnd;
-addImage(TutorialImages/Shaders/01.png);
+
+codeStart;
+<span class="code-basic">SamplerState</span> SpriteSheetSampler
+{
+  Filter = None;
+  AddressU = Wrap;
+  AddressV = Wrap;
+  Texture = (SpriteSheet);
+};
+
+<span class="code-basic">struct</span> VertexShaderInput
+{
+  codeBasic(type:  float4,name:Position : POSITION0,value:);
+  codeBasic(type:  float4,name:Normal : NORMAL0,value:);
+  codeBasic(type:  float2,name:TextureUV : TEXCOORD0,value:);
+};
+
+<span class="code-basic">struct</span> VertexShaderOuput
+{
+  codeBasic(type:  float4,name:Position : POSITION0,value:);
+  codeBasic(type:  float2,name:TextureUV : TEXCOORD0,value:);
+};
+codeEnd;
+
+addContainer;
 rowStart;{class:borderBottom}
 rowEnd;
 subHeading(text:Vertex and Pixel Shader Functions,class:blueText mediumFont textShadow,id:shaderfuncs);
@@ -53,8 +85,25 @@ The PixelShaderFunction determines the colour of the pixel based on the position
 </p>
 rowEnd;
 
-addImage(TutorialImages/Shaders/02.png);
+codeStart;
+VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
+{
+  VertexShaderOutput output;
 
+  codeBasicNonNum(type:  float4,name:worldPosition,value:mul(input.Position, World));
+  codeBasicNonNum(type:  float4,name:viewPosition,value:mul(worldPosition, View));
+  output.Position = mul(viewPosition, Projection);
+  output.TextureUV = input.TextureUV;
+  <span class="code-basic">return</span> output;
+}
+
+<span class="code-basic">float4</span> PixelShaderFunction(VertexShaderOutput input) : COLOR0
+{
+  <span class="code-basic">return</span> tex2D(SpriteSheetSampler, input.TextureUV);
+}
+codeEnd;
+
+addContainer;
 rowStart;{class:lightGreenText}
 <p class="main">
 <br><br>
@@ -62,8 +111,18 @@ Finally we specify the technique.  These enable us to use multiple shading funct
 </p>
 rowEnd;
 
-addImage(TutorialImages/Shaders/03.png);
+codeStart;
+<span class="code-basic">technique</span> basic
+{
+  <span class="code-basic">pass</span> Pass1
+  {
+    <span class="code-basic">VertexShader</span> = <span class="code-basic">compile</span> vs_2_0 VertexShaderFunction();
+    <span class="code-basic">PixelShader</span> = <span class="code-basic">compile</span> ps_2_0 PixelShaderFunction();
+  }
+}
+codeEnd;
 
+addContainer;
 rowStart;{class:lightGreenText borderBottom}
 <p class="main">
 With all that now defined in our <b>shader.fx</b> file, we can begin loading it into our program and drawing to the screen.  As usual, here is the <a class="blueText" href="TutorialSource/shader.fx">source</a>.
@@ -96,6 +155,9 @@ navBarStart(text:Monogame Guides,home:#blink);
   navLink(text:Magellanic Games,link:index.html);
   navLink(text:About,link:About.html);
 navBarEnd();
+
+
+
 
 addContainer;
 padding;

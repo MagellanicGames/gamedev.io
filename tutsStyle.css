@@ -28,6 +28,10 @@
 	
 }
 
+.whiteText{
+	color: white;
+}
+
 div{	
 	font-family: "Courier New", Courier, monospace;
 	color: #d5c9c9;
@@ -100,4 +104,36 @@ a:visited{
 
 a.navLink{
 	text-decoration: none;
+}
+
+code.csharp
+{
+	display: block;
+	color: lightGreenText;
+	background-color: #282b2e;
+	padding: 5px;
+
+	padding-left: 15px;
+	font-size: 110%;
+
+}
+
+span.code-basic{
+	color: #426ef4;
+}
+
+span.code-num{
+	color: yellow;
+}
+
+span.code-class{
+	color:#41f47a;
+}
+
+span.code-string{
+	color: #f4a341;
+}
+pre.code{
+	background-color: #00000000;
+	border: none;
 }

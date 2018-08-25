@@ -41,10 +41,15 @@ I won't go into the nitty gritty about matrices here.  All I'll say is we need 3
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Shaders/00.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>float4x4</span> World;
+<span class=code-basic>float4x4</span> View;
+<span class=code-basic>float4x4</span> Projection;
+
+<span class=code-class>Texture2D</span> SpriteSheet;
+
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 The three matrices purposes are as follows:
@@ -70,10 +75,29 @@ The VertexShaderOutput contains the final pixel position and that pixel's colour
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Shaders/01.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">SamplerState</span> SpriteSheetSampler
+{
+  Filter = None;
+  AddressU = Wrap;
+  AddressV = Wrap;
+  Texture = (SpriteSheet);
+};
+
+<span class="code-basic">struct</span> VertexShaderInput
+{
+<span class=code-basic>  float4</span> Position : POSITION0;
+<span class=code-basic>  float4</span> Normal : NORMAL0;
+<span class=code-basic>  float2</span> TextureUV : TEXCOORD0;
+};
+
+<span class="code-basic">struct</span> VertexShaderOuput
+{
+<span class=code-basic>  float4</span> Position : POSITION0;
+<span class=code-basic>  float2</span> TextureUV : TEXCOORD0;
+};
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>		
 <div class="col-lg-2 col-md-2" ></div>
@@ -90,10 +114,24 @@ The PixelShaderFunction determines the colour of the pixel based on the position
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Shaders/02.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText">VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
+{
+  VertexShaderOutput output;
+
+<span class=code-basic>  float4</span> worldPosition = mul(input.Position, World);
+<span class=code-basic>  float4</span> viewPosition = mul(worldPosition, View);
+  output.Position = mul(viewPosition, Projection);
+  output.TextureUV = input.TextureUV;
+  <span class="code-basic">return</span> output;
+}
+
+<span class="code-basic">float4</span> PixelShaderFunction(VertexShaderOutput input) : COLOR0
+{
+  <span class="code-basic">return</span> tex2D(SpriteSheetSampler, input.TextureUV);
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 <br><br>
@@ -102,10 +140,17 @@ Finally we specify the technique.  These enable us to use multiple shading funct
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Shaders/03.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">technique</span> basic
+{
+  <span class="code-basic">pass</span> Pass1
+  {
+    <span class="code-basic">VertexShader</span> = <span class="code-basic">compile</span> vs_2_0 VertexShaderFunction();
+    <span class="code-basic">PixelShader</span> = <span class="code-basic">compile</span> ps_2_0 PixelShaderFunction();
+  }
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 With all that now defined in our <b>shader.fx</b> file, we can begin loading it into our program and drawing to the screen.  As usual, here is the <a class="blueText" href="TutorialSource/shader.fx">source</a>.
