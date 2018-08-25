@@ -23,8 +23,9 @@
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-So in the other <a class="blueText" href="monogameTuts.html#images">guide</a> we used Monogame's in-built spritebatch to draw our sprite/texture/image on to the screen.  There is nothing wrong with using that method, but sometimes you simply want to do your own shaders.  It becomes easier to do effects, lighting and filtering.<br>
-In this tutorial we'll be using the <i>Effect</i> class.  First off, lets write a simple shader.
+So in the other <a class="blueText" href="monogameTuts.html#images">guide</a> we used Monogame's in-built spritebatch to draw our sprite/texture/image on to the screen.  Its a perfectly good method, but sometimes you simply want to do your own shaders.  It can be easier to do effects, lighting and filtering this way.<br>
+In this tutorial we'll be using the <i>Effect</i> class.  First off, lets write a simple shader.<br><br>
+Create a new file in your Content folder and call it <b>"shader.fx"</b>.  
 </p>
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
@@ -35,7 +36,7 @@ In this tutorial we'll be using the <i>Effect</i> class.  First off, lets write 
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-No nitty gritty about matrices here.  All I'm going to say is we need 3 of them.  They are used to calculate the point at which are pixel is drawn on screen.  We'll also define the Texture2D that gets passed to the shader.
+I won't go into the nitty gritty about matrices here.  All I'll say is we need 3 of them.  They are used to calculate the point at which pixels are drawn on screen.  <br><br>Define the matrices and a Texture2D as follows in your <b>shader.fx</b>.
 </p>
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
@@ -62,9 +63,9 @@ The three matrices purposes are as follows:
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Next we need a texture sampler so we can colour our pixels the correct colour on screen (SpriteSheetSampler).<br>
-The VertextShaderInput is the data passed from our game through to the video card so we can calculate where things need to be drawn.<br>
-The VertexShaderOutput contains the final pixel position and that pixel's colour once our shader has finished is calculations.
+Next we need a texture sampler so we can colour our pixels the correctly on screen (SpriteSheetSampler).<br><br>
+The VertextShaderInput is the data passed from our game through to the video card so we can calculate where things need to be drawn.<br><br>
+The VertexShaderOutput contains the final pixel position and that pixel's colour once our shader has finished its calculations.
 </p>
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
@@ -94,7 +95,22 @@ The PixelShaderFunction determines the colour of the pixel based on the position
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>		
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+<br><br>
+Finally we specify the technique.  These enable use to multiple shading functions with a single draw call. I.e pass1: draw scene , pass2: draw outlines.  For this example, though, we'll just be using a single pass.
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Shaders/03.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+With all that now defined in our <b>shader.fx</b> file, we can begin loading it into our program and drawing to the screen.  As usual, here is the <a class="blueText" href="TutorialSource/shader.fx">source</a>.
+</p>
+</div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
@@ -103,7 +119,6 @@ The PixelShaderFunction determines the colour of the pixel based on the position
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Phew, all defined now.  If you want the full source, grab it <a class="blueText" href="TutorialSource/shader.fx">here</a>.  Time to get it into our project so we can use it.
 <br><br>(To be continued)
 </p>
 </div>		
