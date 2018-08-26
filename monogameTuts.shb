@@ -91,24 +91,24 @@ Now, go to Game1.cs. Create a Texture2D member:
 rowEnd;
 
 codeStart;
-<span class="code-basic">using</span> Microsoft.Xna.Framework;
-<span class="code-basic">using</span> Microsoft.Xna.Framework.Graphics;
-<span class="code-basic">using</span> Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-<span class="code-basic">namespace</span> MyAwesomeGame
+namespace MyAwesomeGame
 {
 
-  <span class="code-basic">public class</span> <span class="code-class">Game1</span> : <span class="code-class">Game</span>
+  public class Game1 : Game
   {
 
-codeClass(type:   GraphicsDeviceManager,name:graphics,value:);
-codeClass(type:   SpriteBatch,name:spriteBatch,value:);
-codeClass(type:   Texture2D,name:boxman,value:);
+   GraphicsDeviceManager graphics;
+   SpriteBatch spriteBatch;
+   Texture2D boxman;
 
-    <span class="code-basic">public</span> Game1()
+    public  Game1()
     {
-      graphics = <span class="code-basic">new </span> <span class="code-class">GraphicsDeviceManager</span>(<span class="code-basic">this</span>);
-      Content.RootDirectory = <span class="code-string">"Content"</span>; 
+      graphics = new  GraphicsDeviceManager(this);
+      Content.RootDirectory = "Content"; 
     }
 codeEnd;
 
@@ -120,10 +120,10 @@ In the LoadContent method(line 38) and we'll load the image as follows:
 rowEnd;
 
 codeStart;
-<span class="code-basic">protected override void</span> LoadContent()
+protected override void LoadContent()
 {
-  spriteBatch = <span class="code-basic">new</span> <span class="code-class">SpriteBatch</span>(GraphicsDevice);
-  boxman = Content.Load<<span class="code-class">Texture2D</span>>(<span class="code-string">"boxman"</span>);
+  spriteBatch = new SpriteBatch (GraphicsDevice);
+  boxman =  Content.Load<Texture2D>("boxman");
 }
 codeEnd;
 
@@ -137,15 +137,15 @@ rowEnd;
 
 
 codeStart;
-<span class="code-basic">protected override void</span> Draw(<span class="code-class">GameTime</span> gameTime)
+protected override void Draw(GameTime gameTime)
 {
-  GraphicsDevice.Clear(<span class="code-class">Color</span>.CornFlowerBlue);
+  GraphicsDevice.Clear(Color.CornFlowerBlue);
 
   spriteBatch.Begin();
-  spriteBatch.Draw(boxman,<span class="code-basic">new</span> <span class="code-class">Vector2</span>(200,200),<span class="code-class">Color</span>.White);
+  spriteBatch.Draw(boxman,new Vector2(200,200),Color.White);
   spriteBatch.End();
 
-  <span class="code-basic">base</span>.Draw(gameTime);
+  base.Draw(gameTime);
 }
 codeEnd;
 addContainer;
@@ -175,15 +175,15 @@ First off create a Vector2 member which is boxman's position.
 rowEnd;
 
 codeStart;
-<span class="code-basic">namespace</span> MyAwesomeGame
+namespace MyAwesomeGame
 {
-  <span class="code-basic">public class</span> <span class="code-class">Game1</span> : <span class="code-class">Game</span>
+  public class Game1 : Game 
   {
 
 codeClass(type:   GraphicsDeviceManager,name:graphics,value:);
 codeClass(type:   SpriteBatch,name:spriteBatch,value:);
 codeClass(type:   Texture2D,name:boxman,value:);
-   <u><span class="code-class">Vector2</span> boxmanPos = <span class="code-basic">new</span> <span class="code-class">Vector2</span>(200,200);</u>
+   Vector2 boxmanPos = new Vector2(200,200);
 codeEnd;
 
 addContainer;
@@ -194,15 +194,15 @@ And make sure it is used in the draw call.
 rowEnd;
 
 codeStart;
-<span class="code-basic">protected override void</span> Draw(<span class="code-class">GameTime</span> gameTime)
+protected override void Draw(GameTime gameTime)
 {
-  GraphicsDevice.Clear(<span class="code-class">Color</span>.CornFlowerBlue);
+  GraphicsDevice.Clear(Color.CornFlowerBlue);
 
   spriteBatch.Begin();
-  <u>spriteBatch.Draw(boxman, boxmanPos,<span class="code-class">Color</span>.White);</u>
+  spriteBatch.Draw(boxman, boxmanPos, Color.White);
   spriteBatch.End();
 
-  <span class="code-basic">base</span>.Draw(gameTime);
+  base.Draw(gameTime);
 }
 codeEnd;
 
@@ -214,16 +214,16 @@ Next the controls, go to the Update method ( ~line 62).
 rowEnd;
 
 codeStart;
-<span class="code-basic">protected override void</span> Update(<span class="code-class">GameTime</span> gameTime)
+protected override void Update( GameTime gameTime)
 {
-  <span class="code-basic">float</span> dt = (<span class="code-basic">float</span>)gameTime.ElapsedGameTime.TotalSeconds;
+ float dt = ( float )gameTime.ElapsedGameTime.TotalSeconds;
 
-  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Up))
+   if (Keyboard.GetState().IsKeyDown(Keys.Up))
     boxmanPos.Y -= 100.0f * dt;
-  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Down))
+   if (Keyboard.GetState().IsKeyDownKeys.Down))
     boxmanPos.Y += 100.0f * dt;
 
-  <span class="code-basic">base</span>.Update(gameTime);
+  base.Update(gameTime);
 }
 codeEnd;
 
@@ -259,21 +259,21 @@ rowEnd;
 
 codeStart;
 
-<span class="code-basic">using</span> Microsoft.Xna.Framework;
-<span class="code-basic">using</span> Microsoft.Xna.Framework.Graphics;
-<span class="code-basic">using</span> Microsoft.Xna.Framework.Input;
-<u><span class="code-basic">using</span> Microsoft.Xna.Framework.Audio;</u>
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
-<span class="code-basic">namespace</span> MyAwesomeGame
+namespace MyAwesomeGame
 {
 
-  <span class="code-basic">public class</span> <span class="code-class">Game1</span> : <span class="code-class">Game</span>
+  public class  Game1  : Game 
   {
 
 codeClass(type:   GraphicsDeviceManager,name:graphics,value:);
 codeClass(type:   SpriteBatch,name:spriteBatch,value:);
 codeClass(type:   Texture2D,name:boxman,value:);
-   <span class="code-class">Vector2</span> boxmanPos = <span class="code-basic">new</span> <span class="code-class">Vector2</span>(200,200);
+   Vector2 boxmanPos = new Vector2(200,200);
 
 codeClass(type:   SoundEffect,name:sfx,value:);
 codeClass(type:   SoundEffectInstance,name:sfxInstance,value:);
@@ -288,11 +288,11 @@ rowEnd;
 
 
 codeStart;
-<span class="code-basic">protected override void</span> LoadContent()
+protected override void LoadContent()
 {
-  spriteBatch = <span class="code-basic">new</span> <span class="code-class">SpriteBatch</span>(GraphicsDevice);
-  boxman = Content.Load<<span class="code-class">Texture2D</span>>(<span class="code-string">"boxman"</span>);
-  sfx = Content.Load<<span class="code-class">SoundEffect</span>>(<span class="code-string">"sfx_voice_00"</span>);
+  spriteBatch = new SpriteBatch (GraphicsDevice);
+  boxman =  Content.Load<Texture2D>("boxman");
+  sfx =  Content.Load<SoundEffect >("sfx_voice_00");
   sfxInstance = sfx.CreateInstance();
 }
 codeEnd;
@@ -306,22 +306,22 @@ All thats left to do is hook up a key to play our sound:
 rowEnd;
 
 codeStart;
-<span class="code-basic">protected override void</span> Update(<span class="code-class">GameTime</span> gameTime)
+protected override void Update( GameTime gameTime)
 {
-  <span class="code-basic">float</span> dt = (<span class="code-basic">float</span>)gameTime.ElapsedGameTime.TotalSeconds;
+ float dt = ( float )gameTime.ElapsedGameTime.TotalSeconds;
 
-  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Up))
+   if (Keyboard.GetState().IsKeyDown(Keys.Up))
     boxmanPos.Y -= 100.0f * dt;
-  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Down))
+   if (Keyboard.GetState().IsKeyDownKeys.Down))
     boxmanPos.Y += 100.0f * dt;
 
-  <span class="code-basic">if</span>(<span class="code-class">Keyboard</span>.GetState().IsKeyDown(<span class="code-basic">Keys</span>.Space))
+  if (Keyboard.GetState().IsKeyDown(Keys.Space))
   {
-    <span class="code-basic">if</span>(sfxInstance.State != <span class="code-basic">SoundState</span>.Playing)
+    if (sfxInstance.State != SoundState.Playing)
      sfxInstance.Play();
   }
-  
-  <span class="code-basic">base</span>.Update(gameTime);
+
+  base.Update(gameTime);
 }
 codeEnd;
 

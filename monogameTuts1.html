@@ -44,10 +44,9 @@ I won't go into the nitty gritty about matrices here.  All I'll say is we need 3
 </div><!--End of container-->
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>float4x4</span> World;
 <span class=code-basic>float4x4</span> View;
-<span class=code-basic>float4x4</span> Projection;
+<span class=code-basic>float4x4</span> Projection;  
 
 <span class=code-class>Texture2D</span> SpriteSheet;
-
 </code> </pre> </div> </div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
@@ -76,7 +75,7 @@ The VertexShaderOutput contains the final pixel position and that pixel's colour
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">SamplerState</span> SpriteSheetSampler
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>SamplerState </span>SpriteSheetSampler
 {
   Filter = None;
   AddressU = Wrap;
@@ -84,17 +83,18 @@ The VertexShaderOutput contains the final pixel position and that pixel's colour
   Texture = (SpriteSheet);
 };
 
-<span class="code-basic">struct</span> VertexShaderInput
+<span class=code-basic>struct </span>VertexShaderInput
 {
-<span class=code-basic>  float4</span> Position : POSITION0;
-<span class=code-basic>  float4</span> Normal : NORMAL0;
-<span class=code-basic>  float2</span> TextureUV : TEXCOORD0;
+  <span class=code-basic>float4 </span>Position : POSITION0;
+  <span class=code-basic>float4 </span>Normal : NORMAL0;
+  <span class=code-basic>float2 </span>TextureUV : TEXCOORD0;
+
 };
 
-<span class="code-basic">struct</span> VertexShaderOuput
+<span class=code-basic>struct </span>VertexShaderOutput
 {
-<span class=code-basic>  float4</span> Position : POSITION0;
-<span class=code-basic>  float2</span> TextureUV : TEXCOORD0;
+  <span class=code-basic>float4 </span>Position : POSITION0;
+  <span class=code-basic>float2 </span>TextureUV : TEXCOORD0;
 };
 </code> </pre> </div> </div><!--End of container-->
 <div class="container-fluid" >
@@ -119,16 +119,16 @@ The PixelShaderFunction determines the colour of the pixel based on the position
 {
   VertexShaderOutput output;
 
-<span class=code-basic>  float4</span> worldPosition = mul(input.Position, World);
-<span class=code-basic>  float4</span> viewPosition = mul(worldPosition, View);
+  <span class=code-basic>float4 </span>worldPosition = mul(input.Position, World);
+  <span class=code-basic>float4 </span>viewPosition = mul(worldPosition, View);
   output.Position = mul(viewPosition, Projection);
   output.TextureUV = input.TextureUV;
-  <span class="code-basic">return</span> output;
+  <span class=code-basic>return </span>output;
 }
 
-<span class="code-basic">float4</span> PixelShaderFunction(VertexShaderOutput input) : COLOR0
+<span class=code-basic>float4 </span>PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-  <span class="code-basic">return</span> tex2D(SpriteSheetSampler, input.TextureUV);
+  <span class=code-basic>return </span>tex2D(SpriteSheetSampler, input.TextureUV);
 }
 </code> </pre> </div> </div><!--End of container-->
 <div class="container-fluid" >
@@ -141,12 +141,12 @@ Finally we specify the technique.  These enable us to use multiple shading funct
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class="code-basic">technique</span> basic
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>technique </span><span class=code-basic>basic </span>
 {
-  <span class="code-basic">pass</span> Pass1
+ <span class=code-basic> pass </span>Pass1
   {
-    <span class="code-basic">VertexShader</span> = <span class="code-basic">compile</span> vs_2_0 VertexShaderFunction();
-    <span class="code-basic">PixelShader</span> = <span class="code-basic">compile</span> ps_2_0 PixelShaderFunction();
+   <span class=code-basic> VertexShader </span>=<span class=code-basic> compile </span>vs_2_0 VertexShaderFunction();
+   <span class=code-basic> PixelShader </span>=<span class=code-basic> compile </span>ps_2_0 PixelShaderFunction();
   }
 }
 </code> </pre> </div> </div><!--End of container-->
@@ -164,11 +164,107 @@ With all that now defined in our <b>shader.fx</b> file, we can begin loading it 
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-<br><br>(To be continued)
+With the complete shader, it is time to import it first into the Pipeline Tool.  This process is exactly the same as for images.
 </p>
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
 	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/01.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+Press F6 to build it and check there are no error messages.  The build is done when activated in Visual Studio, but the error messages are rather cryptic.  It is best to build shaders in the pipeline tool to get understandable error messages.  (If you think there is a chance that you made an error)<br><br>
+We'll now head back to our Visual studio project.  You can either use the project created from the <a class="blueText" href="monogameTuts.html#started">basics guide</a> or just create a new one using the "Cross-platform" Monogame template.<br><br>
+In the Game class, some more members need to be added.  Ensure your code looks as follows:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText">
+<span class=code-basic>namespace</span> MyAwesomeGame
+{
+
+  <span class=code-basic>public</span><span class=code-basic> class </span><span class=code-class>Game1</span>  : <span class=code-class>Game</span>
+  {
+
+    <span class=code-class>GraphicsDeviceManager</span> graphics;
+    <span class=code-class>Texture2D</span>       boxman;
+    <span class=code-class>Vector3</span>         boxmanPos =<span class=code-basic> new </span><span class=code-class>Vector3</span>(200,200,0);
+
+   <span class=code-class>VertexBuffer</span>    spriteVertexBuffer;
+   <span class=code-class>Effect</span>          shader;
+
+    <span class=code-class>Matrix</span>          World;
+    <span class=code-class>Matrix</span>          View;
+    <span class=code-class>Matrix</span>          Projection;
+
+    <span class=code-basic>int </span>screenWidth = 800;
+    <span class=code-basic>int </span>screenHeight = 600;
+
+    <span class=code-basic>public</span> <span class=code-class>Game1</span>()
+    {
+      graphics =<span class=code-basic> new </span><span class=code-class>GraphicsDeviceManager</span>(<span class=code-basic>this </span>);
+      graphics.PreferredBackBufferWidth = screenWidth;
+      graphics.PreferredBackBufferHeight = screenHeight;
+
+     <span class=code-class>Content</span>.RootDirectory = <span class=code-string>"Content"</span>; 
+    }
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+So there are quite a few changes from the basic tutorial but there is nothing too complicated.<br><br>
+The first change is the position of boxman to a Vector3.  This can be useful over a Vector2 if you are wanting to easily organise multiple layers.  It will give easier control on the front-to-back order of the entities drawn on screen.  The beauty is, it doesn't have to be used.<br><br>
+Initialise our matrices and vertexbuffer:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Initialize()
+{
+  <span class=code-class>Matrix</span>.CreateOrthographic(screenWidth, screenHeight, -1000.0f, 1000.0f,<span class=code-basic> out </span>Projection);
+  View = <span class=code-class>Matrix</span>.CreateLookAt(new <span class=code-class>Vector3</span>(0,0,-100.0f),<span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector3</span>(0,1,0));
+
+  <span class=code-basic>float </span>width = 0.5f;
+  <span class=code-basic>float </span>height = 0.5f;
+  <span class=code-basic>float </span>uv = 1f;
+
+  <span class=code-basic>var </span>spriteVertices =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>[6];
+
+  spriteVertices[0] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(-width,height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,0));
+  spriteVertices[1] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(-width,-height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,uv));
+  spriteVertices[2] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(width,-height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(uv,uv));
+  spriteVertices[3] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(width,-height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(uv,uv));
+  spriteVertices[4] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(width,height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(uv,0));
+  spriteVertices[5] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(-width,height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,0));
+
+  spriteVertexBuffer =<span class=code-basic> new </span><span class=code-class>VertexBuffer</span>(graphics.GraphicsDevice,<span class=code-basic>typeof</span>(<span class=code-class>VertexPositionNormalTexture</span>),6,<span class=code-basic>BufferUsage</span>.WriteOnly);
+  spriteVertexBuffer.Name = <span class=code-string>"Sprite Vertex Buffer"</span>;
+  spriteVertexBuffer.SetData<<span class=code-class>VertexPositionNormalTexture</span>>(spriteVertices);
+
+ <span class=code-basic>base</span>.Initialize();
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+Use the ContentManager to load the shader to our Effect member:
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>LoadContent()
+{
+  boxman = <span class=code-class>Content</span>.Load<<span class=code-class>Texture2D</span>>(<span class=code-string>"boxman"</span>);
+  shader = <span class=code-class>Content</span>.Load<Effect>(<span class=code-string>"shader"</span>);
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
 </div><!--End of container-->
 <nav class="navbar navbar-inverse navbar-fixed-top" >
 	<div class="container-fluid blackBack" >

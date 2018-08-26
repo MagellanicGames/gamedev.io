@@ -20,12 +20,11 @@ I won't go into the nitty gritty about matrices here.  All I'll say is we need 3
 rowEnd;
 
 codeStart;
-codeBasic(type:float4x4,name:World,value:);
-codeBasic(type:float4x4,name:View,value:);
-codeBasic(type:float4x4,name:Projection,value:);
+float4x4 World;
+float4x4 View;
+float4x4 Projection;  
 
-codeClass(type:Texture2D,name:SpriteSheet,value:);
-
+Texture2D SpriteSheet;
 codeEnd;
 
 addContainer;
@@ -51,7 +50,7 @@ The VertexShaderOutput contains the final pixel position and that pixel's colour
 rowEnd;
 
 codeStart;
-<span class="code-basic">SamplerState</span> SpriteSheetSampler
+SamplerState SpriteSheetSampler
 {
   Filter = None;
   AddressU = Wrap;
@@ -59,17 +58,18 @@ codeStart;
   Texture = (SpriteSheet);
 };
 
-<span class="code-basic">struct</span> VertexShaderInput
+struct VertexShaderInput
 {
-  codeBasic(type:  float4,name:Position : POSITION0,value:);
-  codeBasic(type:  float4,name:Normal : NORMAL0,value:);
-  codeBasic(type:  float2,name:TextureUV : TEXCOORD0,value:);
+  float4 Position : POSITION0;
+  float4 Normal : NORMAL0;
+  float2 TextureUV : TEXCOORD0;
+
 };
 
-<span class="code-basic">struct</span> VertexShaderOuput
+struct VertexShaderOutput
 {
-  codeBasic(type:  float4,name:Position : POSITION0,value:);
-  codeBasic(type:  float2,name:TextureUV : TEXCOORD0,value:);
+  float4 Position : POSITION0;
+  float2 TextureUV : TEXCOORD0;
 };
 codeEnd;
 
@@ -90,16 +90,16 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
   VertexShaderOutput output;
 
-  codeBasicNonNum(type:  float4,name:worldPosition,value:mul(input.Position, World));
-  codeBasicNonNum(type:  float4,name:viewPosition,value:mul(worldPosition, View));
+  float4 worldPosition = mul(input.Position, World);
+  float4 viewPosition = mul(worldPosition, View);
   output.Position = mul(viewPosition, Projection);
   output.TextureUV = input.TextureUV;
-  <span class="code-basic">return</span> output;
+  return output;
 }
 
-<span class="code-basic">float4</span> PixelShaderFunction(VertexShaderOutput input) : COLOR0
+float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-  <span class="code-basic">return</span> tex2D(SpriteSheetSampler, input.TextureUV);
+  return tex2D(SpriteSheetSampler, input.TextureUV);
 }
 codeEnd;
 
@@ -112,12 +112,12 @@ Finally we specify the technique.  These enable us to use multiple shading funct
 rowEnd;
 
 codeStart;
-<span class="code-basic">technique</span> basic
+technique basic 
 {
-  <span class="code-basic">pass</span> Pass1
+  pass Pass1
   {
-    <span class="code-basic">VertexShader</span> = <span class="code-basic">compile</span> vs_2_0 VertexShaderFunction();
-    <span class="code-basic">PixelShader</span> = <span class="code-basic">compile</span> ps_2_0 PixelShaderFunction();
+    VertexShader = compile vs_2_0 VertexShaderFunction();
+    PixelShader = compile ps_2_0 PixelShaderFunction();
   }
 }
 codeEnd;
@@ -133,10 +133,106 @@ subHeading(text:Loading the shader into the Project,class:blueText mediumFont te
 
 rowStart;{class:lightGreenText}
 <p class="main">
-<br><br>(To be continued)
+With the complete shader, it is time to import it first into the Pipeline Tool.  This process is exactly the same as for images.
 </p>
 rowEnd;
 
+addImage(TutorialImages/LoadingImages/01.png);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+Press F6 to build it and check there are no error messages.  The build is done when activated in Visual Studio, but the error messages are rather cryptic.  It is best to build shaders in the pipeline tool to get understandable error messages.  (If you think there is a chance that you made an error)<br><br>
+
+We'll now head back to our Visual studio project.  You can either use the project created from the <a class="blueText" href="monogameTuts.html#started">basics guide</a> or just create a new one using the "Cross-platform" Monogame template.<br><br>
+
+In the Game class, some more members need to be added.  Ensure your code looks as follows:
+</p>
+rowEnd;
+
+codeStart;
+
+namespace MyAwesomeGame
+{
+
+  public class  Game1  :  Game 
+  {
+
+    GraphicsDeviceManager graphics;
+    Texture2D       boxman;
+    Vector3         boxmanPos = new Vector3(200,200,0);
+
+    VertexBuffer    spriteVertexBuffer;
+    Effect          shader;
+
+    Matrix          World;
+    Matrix          View;
+    Matrix          Projection;
+
+    int screenWidth = 800;
+    int screenHeight = 600;
+
+    public  Game1()
+    {
+      graphics = new GraphicsDeviceManager( this);
+      graphics.PreferredBackBufferWidth = screenWidth;
+      graphics.PreferredBackBufferHeight = screenHeight;
+
+      Content.RootDirectory = "Content"; 
+    }
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+So there are quite a few changes from the basic tutorial but there is nothing too complicated.<br><br>
+The first change is the position of boxman to a Vector3.  This can be useful over a Vector2 if you are wanting to easily organise multiple layers.  It will give easier control on the front-to-back order of the entities drawn on screen.  The beauty is, it doesn't have to be used.<br><br>
+Initialise our matrices and vertexbuffer:
+</p>
+rowEnd;
+
+codeStart;
+protected override void Initialize()
+{
+  Matrix.CreateOrthographic(screenWidth, screenHeight, -1000.0f, 1000.0f, out Projection);
+  View = Matrix.CreateLookAt(new Vector3(0,0,-100.0f),Vector3.Forward, new Vector3(0,1,0));
+
+  float width = 0.5f;
+  float height = 0.5f;
+  float uv = 1f;
+
+  var spriteVertices = new VertexPositionNormalTexture[6];
+
+  spriteVertices[0] = new VertexPositionNormalTexture(new Vector3(-width,height,0f),  Vector3.Forward, new Vector2(0,0));
+  spriteVertices[1] = new VertexPositionNormalTexture(new Vector3(-width,-height,0f), Vector3.Forward, new Vector2(0,uv));
+  spriteVertices[2] = new VertexPositionNormalTexture(new Vector3(width,-height,0f),  Vector3.Forward, new Vector2(uv,uv));
+  spriteVertices[3] = new VertexPositionNormalTexture(new Vector3(width,-height,0f),  Vector3.Forward, new Vector2(uv,uv));
+  spriteVertices[4] = new VertexPositionNormalTexture(new Vector3(width,height,0f), Vector3.Forward, new Vector2(uv,0));
+  spriteVertices[5] = new VertexPositionNormalTexture(new Vector3(-width,height,0f),  Vector3.Forward, new Vector2(0,0));
+
+  spriteVertexBuffer = new  VertexBuffer(graphics.GraphicsDevice,typeof(VertexPositionNormalTexture),6,BufferUsage.WriteOnly);
+  spriteVertexBuffer.Name = "Sprite Vertex Buffer";
+  spriteVertexBuffer.SetData<VertexPositionNormalTexture>(spriteVertices);
+
+  base.Initialize();
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+Use the ContentManager to load the shader to our Effect member:
+</p>
+rowEnd;
+
+codeStart;
+protected override void LoadContent()
+{
+  boxman =  Content.Load<Texture2D>("boxman");
+  shader =  Content.Load<Effect>("shader");
+}
+codeEnd;
+
+addContainer;
 navBarStart(text:Monogame Guides,home:#blink);
   navDropdown(text:Basics);
     navLink(text:Basics,link:monogameTuts.html);
