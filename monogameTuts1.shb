@@ -279,7 +279,7 @@ The shader.Parameters are the variables/data passed to the graphics card to do o
 rowEnd;
 addImage(TutorialImages/Shaders/04.png);
 addContainer;
-navBarStart(text:Monogame Guides,home:#blink);
+navBarStart(text:Monogame Guides,home:monogameTuts.html);
   navDropdown(text:Basics);
     navLink(text:Basics,link:monogameTuts.html);
     navLink(text:Getting Started,link:monogameTuts.html#started);

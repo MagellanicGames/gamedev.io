@@ -332,7 +332,7 @@ rowStart;{class:lightGreenText}
 </p>
 rowEnd;
 
-navBarStart(text:Monogame Guides,home:#blink);
+navBarStart(text:Monogame Guides,home:monogameTuts.html);
   navDropdown(text:Basics);
     navLink(text:Example Projects,link:monogameTuts.html#examples);
     navLink(text:Getting Started,link:monogameTuts.html#started);
