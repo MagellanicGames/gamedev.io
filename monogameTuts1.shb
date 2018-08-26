@@ -231,8 +231,12 @@ protected override void LoadContent()
   shader =  Content.Load<Effect>("shader");
 }
 codeEnd;
+addContainer;
+rowStart;{class:lightGreenText borderBottom}
+rowEnd;
 
 addContainer;
+subHeading(text:Drawing with the Shader,class:blueText mediumFont textShadow,id:shaderdraw);
 rowStart;{class:lightGreenText}
 <p class="main">
 Finally, we use it in our draw method.
@@ -289,6 +293,7 @@ navBarStart(text:Monogame Guides,home:#blink);
     navLink(text:Inputs, Outputs & Samplers,link:monogameTuts1.html#io);
     navLink(text:Shader Functions,link:monogameTuts1.html#shaderfuncs);
     navLink(text:Loading the Shader,link:monogameTuts1.html#loading);
+    navLink(text:Drawing with the Shader,link:monogameTuts1.html#shaderdraw);
   navDropdownEnd();
   navLink(text:Magellanic Games,link:index.html);
   navLink(text:About,link:About.html);
