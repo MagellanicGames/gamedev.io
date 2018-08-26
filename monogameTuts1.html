@@ -235,12 +235,12 @@ Initialise our matrices and vertexbuffer:
 
   <span class=code-basic>var </span>spriteVertices =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>[6];
 
-  spriteVertices[0] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(-width,height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,0));
-  spriteVertices[1] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(-width,-height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,uv));
-  spriteVertices[2] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(width,-height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(uv,uv));
-  spriteVertices[3] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(width,-height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(uv,uv));
-  spriteVertices[4] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(width,height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(uv,0));
-  spriteVertices[5] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(new <span class=code-class>Vector3</span>(-width,height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,0));
+  spriteVertices[0] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(-width,height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,0));
+  spriteVertices[1] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(-width,-height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,uv));
+  spriteVertices[2] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(width,-height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(uv,uv));
+  spriteVertices[3] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(width,-height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(uv,uv));
+  spriteVertices[4] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(width,height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(uv,0));
+  spriteVertices[5] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(-width,height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,0));
 
   spriteVertexBuffer =<span class=code-basic> new </span><span class=code-class>VertexBuffer</span>(graphics.GraphicsDevice,<span class=code-basic>typeof</span>(<span class=code-class>VertexPositionNormalTexture</span>),6,<span class=code-basic>BufferUsage</span>.WriteOnly);
   spriteVertexBuffer.Name = <span class=code-string>"Sprite Vertex Buffer"</span>;
@@ -264,6 +264,53 @@ Use the ContentManager to load the shader to our Effect member:
   shader = <span class=code-class>Content</span>.Load<Effect>(<span class=code-string>"shader"</span>);
 }
 </code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+Finally, we use it in our draw method.
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Draw(GameTime gameTime)
+{
+      <span class=code-class>GraphicsDevice</span>.Clear(<span class=code-class>Color</span>.CornflowerBlue);
+
+      World = <span class=code-class>Matrix</span>.Identity;
+      World *= <span class=code-class>Matrix</span>.CreateScale(32);
+      World *= <span class=code-class>Matrix</span>.CreateTranslation(boxmanPos);
+
+      shader.Parameters[<span class=code-string>"World"</span>].SetValue(World);
+      shader.Parameters[<span class=code-string>"View"</span>].SetValue(View);
+      shader.Parameters[<span class=code-string>"Projection"</span>].SetValue(Projection);
+      shader.Parameters[<span class=code-string>"SpriteSheet"</span>].SetValue(boxman);
+
+      <span class=code-class>GraphicsDevice</span>.SetVertexBuffer(spriteVertexBuffer);
+
+      <span class=code-basic>foreach</span>(<span class=code-class>EffectPass</span> pass<span class=code-basic> in </span>shader.CurrentTechnique.Passes)
+      {
+        pass.Apply();
+        <span class=code-class>GraphicsDevice</span>.DrawPrimitives(PrimitiveType.TriangleList,0,4);
+      }
+
+     <span class=code-basic>base</span>.Draw(gameTime);
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+The World matrix is essentially the matrix for our sprite.  It is translated using the position.  A scale of 32 is used so that 1 unit is equal to 1 pixel (in this particular instance). <br>
+The shader.Parameters are the variables/data passed to the graphics card to do our drawing, and finally the scene is drawn.  You should see the same as the image below.  <a class="blueText" href="TutorialSource/SimpleShader.cs">Source available here.</a>
+</p>
+</div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Shaders/04.png" ></div>		
+<div class="col-lg-2 col-md-2" ></div>
+	</div><!--End of Row-->
+</div><!--End of container-->
 <div class="container-fluid" >
 </div><!--End of container-->
 <nav class="navbar navbar-inverse navbar-fixed-top" >

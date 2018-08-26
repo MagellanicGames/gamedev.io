@@ -202,12 +202,12 @@ protected override void Initialize()
 
   var spriteVertices = new VertexPositionNormalTexture[6];
 
-  spriteVertices[0] = new VertexPositionNormalTexture(new Vector3(-width,height,0f),  Vector3.Forward, new Vector2(0,0));
-  spriteVertices[1] = new VertexPositionNormalTexture(new Vector3(-width,-height,0f), Vector3.Forward, new Vector2(0,uv));
-  spriteVertices[2] = new VertexPositionNormalTexture(new Vector3(width,-height,0f),  Vector3.Forward, new Vector2(uv,uv));
-  spriteVertices[3] = new VertexPositionNormalTexture(new Vector3(width,-height,0f),  Vector3.Forward, new Vector2(uv,uv));
-  spriteVertices[4] = new VertexPositionNormalTexture(new Vector3(width,height,0f), Vector3.Forward, new Vector2(uv,0));
-  spriteVertices[5] = new VertexPositionNormalTexture(new Vector3(-width,height,0f),  Vector3.Forward, new Vector2(0,0));
+  spriteVertices[0] = new VertexPositionNormalTexture( new Vector3(-width,height,0f),  Vector3.Forward, new Vector2(0,0));
+  spriteVertices[1] = new VertexPositionNormalTexture( new Vector3(-width,-height,0f), Vector3.Forward, new Vector2(0,uv));
+  spriteVertices[2] = new VertexPositionNormalTexture( new Vector3(width,-height,0f),  Vector3.Forward, new Vector2(uv,uv));
+  spriteVertices[3] = new VertexPositionNormalTexture( new Vector3(width,-height,0f),  Vector3.Forward, new Vector2(uv,uv));
+  spriteVertices[4] = new VertexPositionNormalTexture( new Vector3(width,height,0f), Vector3.Forward, new Vector2(uv,0));
+  spriteVertices[5] = new VertexPositionNormalTexture( new Vector3(-width,height,0f),  Vector3.Forward, new Vector2(0,0));
 
   spriteVertexBuffer = new  VertexBuffer(graphics.GraphicsDevice,typeof(VertexPositionNormalTexture),6,BufferUsage.WriteOnly);
   spriteVertexBuffer.Name = "Sprite Vertex Buffer";
@@ -232,6 +232,48 @@ protected override void LoadContent()
 }
 codeEnd;
 
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+Finally, we use it in our draw method.
+</p>
+rowEnd;
+
+codeStart;
+protected override void Draw(GameTime gameTime)
+{
+      GraphicsDevice .Clear(Color.CornflowerBlue);
+
+      World = Matrix.Identity;
+      World *= Matrix.CreateScale(32);
+      World *= Matrix.CreateTranslation(boxmanPos);
+
+      shader.Parameters["World"].SetValue(World);
+      shader.Parameters["View"].SetValue(View);
+      shader.Parameters["Projection"].SetValue(Projection);
+      shader.Parameters["SpriteSheet"].SetValue(boxman);
+
+      GraphicsDevice .SetVertexBuffer(spriteVertexBuffer);
+
+      foreach(EffectPass pass in shader.CurrentTechnique.Passes)
+      {
+        pass.Apply();
+        GraphicsDevice .DrawPrimitives(PrimitiveType.TriangleList,0,4);
+      }
+
+      base.Draw(gameTime);
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+The World matrix is essentially the matrix for our sprite.  It is translated using the position.  A scale of 32 is used so that 1 unit is equal to 1 pixel (in this particular instance). <br>
+The shader.Parameters are the variables/data passed to the graphics card to do our drawing, and finally the scene is drawn.  You should see the same as the image below.  <a class="blueText" href="TutorialSource/SimpleShader.cs">Source available here.</a>
+</p>
+
+rowEnd;
+addImage(TutorialImages/Shaders/04.png);
 addContainer;
 navBarStart(text:Monogame Guides,home:#blink);
   navDropdown(text:Basics);
