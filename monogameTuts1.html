@@ -51,7 +51,7 @@ I won't go into the nitty gritty about matrices here.  All I'll say is we need 3
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-The three matrices purposes are as follows:
+The three matrices purposes:
 <ul>
   <li><b>World</b> - Also known as the Model matrix, is used for determining the position of an object in the world e.g. (0,0,0) - origin</li>
   <li><b>View</b> - Think of this simply as where your eye/camera in the world is.  </li>
@@ -67,7 +67,7 @@ The three matrices purposes are as follows:
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Next we need a texture sampler so we can colour our pixels the correctly on screen (SpriteSheetSampler).<br><br>
+Next we need a texture sampler so we can colour our pixels correctly on screen (SpriteSheetSampler).<br><br>
 The VertextShaderInput is the data passed from our game through to the video card so we can calculate where things need to be drawn.<br><br>
 The VertexShaderOutput contains the final pixel position and that pixel's colour once our shader has finished its calculations.
 </p>
@@ -261,7 +261,7 @@ Use the ContentManager to load the shader to our Effect member:
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>LoadContent()
 {
   boxman = <span class=code-class>Content</span>.Load<<span class=code-class>Texture2D</span>>(<span class=code-string>"boxman"</span>);
-  shader = <span class=code-class>Content</span>.Load<Effect>(<span class=code-string>"shader"</span>);
+  shader = <span class=code-class>Content</span>.Load<<span class=code-class>Effect</span>>(<span class=code-string>"shader"</span>);
 }
 </code> </pre> </div> </div><!--End of container-->
 <div class="container-fluid" >
@@ -350,6 +350,12 @@ The shader.Parameters are the variables/data passed to the graphics card to do o
 <li><a class="navLink"  href="monogameTuts1.html#loading" >Loading the Shader</a></li><!--End of container-->
 <li><a class="navLink"  href="monogameTuts1.html#shaderdraw" >Drawing with the Shader</a></li><!--End of container-->
 </ul></li><!--End of container-->
+<li class="dropdown" ><a class="navLink"  data-toggle="dropdown"  href="#" >Coming Soon<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
+<li><a class="navLink"  href="#" >Advanced Input</a></li><!--End of container-->
+<li><a class="navLink"  href="#" >RenderTargets & Culling</a></li><!--End of container-->
+<li><a class="navLink"  href="#" >2D Camera</a></li><!--End of container-->
+<li><a class="navLink"  href="#" >3D Camera</a></li><!--End of container-->
+</ul></li><!--End of container-->
 <li><a class="navLink"  href="index.html" >Magellanic Games</a></li><!--End of container-->
 <li><a class="navLink"  href="About.html" >About</a></li><!--End of container-->
 </ul></div></nav><!--End of container-->
@@ -360,7 +366,7 @@ The shader.Parameters are the variables/data passed to the graphics card to do o
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><footer><h6 class="lightGreenText" >Email: magellanicDev@gmail.com <span class="glyphicon glyphicon-envelope" ></span><br>
-Last Updated: 23/08/2018<br>
+Last Updated: 26/08/2018<br>
 Copyright: Liam Charalambous</h6>
 </footer>
 </div>		

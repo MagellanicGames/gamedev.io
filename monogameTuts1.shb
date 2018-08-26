@@ -30,7 +30,7 @@ codeEnd;
 addContainer;
 rowStart;{class:lightGreenText borderBottom}
 <p class="main">
-The three matrices purposes are as follows:
+The three matrices purposes:
 <ul>
   <li><b>World</b> - Also known as the Model matrix, is used for determining the position of an object in the world e.g. (0,0,0) - origin</li>
   <li><b>View</b> - Think of this simply as where your eye/camera in the world is.  </li>
@@ -43,7 +43,7 @@ subHeading(text:Inputs, Outputs & Samplers,class:blueText mediumFont textShadow,
 
 rowStart;{class:lightGreenText}
 <p class="main">
-Next we need a texture sampler so we can colour our pixels the correctly on screen (SpriteSheetSampler).<br><br>
+Next we need a texture sampler so we can colour our pixels correctly on screen (SpriteSheetSampler).<br><br>
 The VertextShaderInput is the data passed from our game through to the video card so we can calculate where things need to be drawn.<br><br>
 The VertexShaderOutput contains the final pixel position and that pixel's colour once our shader has finished its calculations.
 </p>
@@ -228,7 +228,7 @@ codeStart;
 protected override void LoadContent()
 {
   boxman =  Content.Load<Texture2D>("boxman");
-  shader =  Content.Load<Effect>("shader");
+  shader =  Content.Load< Effect>("shader");
 }
 codeEnd;
 addContainer;
@@ -295,6 +295,12 @@ navBarStart(text:Monogame Guides,home:#blink);
     navLink(text:Loading the Shader,link:monogameTuts1.html#loading);
     navLink(text:Drawing with the Shader,link:monogameTuts1.html#shaderdraw);
   navDropdownEnd();
+  navDropdown(text:Coming Soon);
+    navLink(text:Advanced Input,link:#);
+    navLink(text:RenderTargets & Culling,link:#);
+    navLink(text:2D Camera,link:#);
+    navLink(text:3D Camera,link:#);
+  navDropdownEnd();  
   navLink(text:Magellanic Games,link:index.html);
   navLink(text:About,link:About.html);
 navBarEnd();
@@ -305,7 +311,7 @@ navBarEnd();
 addContainer;
 padding;
 
-addFooter(email:magellanicDev@gmail.com,date:23/08/2018,copy:Liam Charalambous,class:lightGreenText);
+addFooter(email:magellanicDev@gmail.com,date:26/08/2018,copy:Liam Charalambous,class:lightGreenText);
 rowStart;
 <a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
 rowEnd;

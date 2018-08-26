@@ -348,6 +348,12 @@ navBarStart(text:Monogame Guides,home:#blink);
     navLink(text:Loading the Shader,link:monogameTuts1.html#loading);
     navLink(text:Drawing with the Shader,link:monogameTuts1.html#shaderdraw);
   navDropdownEnd();
+  navDropdown(text:Coming Soon);
+    navLink(text:Advanced Input,link:#);
+    navLink(text:RenderTargets & Culling,link:#);
+    navLink(text:2D Camera,link:#);
+    navLink(text:3D Camera,link:#);
+  navDropdownEnd();  
   navLink(text:Magellanic Games,link:index.html);
   navLink(text:About,link:About.html);
 navBarEnd();
@@ -355,7 +361,7 @@ navBarEnd();
 addContainer;
 padding;
 
-addFooter(email:magellanicDev@gmail.com,date:23/08/2018,copy:Liam Charalambous,class:lightGreenText);
+addFooter(email:magellanicDev@gmail.com,date:26/08/2018,copy:Liam Charalambous,class:lightGreenText);
 rowStart;
 <a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
 rowEnd;
