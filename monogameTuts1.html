@@ -14,13 +14,13 @@
 <body class="bg" >
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><h1 id="shaders"  class="blueText largeFont textShadow" >Shaders</h1></center></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><h1 id="shaders"  class="blueText largeFont textShadow" >Shaders</h1></center></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 So in the other <a class="blueText" href="monogameTuts.html#images">guide</a> we used Monogame's in-built spritebatch to draw our sprite/texture/image on to the screen.  Its a perfectly good method, but sometimes you just want to do your own shaders.<br>
@@ -28,20 +28,20 @@ In this tutorial we'll be using the <i>Effect</i> class, but before that we need
 Create a new file in your Content folder and call it <b>"shader.fx"</b>.  
 <small><small class="blueText">(Monogame does have predefined shaders, but I'll cover those another time)</small></small>
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="matrices"  class="blueText mediumFont textShadow" >Matrices</h3></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="matrices"  class="blueText mediumFont textShadow" >Matrices</h3></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 I won't go into the nitty gritty about matrices here.  All I'll say is we need 3 of them.  They are used to calculate the point at which pixels are drawn on screen.  <br><br>Define the matrices and a Texture2D as follows in your <b>shader.fx</b>.
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>float4x4</span> World;
 <span class=code-basic>float4x4</span> View;
@@ -59,22 +59,22 @@ The three matrices purposes:
   <li><b>Projection</b> - Usually orthographic or perspective.  If perspective then the further away something is the smaller it will appear.  Orthographic does not do this perspective divide and so no matter how "far" away something is from the View, it'll be appear the same size.  Good for 2D.</li>
 </ul>
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="io"  class="blueText mediumFont textShadow" >Inputs, Outputs & Samplers</h3></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="io"  class="blueText mediumFont textShadow" >Inputs, Outputs & Samplers</h3></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 Next we need a texture sampler so we can colour our pixels correctly on screen (SpriteSheetSampler).<br><br>
 The VertextShaderInput is the data passed from our game through to the video card so we can calculate where things need to be drawn.<br><br>
 The VertexShaderOutput contains the final pixel position and that pixel's colour once our shader has finished its calculations.
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>SamplerState </span>SpriteSheetSampler
 {
@@ -100,21 +100,21 @@ The VertexShaderOutput contains the final pixel position and that pixel's colour
 </code> </pre> </div> </div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class="borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="shaderfuncs"  class="blueText mediumFont textShadow" >Vertex and Pixel Shader Functions</h3></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="shaderfuncs"  class="blueText mediumFont textShadow" >Vertex and Pixel Shader Functions</h3></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 The VertexShaderFunction is where we do the calculations to determine where the pixel is on screen.  These calulations take the data from the input and we store the results in the VertexShaderOutput object.<br><br><br>
 The PixelShaderFunction determines the colour of the pixel based on the position of texture's UV co-ordinates.
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText">VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
@@ -138,9 +138,9 @@ The PixelShaderFunction determines the colour of the pixel based on the position
 <br><br>
 Finally we specify the technique.  These enable us to use multiple shading functions with a single draw call. I.e pass1: draw scene , pass2: draw outlines.  For this example, though, we'll just be using a single pass.
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>technique </span><span class=code-basic>basic </span>
 {
@@ -156,33 +156,33 @@ Finally we specify the technique.  These enable us to use multiple shading funct
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 With all that now defined in our <b>shader.fx</b> file, we can begin loading it into our program and drawing to the screen.  As usual, here is the <a class="blueText" href="TutorialSource/shader.fx">source</a>.
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="loading"  class="blueText mediumFont textShadow" >Loading the shader into the Project</h3></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="loading"  class="blueText mediumFont textShadow" >Loading the shader into the Project</h3></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 With the complete shader, it is time to import it first into the Pipeline Tool.  This process is exactly the same as for images.
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/01.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/LoadingImages/01.png" ></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 Press F6 to build it and check there are no error messages.  The build is done when activated in Visual Studio, but the error messages are rather cryptic.  It is best to build shaders in the pipeline tool to get understandable error messages.  (If you think there is a chance that you made an error)<br><br>
 We'll now head back to our Visual studio project.  You can either use the project created from the <a class="blueText" href="monogameTuts.html#started">basics guide</a> or just create a new one using the "Cross-platform" Monogame template.<br><br>
 In the Game class, some more members need to be added.  Ensure your code looks as follows:
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText">
 <span class=code-basic>namespace</span> MyAwesomeGame
@@ -193,7 +193,7 @@ In the Game class, some more members need to be added.  Ensure your code looks a
 
     <span class=code-class>GraphicsDeviceManager</span> graphics;
     <span class=code-class>Texture2D</span>       boxman;
-    <span class=code-class>Vector3</span>         boxmanPos =<span class=code-basic> new </span><span class=code-class>Vector3</span>(200,200,0);
+    <span class=code-class>Vector3</span>         boxmanPos =<span class=code-basic> new </span><span class=code-class>Vector3</span>(0,0,0);
 
    <span class=code-class>VertexBuffer</span>    spriteVertexBuffer;
    <span class=code-class>Effect</span>          shader;
@@ -221,14 +221,14 @@ So there are quite a few changes from the basic tutorial but there is nothing to
 The first change is the position of boxman to a Vector3.  This can be useful over a Vector2 if you are wanting to easily organise multiple layers.  It will give easier control on the front-to-back order of the entities drawn on screen.  The beauty is, it doesn't have to be used.<br><br>
 Initialise our matrices and vertexbuffer:
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Initialize()
 {
-  <span class=code-class>Matrix</span>.CreateOrthographic(screenWidth, screenHeight, -1000.0f, 1000.0f,<span class=code-basic> out </span>Projection);
-  View = <span class=code-class>Matrix</span>.CreateLookAt(new <span class=code-class>Vector3</span>(0,0,-100.0f),<span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector3</span>(0,1,0));
+  <span class=code-class>Matrix</span>.CreateOrthographic(screenWidth, screenHeight, 1000.0f, -1000.0f,<span class=code-basic> out </span>Projection);
+  View = <span class=code-class>Matrix</span>.CreateLookAt(<span class=code-basic> new </span><span class=code-class>Vector3</span>(0,0,10),<span class=code-class>Vector3</span>.Zero, <span class=code-class>Vector3</span>.Up);
 
   <span class=code-basic>float </span>width = 0.5f;
   <span class=code-basic>float </span>height = 0.5f;
@@ -247,6 +247,7 @@ Initialise our matrices and vertexbuffer:
   spriteVertexBuffer.Name = <span class=code-string>"Sprite Vertex Buffer"</span>;
   spriteVertexBuffer.SetData<<span class=code-class>VertexPositionNormalTexture</span>>(spriteVertices);
 
+  GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
  <span class=code-basic>base</span>.Initialize();
 }
 </code> </pre> </div> </div><!--End of container-->
@@ -255,9 +256,9 @@ Initialise our matrices and vertexbuffer:
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 Use the ContentManager to load the shader to our Effect member:
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>LoadContent()
 {
@@ -267,22 +268,22 @@ Use the ContentManager to load the shader to our Effect member:
 </code> </pre> </div> </div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="shaderdraw"  class="blueText mediumFont textShadow" >Drawing with the Shader</h3></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="shaderdraw"  class="blueText mediumFont textShadow" >Drawing with the Shader</h3></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
 Finally, we use it in our draw method.
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Draw(GameTime gameTime)
 {
@@ -314,13 +315,13 @@ Finally, we use it in our draw method.
 The World matrix is essentially the matrix for our sprite.  It is translated using the position.  A scale of 32 is used so that 1 unit is equal to 1 pixel (in this particular instance). <br>
 The shader.Parameters are the variables/data passed to the graphics card to do our drawing, and finally the scene is drawn.  You should see the same as the image below.  <a class="blueText" href="TutorialSource/SimpleShader.cs">Source available here.</a>
 </p>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Shaders/04.png" ></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><img style="max-width:75%"  src="TutorialImages/Shaders/04.png" ></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >
 </div><!--End of container-->
@@ -362,32 +363,32 @@ The shader.Parameters are the variables/data passed to the graphics card to do o
 </ul></div></nav><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><footer><h6 class="lightGreenText" >Email: magellanicDev@gmail.com <span class="glyphicon glyphicon-envelope" ></span><br>
-Last Updated: 26/08/2018<br>
+Last Updated: 27/08/2018<br>
 Copyright: Liam Charalambous</h6>
 </footer>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
-</div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p style="font-size:50%" >Generated with SpeedyHtml.</p></div>		
-<div class="col-lg-2 col-md-2" ></div>
-	</div><!--End of Row-->
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p style="font-size:50%" >Generated with SpeedyHtml.</p></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
 </div><!--End of container-->
 </body>
 </html>

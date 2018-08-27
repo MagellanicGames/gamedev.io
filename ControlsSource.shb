@@ -1,0 +1,63 @@
+Monogame For Impatient Developers,tutsStyle.css
+
+codeStart;
+public  static  class  Controls
+{
+	private  static  List< bool > mKeys = new List< bool >();
+
+	 static   Controls ()
+	{
+		 for (int i = 0; i < ( int )Keys.F12; i++)
+		{
+			mKeys.Add(false);
+		}
+	}	
+
+	public  static   bool  OnKeyPressed(Keys key)
+	{
+
+		int k = ( int )key;
+		KeyboardState keyState = Keyboard.GetState();
+	
+		 if (keyState.IsKeyDown(key) == true && mKeys[k] == false)
+		{
+			mKeys[k] = true;
+			return true;
+		}
+	
+		 if (keyState.IsKeyDown(key) == false && mKeys[k] == true)
+		{
+			mKeys[k] = false;
+			return false;
+		}
+
+		return false;
+	}
+
+	public static bool OnKeyReleased(Keys key)
+	{
+		int k = (int )key;
+		KeyboardState keyState = Keyboard.GetState();
+
+		 if (keyState.IsKeyDown(key) && mKeys[k] == false)
+		{
+			mKeys[k] = true;
+			return false;
+		}
+
+		 if (keyState.IsKeyDown(key) == false && mKeys[k] == true)
+		{
+			mKeys[k] = false;
+			return true;
+		}
+
+		return false;
+	}
+
+	public  static   bool  IsKeyPressed(Keys key)
+	{
+		KeyboardState keyState = Keyboard.GetState();
+		return keyState.IsKeyDown(key);
+	}
+}
+codeEnd;

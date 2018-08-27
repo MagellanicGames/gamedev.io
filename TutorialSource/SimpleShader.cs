@@ -12,7 +12,7 @@ namespace MyAwesomeGame
 	{
 		GraphicsDeviceManager	graphics;
 		Texture2D				boxman;
-		Vector3					boxmanPos = new Vector3(200,200,0);
+		Vector3					boxmanPos = new Vector3(0,0,0);
 
 		VertexBuffer			spriteVertexBuffer;
 		Effect					shader;
@@ -42,8 +42,8 @@ namespace MyAwesomeGame
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
-			Matrix.CreateOrthographic(screenWidth, screenHeight, -1000.0f, 1000.0f, out Projection);
-			View = Matrix.CreateLookAt( new Vector3(0,0,-100.0f),Vector3.Forward, new Vector3(0,1,0));
+			Matrix.CreateOrthographic(screenWidth, screenHeight, 1000.0f, -1000.0f, out Projection);
+			View = Matrix.CreateLookAt( new Vector3(0,0,10),Vector3.Zero, Vector3.Up);
 
 			float width = 0.5f;
 			float height = 0.5f;
@@ -62,6 +62,8 @@ namespace MyAwesomeGame
 			spriteVertexBuffer.Name = "Sprite Vertex Buffer";
 			spriteVertexBuffer.SetData<VertexPositionNormalTexture>(spriteVertices);
 
+			GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+			
 			base.Initialize();
 		}
 

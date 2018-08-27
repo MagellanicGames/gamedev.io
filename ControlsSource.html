@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" >
+	<head>
+		<title>Monogame For Impatient Developers</title>
+		<link rel="shortcut icon"type="image/x-icon"href="favicon.ico"/>
+		<meta charset="utf-8" >
+		<meta name="viewport"  content="width=device-width, initial-scale=1 maximum-scale=1 user-scalable=no" >
+		<link rel="stylesheet"  href="tutsStyle.css" >
+		<link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+</head>
+
+<body class="bg" >
+<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>public</span> <span class=code-basic>static</span><span class=code-basic> class </span> Controls
+{
+	<span class=code-basic>private</span> <span class=code-basic>static</span> List<<span class=code-basic>bool</span>> mKeys =<span class=code-basic> new </span>List<<span class=code-basic>bool</span>>();
+
+	<span class=code-basic>static</span> <span class=code-class>Controls</span>()
+	{
+		<span class=code-basic>for</span>(<span class=code-basic>int </span>i = 0; i < ( <span class=code-basic>int </span>)Keys.F12; i++)
+		{
+			mKeys.Add(<span class=code-basic>false</span>);
+		}
+	}	
+
+	<span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> OnKeyPressed(Keys key)
+	{
+
+		<span class=code-basic>int </span>k = ( <span class=code-basic>int </span>)key;
+		<span class=code-class><span class=code-class>Keyboard</span>State</span> keyState = <span class=code-class>Keyboard</span>.GetState();
+
+		<span class=code-basic>if </span>(keyState.IsKeyDown(key) == <span class=code-basic>true</span> && mKeys[k] == <span class=code-basic>false</span>)
+		{
+			mKeys[k] = <span class=code-basic>true</span>;
+			<span class=code-basic>return </span><span class=code-basic>true</span>;
+		}
+
+		<span class=code-basic>if </span>(keyState.IsKeyDown(key) == <span class=code-basic>false</span> && mKeys[k] == <span class=code-basic>true</span>)
+		{
+			mKeys[k] = <span class=code-basic>false</span>;
+			<span class=code-basic>return </span><span class=code-basic>false</span>;
+		}
+
+		<span class=code-basic>return </span><span class=code-basic>false</span>;
+	}
+
+	<span class=code-basic>public</span> static<span class=code-basic>bool</span>OnKeyReleased(Keys key)
+	{
+		<span class=code-basic>int </span>k = (<span class=code-basic>int </span>)key;
+		<span class=code-class><span class=code-class>Keyboard</span>State</span> keyState = <span class=code-class>Keyboard</span>.GetState();
+
+		<span class=code-basic>if </span>(keyState.IsKeyDown(key) && mKeys[k] == <span class=code-basic>false</span>)
+		{
+			mKeys[k] = <span class=code-basic>true</span>;
+			<span class=code-basic>return </span><span class=code-basic>false</span>;
+		}
+
+		<span class=code-basic>if </span>(keyState.IsKeyDown(key) == <span class=code-basic>false</span> && mKeys[k] == <span class=code-basic>true</span>)
+		{
+			mKeys[k] = <span class=code-basic>false</span>;
+			<span class=code-basic>return </span><span class=code-basic>true</span>;
+		}
+
+		<span class=code-basic>return </span><span class=code-basic>false</span>;
+	}
+
+	<span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> IsKeyPressed(Keys key)
+	{
+		<span class=code-class><span class=code-class>Keyboard</span>State</span> keyState = <span class=code-class>Keyboard</span>.GetState();
+		<span class=code-basic>return </span>keyState.IsKeyDown(key);
+	}
+}
+</code> </pre> </div> </div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p style="font-size:50%" >Generated with SpeedyHtml.</p></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+</div><!--End of container-->
+</body>
+</html>

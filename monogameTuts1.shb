@@ -160,7 +160,7 @@ namespace MyAwesomeGame
 
     GraphicsDeviceManager graphics;
     Texture2D       boxman;
-    Vector3         boxmanPos = new Vector3(200,200,0);
+    Vector3         boxmanPos = new Vector3(0,0,0);
 
     VertexBuffer    spriteVertexBuffer;
     Effect          shader;
@@ -194,8 +194,8 @@ rowEnd;
 codeStart;
 protected override void Initialize()
 {
-  Matrix.CreateOrthographic(screenWidth, screenHeight, -1000.0f, 1000.0f, out Projection);
-  View = Matrix.CreateLookAt(new Vector3(0,0,-100.0f),Vector3.Forward, new Vector3(0,1,0));
+  Matrix.CreateOrthographic(screenWidth, screenHeight, 1000.0f, -1000.0f, out Projection);
+  View = Matrix.CreateLookAt( new Vector3(0,0,10),Vector3.Zero, Vector3.Up);
 
   float width = 0.5f;
   float height = 0.5f;
@@ -214,6 +214,7 @@ protected override void Initialize()
   spriteVertexBuffer.Name = "Sprite Vertex Buffer";
   spriteVertexBuffer.SetData<VertexPositionNormalTexture>(spriteVertices);
 
+  GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
   base.Initialize();
 }
 codeEnd;
@@ -312,7 +313,7 @@ navBarEnd();
 addContainer;
 padding;
 
-addFooter(email:magellanicDev@gmail.com,date:26/08/2018,copy:Liam Charalambous,class:lightGreenText);
+addFooter(email:magellanicDev@gmail.com,date:27/08/2018,copy:Liam Charalambous,class:lightGreenText);
 rowStart;
 <a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
 rowEnd;
