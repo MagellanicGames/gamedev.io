@@ -30,9 +30,9 @@ subHeading(text:Getting Started,class:blueText mediumFont textShadow,id:started)
 rowStart;{class:lightGreenText}
 <p class="main">
 This will focus on using Windows for development.  I myself use Win 7 (I know, I know) and Visual Studio 2015 but Visual Studio 2017 should work fine.
-Head to this link and download version <a class="blueText" href="http://www.monogame.net/downloads/">3.6</a><br><br>
+Head to this link and download <a class="blueText" href="http://www.monogame.net/downloads/">Monogame 3.6</a><br><br>
 
-Run the installer and just yes through everything.  You can install through NUGET, I believe you can choose specific template types, where as the installer simply installs all template types.
+Run the installer and just yes through everything.  You can install through NUGET, which I believe lets you choose specific template types. The installer simply installs all template types.
 </p>
 rowEnd;
 
@@ -41,15 +41,15 @@ addContainer;
 subHeading(text:Project Setup,class:blueText mediumFont textShadow,id:);
 rowStart;{class:lightGreenText}
 <p class="main">
-So once all that is installed, simply fire up VS and create a new project.  I use the “Cross Platform Desktop Project” as the projects I'm developing require it.  This guide will use that template, but at this basic level, there's no real difference between cross-platform and the “Windows project”.<br><br>
-Simply choose cross-platform project:
+So once all that is installed, simply fire up VS and create a new project.  I use the “Cross Platform Desktop Project” as the projects I'm developing require it.  This guide will use that template, but everything should work with the “Windows project” template. <i>(Disclaimer: I have not tested it.)</i> <br><br>
+Choose the cross-platform project:
 </p>
 rowEnd;
 addImage(TutorialImages/Setup/00.png);
 
 rowStart;{class:lightGreenText}
 <p class="main">
-We now have our project.  If you run you should simply see this:
+We now have our project.  If you press run, you should see the following:
 </p>
 rowEnd;
 
@@ -57,7 +57,7 @@ addImage(TutorialImages/Setup/01.png);
 
 rowStart;{class:lightGreenText borderBottom}
 <p class="main">
-The project you'll see consists of <b>Program.cs</b> and <b>Game1.cs</b>.  <b>Program.cs</b> contains the Main method and <b>Game1.cs</b> is where the magic happens.
+The project consists of two source files: <b>Program.cs</b> and <b>Game1.cs</b>.  <b>Program.cs</b> contains the Main method and <b>Game1.cs</b> is where the magic happens.
 I won't run through the code as its very well documented and this is for impatient people so, lets learn by doing.
 </p>
 rowEnd;
@@ -98,7 +98,7 @@ using Microsoft.Xna.Framework.Input;
 namespace MyAwesomeGame
 {
 
-  public class Game1 : Game
+  public class  Game1  :  Game 
   {
 
    GraphicsDeviceManager graphics;
@@ -107,7 +107,7 @@ namespace MyAwesomeGame
 
     public  Game1()
     {
-      graphics = new  GraphicsDeviceManager(this);
+      graphics = new  GraphicsDeviceManager( this );
       Content.RootDirectory = "Content"; 
     }
 codeEnd;
@@ -115,7 +115,7 @@ codeEnd;
 addContainer;
 rowStart;{class:lightGreenText}
 <p class="main">
-In the LoadContent method(line 38) and we'll load the image as follows:
+Find the LoadContent method and load the image like so:
 </p>
 rowEnd;
 
@@ -130,19 +130,19 @@ codeEnd;
 addContainer;
 rowStart;{class:lightGreenText}
 <p class="main">
-The file extension is omitted as its now within the content management system.  If you wish to keep track within Visual Studio of your images and such, I find it easiest to simply add them to the project (absolutely not required).<br><br>
-Finally we draw it:
+Note that you do not need to specify the file extension (i.e: "boxman", not "boxman.png").<br>  It can be a good idea to keep track of images within Visual Studio by adding them to the project.<br><br>
+Finally, draw the image:
 </p>
 rowEnd;
 
 
 codeStart;
-protected override void Draw(GameTime gameTime)
+protected override void Draw( GameTime gameTime)
 {
   GraphicsDevice.Clear(Color.CornFlowerBlue);
 
   spriteBatch.Begin();
-  spriteBatch.Draw(boxman,new Vector2(200,200),Color.White);
+  spriteBatch.Draw(boxman, new Vector2(200,200),Color.White);
   spriteBatch.End();
 
   base.Draw(gameTime);
@@ -168,21 +168,21 @@ addContainer;
 subHeading(text:Controls (Keyboard),class:blueText mediumFont textShadow,id:keyboard);
 rowStart;{class:lightGreenText}
 <p class="main">
-We'll use the keyboard input for simplicity.  I'll go through other means later on.<br><br>
+We'll start off using keyboard input.  I'll go through other means later on.<br><br>
 
-First off create a Vector2 member which is boxman's position.
+Create a Vector2 member which is boxman's position.
 </p>
 rowEnd;
 
 codeStart;
 namespace MyAwesomeGame
 {
-  public class Game1 : Game 
+  public class Game1 :Game
   {
 
-codeClass(type:   GraphicsDeviceManager,name:graphics,value:);
-codeClass(type:   SpriteBatch,name:spriteBatch,value:);
-codeClass(type:   Texture2D,name:boxman,value:);
+   GraphicsDeviceManager graphics;
+   SpriteBatch spriteBatch;
+   Texture2D boxman;
    Vector2 boxmanPos = new Vector2(200,200);
 codeEnd;
 
@@ -194,9 +194,9 @@ And make sure it is used in the draw call.
 rowEnd;
 
 codeStart;
-protected override void Draw(GameTime gameTime)
+protected override void Draw( GameTime gameTime)
 {
-  GraphicsDevice.Clear(Color.CornFlowerBlue);
+  GraphicsDevice .Clear(Color.CornFlowerBlue);
 
   spriteBatch.Begin();
   spriteBatch.Draw(boxman, boxmanPos, Color.White);
@@ -209,7 +209,7 @@ codeEnd;
 addContainer;
 rowStart;{class:lightGreenText}
 <p class="main">
-Next the controls, go to the Update method ( ~line 62).
+Add the following code to the Update method.
 </p>
 rowEnd;
 
@@ -230,7 +230,7 @@ codeEnd;
 addContainer;
 rowStart;{class:lightGreenText borderBottom}
 <p class="main">
-I've added dt in, but this is not required.  Its simply for having everything run at a consistent speed.  All we do is query the state and modify the position based on input.  This is incredibly rough and is not ideal, but its to get you started.<br>  The Monogame functions are easy enough to wrap into On-press and On-release functions.  I'll cover this in a later guide. 
+All thats needed is to query the keyboard state and modify the position based on input.  This is incredibly rough, but its just to get you started.<br>  The Monogame functions are easy enough to wrap into On-press and On-release functions.  I'll cover this in a later guide. 
 <br><br>Full source available <a class="blueText" href="TutorialSource/KeyboardInput.cs">here.</a>
 </p>
 rowEnd;
@@ -241,8 +241,8 @@ addContainer;
 subHeading(text:Audio,class:blueText mediumFont textShadow,id:audio);
 rowStart;{class:lightGreenText}
 <p class="main">
-Here we'll be using our good friend the Pipeline Tool.  I'll be using a sound file from my game.  Most file formats are supported.  Mp3 and Ogg definitely are supported.  For this I'll be using the latter. <br>
-The process is the same as loading images.<br> Open the Pipeline Tool, right-click on "Content" in the project window > add existing item and select your file.<br><br>
+Again, we'll be using the Pipeline Tool.  I'll be using a sound file from my game, feel free to use any mp3 or ogg file.  Most file formats are supported. <br>
+The process is basically the same as loading images.<br> Open the Pipeline Tool, right-click on "Content" in the project window > add existing item and select your file.<br><br>
 
 Ensure you have the processor correctly set to SoundEffect:
 </p>
@@ -267,22 +267,22 @@ using Microsoft.Xna.Framework.Audio;
 namespace MyAwesomeGame
 {
 
-  public class  Game1  : Game 
+  public class  Game1  :  Game 
   {
 
-codeClass(type:   GraphicsDeviceManager,name:graphics,value:);
-codeClass(type:   SpriteBatch,name:spriteBatch,value:);
-codeClass(type:   Texture2D,name:boxman,value:);
+   GraphicsDeviceManager graphics;
+   SpriteBatch spriteBatch;
+   Texture2D boxman;
    Vector2 boxmanPos = new Vector2(200,200);
 
-codeClass(type:   SoundEffect,name:sfx,value:);
-codeClass(type:   SoundEffectInstance,name:sfxInstance,value:);
+   SoundEffect  sfx;
+   SoundEffectInstance sfxInstance;
 codeEnd;
 
 addContainer;
 rowStart;{class:lightGreenText}
 <p class="main">
-Initialise it:
+Initialise the sfx member:
 </p>
 rowEnd;
 
@@ -290,7 +290,7 @@ rowEnd;
 codeStart;
 protected override void LoadContent()
 {
-  spriteBatch = new SpriteBatch (GraphicsDevice);
+  spriteBatch = new SpriteBatch (GraphicsDevice );
   boxman =  Content.Load<Texture2D>("boxman");
   sfx =  Content.Load<SoundEffect >("sfx_voice_00");
   sfxInstance = sfx.CreateInstance();
@@ -300,7 +300,7 @@ codeEnd;
 addContainer;
 rowStart;{class:lightGreenText}
 <p class="main">
-The <i>SoundEffectInstance</i> is not required.  You can simply play the <i>SoundEffect</i> but the instance allows better control and you can query the state.  They're kind of analogous to Texture and Sprite.<br> 
+The <i>SoundEffectInstance</i> is not required.  You can solely use the <i>SoundEffect</i> but, an instance allows better control and has queryable state.  They're kind of analogous to Texture and Sprite.<br> 
 All thats left to do is hook up a key to play our sound:
 </p>
 rowEnd;

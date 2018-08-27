@@ -5,9 +5,10 @@ padding;
 heading(text:Shaders,class:blueText largeFont textShadow,id:shaders);
 rowStart;{class:lightGreenText borderBottom}
 <p class="main">
-So in the other <a class="blueText" href="monogameTuts.html#images">guide</a> we used Monogame's in-built spritebatch to draw our sprite/texture/image on to the screen.  Its a perfectly good method, but sometimes you simply want to do your own shaders.  It can be easier to do effects, lighting and filtering this way.<br>
-In this tutorial we'll be using the <i>Effect</i> class.  First off, lets write a simple shader.<br><br>
+So in the other <a class="blueText" href="monogameTuts.html#images">guide</a> we used Monogame's in-built spritebatch to draw our sprite/texture/image on to the screen.  Its a perfectly good method, but sometimes you just want to do your own shaders.<br>
+In this tutorial we'll be using the <i>Effect</i> class, but before that we need to write a simple shader.<br><br>
 Create a new file in your Content folder and call it <b>"shader.fx"</b>.  
+<small><small class="blueText">(Monogame does have predefined shaders, but I'll cover those another time)</small></small>
 </p>
 rowEnd;
 

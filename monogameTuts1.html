@@ -23,9 +23,10 @@
 	</div><!--End of Row-->
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-So in the other <a class="blueText" href="monogameTuts.html#images">guide</a> we used Monogame's in-built spritebatch to draw our sprite/texture/image on to the screen.  Its a perfectly good method, but sometimes you simply want to do your own shaders.  It can be easier to do effects, lighting and filtering this way.<br>
-In this tutorial we'll be using the <i>Effect</i> class.  First off, lets write a simple shader.<br><br>
+So in the other <a class="blueText" href="monogameTuts.html#images">guide</a> we used Monogame's in-built spritebatch to draw our sprite/texture/image on to the screen.  Its a perfectly good method, but sometimes you just want to do your own shaders.<br>
+In this tutorial we'll be using the <i>Effect</i> class, but before that we need to write a simple shader.<br><br>
 Create a new file in your Content folder and call it <b>"shader.fx"</b>.  
+<small><small class="blueText">(Monogame does have predefined shaders, but I'll cover those another time)</small></small>
 </p>
 </div>		
 <div class="col-lg-2 col-md-2" ></div>
@@ -206,7 +207,7 @@ In the Game class, some more members need to be added.  Ensure your code looks a
 
     <span class=code-basic>public</span> <span class=code-class>Game1</span>()
     {
-      graphics =<span class=code-basic> new </span><span class=code-class>GraphicsDeviceManager</span>(<span class=code-basic>this </span>);
+      graphics =<span class=code-basic> new </span><span class=code-class>GraphicsDeviceManager</span>( this);
       graphics.PreferredBackBufferWidth = screenWidth;
       graphics.PreferredBackBufferHeight = screenHeight;
 
@@ -335,29 +336,29 @@ The shader.Parameters are the variables/data passed to the graphics card to do o
 		</div>
 <div class="collapse navbar-collapse blueText"  id="myNavbar" >
 <ul class="nav navbar-nav" ><!--End of container-->
-<li class="dropdown" ><a class="navLink"  data-toggle="dropdown"  href="#" >Basics<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
-<li><a class="navLink"  href="monogameTuts.html" >Basics</a></li><!--End of container-->
-<li><a class="navLink"  href="monogameTuts.html#started" >Getting Started</a></li><!--End of container-->
-<li><a class="navLink"  href="monogameTuts.html#images" >Images & Sprites</a></li><!--End of container-->
-<li><a class="navLink"  href="monogameTuts.html#keyboard" >Controls (Keyboard)</a></li><!--End of container-->
-<li><a class="navLink"  href="monogameTuts.html#audio" >Audio</a></li><!--End of container-->
+<li class="dropdown" ><a href="#"  class="navLink"  data-toggle="dropdown" >Basics<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
+<li><a href="monogameTuts.html"  class="navLink" >Basics</a></li><!--End of container-->
+<li><a href="monogameTuts.html#started"  class="navLink" >Getting Started</a></li><!--End of container-->
+<li><a href="monogameTuts.html#images"  class="navLink" >Images & Sprites</a></li><!--End of container-->
+<li><a href="monogameTuts.html#keyboard"  class="navLink" >Controls (Keyboard)</a></li><!--End of container-->
+<li><a href="monogameTuts.html#audio"  class="navLink" >Audio</a></li><!--End of container-->
 </ul></li><!--End of container-->
-<li class="dropdown" ><a class="navLink"  data-toggle="dropdown"  href="#" >Shaders<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
-<li><a class="navLink"  href="monogameTuts1.html" >Shaders</a></li><!--End of container-->
-<li><a class="navLink"  href="monogameTuts1.html#matrices" >Matrices</a></li><!--End of container-->
-<li><a class="navLink"  href="monogameTuts1.html#io" >Inputs, Outputs & Samplers</a></li><!--End of container-->
-<li><a class="navLink"  href="monogameTuts1.html#shaderfuncs" >Shader Functions</a></li><!--End of container-->
-<li><a class="navLink"  href="monogameTuts1.html#loading" >Loading the Shader</a></li><!--End of container-->
-<li><a class="navLink"  href="monogameTuts1.html#shaderdraw" >Drawing with the Shader</a></li><!--End of container-->
+<li class="dropdown" ><a href="#"  class="navLink"  data-toggle="dropdown" >Shaders<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
+<li><a href="monogameTuts1.html"  class="navLink" >Shaders</a></li><!--End of container-->
+<li><a href="monogameTuts1.html#matrices"  class="navLink" >Matrices</a></li><!--End of container-->
+<li><a href="monogameTuts1.html#io"  class="navLink" >Inputs, Outputs & Samplers</a></li><!--End of container-->
+<li><a href="monogameTuts1.html#shaderfuncs"  class="navLink" >Shader Functions</a></li><!--End of container-->
+<li><a href="monogameTuts1.html#loading"  class="navLink" >Loading the Shader</a></li><!--End of container-->
+<li><a href="monogameTuts1.html#shaderdraw"  class="navLink" >Drawing with the Shader</a></li><!--End of container-->
 </ul></li><!--End of container-->
-<li class="dropdown" ><a class="navLink"  data-toggle="dropdown"  href="#" >Coming Soon<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
-<li><a class="navLink"  href="#" >Advanced Input</a></li><!--End of container-->
-<li><a class="navLink"  href="#" >RenderTargets & Culling</a></li><!--End of container-->
-<li><a class="navLink"  href="#" >2D Camera</a></li><!--End of container-->
-<li><a class="navLink"  href="#" >3D Camera</a></li><!--End of container-->
+<li class="dropdown" ><a href="#"  class="navLink"  data-toggle="dropdown" >Coming Soon<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
+<li><a href="#"  class="navLink" >Advanced Input</a></li><!--End of container-->
+<li><a href="#"  class="navLink" >RenderTargets & Culling</a></li><!--End of container-->
+<li><a href="#"  class="navLink" >2D Camera</a></li><!--End of container-->
+<li><a href="#"  class="navLink" >3D Camera</a></li><!--End of container-->
 </ul></li><!--End of container-->
-<li><a class="navLink"  href="index.html" >Magellanic Games</a></li><!--End of container-->
-<li><a class="navLink"  href="About.html" >About</a></li><!--End of container-->
+<li><a href="index.html"  class="navLink" >Magellanic Games</a></li><!--End of container-->
+<li><a href="About.html"  class="navLink" >About</a></li><!--End of container-->
 </ul></div></nav><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
