@@ -43,12 +43,21 @@ I won't go into the nitty gritty about matrices here.  All I'll say is we need 3
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>float4x4</span> World;
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>float4x4</span> World;
 <span class=code-basic>float4x4</span> View;
 <span class=code-basic>float4x4</span> Projection;  
 
 <span class=code-class>Texture2D</span> SpriteSheet;
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
@@ -76,7 +85,12 @@ The VertexShaderOutput contains the final pixel position and that pixel's colour
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>SamplerState </span>SpriteSheetSampler
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>SamplerState </span>SpriteSheetSampler
 {
   Filter = None;
   AddressU = Wrap;
@@ -97,7 +111,11 @@ The VertexShaderOutput contains the final pixel position and that pixel's colour
   <span class=code-basic>float4 </span>Position : POSITION0;
   <span class=code-basic>float2 </span>TextureUV : TEXCOORD0;
 };
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>
@@ -116,7 +134,12 @@ The PixelShaderFunction determines the colour of the pixel based on the position
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText">VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
   VertexShaderOutput output;
 
@@ -131,7 +154,11 @@ The PixelShaderFunction determines the colour of the pixel based on the position
 {
   <span class=code-basic>return </span>tex2D(SpriteSheetSampler, input.TextureUV);
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
@@ -142,7 +169,12 @@ Finally we specify the technique.  These enable us to use multiple shading funct
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>technique </span><span class=code-basic>basic </span>
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>technique </span><span class=code-basic>basic </span>
 {
  <span class=code-basic> pass </span>Pass1
   {
@@ -150,7 +182,11 @@ Finally we specify the technique.  These enable us to use multiple shading funct
    <span class=code-basic> PixelShader </span>=<span class=code-basic> compile </span>ps_2_0 PixelShaderFunction();
   }
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
@@ -184,7 +220,12 @@ In the Game class, some more members need to be added.  Ensure your code looks a
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText">
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+
 <span class=code-basic>namespace</span> MyAwesomeGame
 {
 
@@ -213,7 +254,11 @@ In the Game class, some more members need to be added.  Ensure your code looks a
 
      <span class=code-class>Content</span>.RootDirectory = <span class=code-string>"Content"</span>; 
     }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
@@ -225,7 +270,12 @@ Initialise our matrices and vertexbuffer:
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Initialize()
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Initialize()
 {
   <span class=code-class>Matrix</span>.CreateOrthographic(screenWidth, screenHeight, 1000.0f, -1000.0f,<span class=code-basic> out </span>Projection);
   View = <span class=code-class>Matrix</span>.CreateLookAt(<span class=code-basic> new </span><span class=code-class>Vector3</span>(0,0,10),<span class=code-class>Vector3</span>.Zero, <span class=code-class>Vector3</span>.Up);
@@ -250,7 +300,11 @@ Initialise our matrices and vertexbuffer:
   GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
  <span class=code-basic>base</span>.Initialize();
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
@@ -260,12 +314,21 @@ Use the ContentManager to load the shader to our Effect member:
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>LoadContent()
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>LoadContent()
 {
   boxman = <span class=code-class>Content</span>.Load<<span class=code-class>Texture2D</span>>(<span class=code-string>"boxman"</span>);
   shader = <span class=code-class>Content</span>.Load<<span class=code-class>Effect</span>>(<span class=code-string>"shader"</span>);
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>
@@ -285,7 +348,12 @@ Finally, we use it in our draw method.
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Draw(GameTime gameTime)
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Draw(GameTime gameTime)
 {
       <span class=code-class>GraphicsDevice</span>.Clear(<span class=code-class>Color</span>.CornflowerBlue);
 
@@ -308,7 +376,11 @@ Finally, we use it in our draw method.
 
      <span class=code-basic>base</span>.Draw(gameTime);
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
@@ -360,7 +432,9 @@ The shader.Parameters are the variables/data passed to the graphics card to do o
 </ul></li><!--End of container-->
 <li><a href="index.html"  class="navLink" >Magellanic Games</a></li><!--End of container-->
 <li><a href="About.html"  class="navLink" >About</a></li><!--End of container-->
-</ul></div></nav><!--End of container-->
+</ul>
+</div>
+</nav><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>

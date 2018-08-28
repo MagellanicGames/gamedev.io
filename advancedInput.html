@@ -41,7 +41,12 @@ First up, create a new class called Controls:
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>public</span> <span class=code-basic>static</span><span class=code-basic> class </span><span class=code-class>Controls</span>
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>public</span> <span class=code-basic>static</span><span class=code-basic> class </span><span class=code-class>Controls</span>
 {
 	<span class=code-basic>private</span> <span class=code-basic>static</span> <span class=code-class>List</span><<span class=code-basic>bool</span>> mKeys =<span class=code-basic> new </span><span class=code-class>List</span><<span class=code-basic>bool</span>>();
 
@@ -53,7 +58,11 @@ First up, create a new class called Controls:
 		}
 	}
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
@@ -63,7 +72,12 @@ Next define an OnKeyPressed method that takes a Key enum
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> OnKeyPressed(Keys key)
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> OnKeyPressed(Keys key)
 {
 	<span class=code-basic>int </span>k = ( <span class=code-basic>int </span>)key;
 	<span class=code-class><span class=code-class>Keyboard</span>State</span> keyState = <span class=code-class>Keyboard</span>.GetState();
@@ -79,7 +93,11 @@ Next define an OnKeyPressed method that takes a Key enum
 	}
 	<span class=code-basic>return </span><span class=code-basic>false</span>;
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
@@ -91,7 +109,12 @@ Next define the OnReleased function.
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> OnKeyReleased(Keys key)
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> OnKeyReleased(Keys key)
 {
 	<span class=code-basic>int </span>k = (<span class=code-basic>int </span>)key;
 	<span class=code-class><span class=code-class>Keyboard</span>State</span> keyState = <span class=code-class>Keyboard</span>.GetState();
@@ -107,7 +130,11 @@ Next define the OnReleased function.
 	}
 	<span class=code-basic>return </span><span class=code-basic>false</span>;
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
@@ -125,12 +152,21 @@ Finally, we can't forget the simple IsPressed function:
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> IsKeyPressed(Keys key)
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> IsKeyPressed(Keys key)
 {
 	<span class=code-class><span class=code-class>Keyboard</span>State</span> keyState = <span class=code-class>Keyboard</span>.GetState();
 	<span class=code-basic>return </span>keyState.IsKeyDown(key);
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderTop col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>
@@ -148,7 +184,12 @@ With that all done, move back over to the Game class' Update method and we'll ma
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
-<div class="container-fluid" >	<div class="row" ><div class="col-lg-2 col-md-2" ></div><div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><pre class="code"> <code class="csharp whiteText"><span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Update(<span class=code-class>GameTime</span> gameTime)
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Update(<span class=code-class>GameTime</span> gameTime)
 {
 	<span class=code-basic>float </span>dt = ( <span class=code-basic>float </span>)gameTime.ElapsedGameTime.TotalSeconds;
 	<span class=code-basic>float </span>speed = 200.0f;
@@ -164,7 +205,11 @@ With that all done, move back over to the Game class' Update method and we'll ma
 
 	<span class=code-basic>base</span>.Update(gameTime);
 }
-</code> </pre> </div> </div><!--End of container-->
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class=main>
@@ -216,7 +261,9 @@ If you hold down right, the sprite should keep moving (like in the basics tutori
 </ul></li><!--End of container-->
 <li><a href="index.html"  class="navLink" >Magellanic Games</a></li><!--End of container-->
 <li><a href="About.html"  class="navLink" >About</a></li><!--End of container-->
-</ul></div></nav><!--End of container-->
+</ul>
+</div>
+</nav><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>
