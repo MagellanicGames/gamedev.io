@@ -1,0 +1,8 @@
+addContainer;
+padding;
+
+addFooter(email:magellanicDev@gmail.com,date:29/08/2018,copy:Liam Charalambous,class:lightGreenText);
+rowStart;
+<a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
+rowEnd;
+padding;

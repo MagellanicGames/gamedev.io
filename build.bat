@@ -5,4 +5,4 @@ start SpeedyHtmlBuilder.exe advancedInput.shb
 start SpeedyHtmlBuilder.exe ControlsSource.shb
 start SpeedyHtmlBuilder.exe basic2dCamera.shb
 start SpeedyHtmlBuilder.exe 2dcameraSource.shb
-start SpeedyHtmlBuilder.exe About.shb
+start SpeedyHtmlBuilder.exe about.shb

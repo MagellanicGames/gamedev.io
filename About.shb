@@ -13,35 +13,5 @@ My projects can viewed both here and on <a class="blueText" href="https://github
 <a href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @MagellanicGames</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></h6>
 rowEnd;
 
-htmlStart;
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  			<div class="container-fluid blackBack">
-   				 <div class="navbar-header">
-        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          				<span class="icon-bar"></span>
-          				<span class="icon-bar"></span>
-          				<span class="icon-bar"></span>                        
-      				</button>
-      				<a class="navLink navbar-brand" href="index.html"><div class="blueText">Magellanic Games</div></a>
-    		</div>
-    		<div>
-      			<div class="collapse navbar-collapse blueText" id="myNavbar">
-      				
-        			<ul class="nav navbar-nav">          			
-                   <li><a class="navLink"href="monogameTuts.html">Monogame Guides</a></li>    
-        			</ul>
-        			
-      			</div>
-    		</div>
-  			</div>
-		</nav>    
-htmlEnd;
-
-addContainer;
-padding;
-
-addFooter(email:magellanicDev@gmail.com,date:23/08/2018,copy:Liam Charalambous,class:lightGreenText);
-rowStart;
-<a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
-rowEnd;
-padding;
+importPartial(Partials/navbarMain.shbp);
+importPartial(Partials/footer.shbp);

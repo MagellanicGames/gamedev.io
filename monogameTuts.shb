@@ -332,37 +332,5 @@ rowStart;{class:lightGreenText}
 </p>
 rowEnd;
 
-navBarStart(text:Monogame Guides,home:monogameTuts.html);
-  navDropdown(text:Basics);
-    navLink(text:Example Projects,link:monogameTuts.html#examples);
-    navLink(text:Getting Started,link:monogameTuts.html#started);
-    navLink(text:Images & Sprites,link:monogameTuts.html#images);
-    navLink(text:Controls (Keyboard),link:monogameTuts.html#keyboard);
-    navLink(text:Audio,link:monogameTuts.html#audio);
-  navDropdownEnd();
-  navDropdown(text:Shaders);
-    navLink(text:Shaders,link:monogameTuts1.html);
-    navLink(text:Matrices,link:monogameTuts1.html#matrices);
-    navLink(text:Inputs, Outputs & Samplers,link:monogameTuts1.html#io);
-    navLink(text:Shader Functions,link:monogameTuts1.html#shaderfuncs);
-    navLink(text:Loading the Shader,link:monogameTuts1.html#loading);
-    navLink(text:Drawing with the Shader,link:monogameTuts1.html#shaderdraw);
-  navDropdownEnd();
-  navDropdown(text:Coming Soon);
-    navLink(text:Advanced Input,link:#);
-    navLink(text:RenderTargets & Culling,link:#);
-    navLink(text:2D Camera,link:#);
-    navLink(text:3D Camera,link:#);
-  navDropdownEnd();  
-  navLink(text:Magellanic Games,link:index.html);
-  navLink(text:About,link:About.html);
-navBarEnd();
-
-addContainer;
-padding;
-
-addFooter(email:magellanicDev@gmail.com,date:26/08/2018,copy:Liam Charalambous,class:lightGreenText);
-rowStart;
-<a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
-rowEnd;
-padding;
+importPartial(Partials/navbarGuides.shbp);
+importPartial(Partials/footer.shbp);
