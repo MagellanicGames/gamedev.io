@@ -44,8 +44,6 @@ rowStart;{class:lightGreenText borderBottom}
  			 	</p>
 rowEnd;
 
-
+addScript(animate.js);
 importPartial(Partials/navbarMain.shbp);
 importPartial(Partials/footer.shbp);
-
-addScript(animate.js);

@@ -1,9 +1,9 @@
-navBarStart(text:Magellanic Games,home:#blink);
+navBarStart(text:Magellanic Games,home:index.html);
  navDropdown(text:Projects);
-    navLink(text:Mr. Blocked,link:#blocked);
-    navLink(text:Zombie Apocalyp-tic-80,link:#zombie);
-    navLink(text:SpaceTrade Ascii Edition,link:#spaceTrade);
-    navLink(text:Raycasting 3D Engine,link:#raycast);
+    navLink(text:Mr. Blocked,link:index.html#blocked);
+    navLink(text:Zombie Apocalyp-tic-80,link:index.html#zombie);
+    navLink(text:SpaceTrade Ascii Edition,link:index.html#spaceTrade);
+    navLink(text:Raycasting 3D Engine,link:index.html#raycast);
   navDropdownEnd();
   navDropdown(text:Monogame Guides);
     navLink(text:Basics,link:monogameTuts.html);
