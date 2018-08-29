@@ -84,7 +84,7 @@ codeEnd;
 addContainer;
 rowStart;{class:lightGreenText}
 <p class="main">
-The last method we'll add is PassParamters.  We'll define an Effect as a parameter, as this'll work the shader from the <a class="blueText" href="monogameTuts1.html">shaders</a> guide.  
+The last method we'll add is PassParamters.  We'll define an Effect as a parameter, as this'll work with the shader from the <a class="blueText" href="monogameTuts1.html">shaders</a> guide.  
 </p>
 rowEnd;
 
@@ -284,7 +284,7 @@ navBarStart(text:Monogame Guides,home:monogameTuts.html);
   navDropdownEnd();
 
   navDropdown(text:Advanced Input);
-    navLink(text:OnPress & OnRelease,link:advancedInput.html#keyboardon);
+    navLink(text:OnPress & OnRelease,link:advancedInput.html);
     navLink(text:Using the Controls class,link:advancedInput.html#controls);
   navDropdownEnd();
   
@@ -301,7 +301,7 @@ navBarEnd();
 addContainer;
 padding;
 
-addFooter(email:magellanicDev@gmail.com,date:27/08/2018,copy:Liam Charalambous,class:lightGreenText);
+addFooter(email:magellanicDev@gmail.com,date:29/08/2018,copy:Liam Charalambous,class:lightGreenText);
 rowStart;
 <a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
 rowEnd;
