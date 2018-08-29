@@ -1,0 +1,42 @@
+Monogame For Impatient Developers,tutsStyle.css
+
+codeStart;
+class  Camera 
+{
+    Matrix      mProjection;
+    Matrix      mView;
+		
+    Vector3     mPosition;
+    Vector3     mUp;
+    Vector3     mCenter;
+		
+    Vector3     mOffset;	
+
+    public Camera(int width, int height, Vector3 pos, float zOffset = 10.0f)
+    {    
+        mUp = Vector3.Up;
+        mPosition = pos;
+        mOffset = new Vector3(0,0,zOffset);
+        mCenter = mPosition + mOffset;
+
+        float nearClip = 1.0f;
+        float farClip = -50.0f;
+
+        Matrix.CreateOrthographic(width, height, nearClip, farClip, out mProjection);
+        mView = Matrix.CreateLookAt(mPosition, mCenter, mUp);
+    }
+
+    public void SetPosition(Vector3 pos)
+    {
+        mPosition = pos;      
+        mCenter = mPosition + mOffset;   
+        mView = Matrix.CreateLookAt(mPosition, mCenter, mUp);
+    }
+
+    public void PassParameters(Effect effect)
+    {
+        effect.Parameters["View"].SetValue(mView);
+        effect.Parameters["Projection"].SetValue(mProjection);           
+    }
+}
+codeEnd;

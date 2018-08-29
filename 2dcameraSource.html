@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" >
+	<head>
+		<title>Monogame For Impatient Developers</title>
+		<link rel="shortcut icon"type="image/x-icon"href="favicon.ico"/>
+		<meta charset="utf-8" >
+		<meta name="viewport"  content="width=device-width, initial-scale=1 maximum-scale=1 user-scalable=no" >
+		<link rel="stylesheet"  href="tutsStyle.css" >
+		<link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+</head>
+
+<body class="bg" >
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+class <span class=code-class>Camera</span>
+{
+    <span class=code-class>Matrix</span>      mProjection;
+    <span class=code-class>Matrix</span>      mView;
+
+    <span class=code-class>Vector3</span>     mPosition;
+    <span class=code-class>Vector3</span>     mUp;
+    <span class=code-class>Vector3</span>     mCenter;
+
+    <span class=code-class>Vector3</span>     mOffset;	
+
+    <span class=code-basic>public</span> Camera(<span class=code-basic>int </span>width, <span class=code-basic>int </span>height, <span class=code-class>Vector3</span> pos, <span class=code-basic>float </span>zOffset = 10.0f)
+    {    
+        mUp = <span class=code-class>Vector3</span>.Up;
+        mPosition = pos;
+        mOffset =<span class=code-basic> new </span><span class=code-class>Vector3</span>(0,0,zOffset);
+        mCenter = mPosition + mOffset;
+
+        <span class=code-basic>float </span>nearClip = 1.0f;
+        <span class=code-basic>float </span>farClip = -50.0f;
+
+        <span class=code-class>Matrix</span>.CreateOrthographic(width, height, nearClip, farClip,<span class=code-basic> out </span>mProjection);
+        mView = <span class=code-class>Matrix</span>.CreateLookAt(mPosition, mCenter, mUp);
+    }
+
+    <span class=code-basic>public</span> <span class=code-basic>void </span>SetPosition(<span class=code-class>Vector3</span> pos)
+    {
+        mPosition = pos;      
+        mCenter = mPosition + mOffset;   
+        mView = <span class=code-class>Matrix</span>.CreateLookAt(mPosition, mCenter, mUp);
+    }
+
+    <span class=code-basic>public</span> <span class=code-basic>void </span>PassParameters(Effect effect)
+    {
+        effect.Parameters[<span class=code-string>"View"</span>].SetValue(mView);
+        effect.Parameters[<span class=code-string>"Projection"</span>].SetValue(mProjection);           
+    }
+}
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p style="font-size:50%" >Generated with SpeedyHtml.</p></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+</div><!--End of container-->
+</body>
+</html>

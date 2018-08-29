@@ -1,0 +1,308 @@
+Basic 2D Camera - Monogame For Impatient Developers,tutsStyle.css
+
+addContainer;
+padding;
+heading(text:Basic 2D Camera,class:blueText largeFont textShadow,id:);
+rowStart;{class:borderBottom lightGreenText}
+<p class="main">
+This chapter is a continuation of the <a class="blueText" href="monogameTuts1.html">shaders</a> guide.  Its advised you check that out first, but its not a necessity. This code should be easily modable into your own code.  This guide wraps up the bare matrices and adds a few convienience functions to allow basic manipulation of the Camera's movement.
+</p>
+rowEnd;
+
+subHeading(text:Camera Class,class:blueText mediumFont textShadow,id:cameraclass);
+rowStart;{class:lightGreenText}
+<p class="main">
+Create a new class with the following imports and members:
+</p>
+rowEnd;
+
+codeStart;
+ using Microsoft.Xna.Framework;
+ using Microsoft.Xna.Framework.Graphics;
+
+ class   Camera 
+{
+    Matrix      mProjection;
+    Matrix      mView;
+
+    Vector3     mPosition;
+    Vector3     mUp;
+    Vector3     mCenter;
+
+    Vector3     mOffset;    
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+This camera will use orthagraphic projection.  Define the constructor like below.
+</p>
+rowEnd;
+
+codeStart;
+public  Camera (int width, int height, Vector3 pos, float zOffset = 10.0f)
+{    
+    mUp = Vector3.Up;
+    mPosition = pos;
+    mOffset = new Vector3(0,0,zOffset);
+    mCenter = mPosition + mOffset;
+
+    float nearClip = 1.0f;
+    float farClip = -50.0f;
+
+    Matrix.CreateOrthographic(width, height, nearClip, farClip, out mProjection);
+    mView = Matrix.CreateLookAt(mPosition, mCenter, mUp);
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+The width and height are the dimensions of your viewport.  Obviously this can be whatever size you desire, but most of the time its best kept to the dimensions of your window/rendering area.<br>
+Even though the offset isn't used directly, its useful for preserving the position of the camera in relation to its focal point when panning/moving.<br><br>
+</p>
+rowEnd;
+
+addContainer;
+subHeading(text:Position & Passing to the Shader,class:blueText mediumFont textShadow,id:position);
+rowStart;{class:lightGreenText}
+<p class="main">
+Obviously, one of the perks of a camera is it makes moving the view easier, so define a SetPosition function:
+</p>
+rowEnd;
+
+codeStart;
+public void SetPosition(Vector3 pos)
+{
+    mPosition = pos;      
+    mCenter = mPosition + mOffset;   
+    mView = Matrix.CreateLookAt(mPosition, mCenter, mUp);
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+The last method we'll add is PassParamters.  We'll define an Effect as a parameter, as this'll work the shader from the <a class="blueText" href="monogameTuts1.html">shaders</a> guide.  
+</p>
+rowEnd;
+
+codeStart;
+public void PassParameters( Effect effect)
+{
+    effect.Parameters["View"].SetValue(mView);
+    effect.Parameters["Projection"].SetValue(mProjection);           
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+Here's the code if you want to just use the default Monogame basic effect:
+</p>
+rowEnd;
+
+codeStart;
+public void PassParameters( BasicEffect  effect)
+{
+    effect.View = mView;
+    effect.Projection = mProjection;           
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+Full source for the <a class="blueText" href="2dcameraSource.html">camera</a>.
+</p>
+rowEnd;
+
+addContainer;
+subHeading(text:Integrating the Camera,class:blueText mediumFont textShadow,id:integration);
+rowStart;{class:lightGreenText}
+<p class="main">
+Now all thats left to do is use our camera.  In the Game class, define a Camera member and remove the Projection and View matrices:
+</p>
+rowEnd;
+
+codeStart;
+public class  Game1  :  Game 
+    {
+        GraphicsDeviceManager   graphics;
+        Texture2D               boxman;
+        Vector3                 boxmanPos = new Vector3(0,0,0);
+
+         VertexBuffer           spriteVertexBuffer;
+         Effect                 shader;
+
+        Matrix                  World;
+
+         Camera                 camera;
+
+        int screenWidth = 800;
+        int screenHeight = 600;
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+Initialise method, note the removal of the View and Projection matrices:
+</p>
+rowEnd;
+
+codeStart;
+protected override void Initialize()
+{
+    camera = new Camera(screenWidth,screenHeight,Vector3.Zero);
+
+    float width = 0.5f;
+    float height = 0.5f;
+    float repetitions = 1f;
+
+    var spriteVertices = new VertexPositionNormalTexture[6];
+
+    spriteVertices[0] = new VertexPositionNormalTexture( new Vector3(-width,height,0f), Vector3.Forward, new Vector2(0,0));
+    spriteVertices[1] = new VertexPositionNormalTexture( new Vector3(-width,-height,0f),    Vector3.Forward, new Vector2(0,repetitions));
+    spriteVertices[2] = new VertexPositionNormalTexture( new Vector3(width,-height,0f), Vector3.Forward, new Vector2(repetitions,repetitions));
+    spriteVertices[3] = new VertexPositionNormalTexture( new Vector3(width,-height,0f), Vector3.Forward, new Vector2(repetitions,repetitions));
+    spriteVertices[4] = new VertexPositionNormalTexture( new Vector3(width,height,0f),  Vector3.Forward, new Vector2(repetitions,0));
+    spriteVertices[5] = new VertexPositionNormalTexture( new Vector3(-width,height,0f), Vector3.Forward, new Vector2(0,0));
+
+    spriteVertexBuffer = new VertexBuffer(graphics.GraphicsDevice,typeof(VertexPositionNormalTexture),6,BufferUsage.WriteOnly);
+    spriteVertexBuffer.Name = "Sprite Vertex Buffer";
+    spriteVertexBuffer.SetData<VertexPositionNormalTexture>(spriteVertices);
+
+            
+    GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+
+     base.Initialize();
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+Finally, the draw method.
+</p>
+rowEnd;
+
+codeStart;
+ protected override void Draw(GameTime gameTime)
+{   
+    GraphicsDevice.Clear(Color.CornflowerBlue);
+    World = Matrix.Identity;
+    World *= Matrix.CreateScale(32);
+    World *= Matrix.CreateTranslation(boxmanPos);
+    shader.Parameters["World"].SetValue(World);
+
+    camera.PassParameters(shader);
+
+    shader.Parameters["SpriteSheet"].SetValue(boxman);
+
+    GraphicsDevice.SetVertexBuffer(spriteVertexBuffer);
+
+    foreach(EffectPass pass in shader.CurrentTechnique.Passes)
+    {
+        pass.Apply();
+        GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,0,4);
+    }
+
+    base.Draw(gameTime);
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+If you run, you should now see boxman once more drawn on screen as before.  
+</p>
+rowEnd;
+
+addContainer;
+subHeading(text:Moving the camera,class:blueText mediumFont textShadow,id:moving);
+rowStart;{class:lightGreenText}
+<p class="main">
+If we now alter our controls, we can move the camera instead of the sprite.
+</p>
+rowEnd;
+
+codeStart;
+protected override void Update(GameTime gameTime)
+{
+    if(Keyboard.GetState().IsKeyDown(Keys.Up))
+        camera.SetPosition(camera.GetPos() + Vector3.Up);
+
+    if(Keyboard.GetState().IsKeyDown(Keys.Down))
+        camera.SetPosition(camera.GetPos() + Vector3.Down);
+
+    if(Keyboard.GetState().IsKeyDown(Keys.Left))
+        camera.SetPosition(camera.GetPos() + Vector3.Left);
+
+    if(Keyboard.GetState().IsKeyDown(Keys.Right))
+        camera.SetPosition(camera.GetPos() + Vector3.Right);
+            
+     base.Update(gameTime);
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+So, because we're now moving the camera instead of the sprite, he should move in the opposite direction to which you're pressing. Ie: camera moves up, he'll appear to move down.
+</p>
+rowEnd;
+
+addImageCentered(TutorialImages/2dcamMove.gif);
+
+navBarStart(text:Monogame Guides,home:monogameTuts.html);
+
+  navDropdown(text:Basics);
+    navLink(text:Example Projects,link:monogameTuts.html#examples);
+    navLink(text:Getting Started,link:monogameTuts.html#started);
+    navLink(text:Images & Sprites,link:monogameTuts.html#images);
+    navLink(text:Controls (Keyboard),link:monogameTuts.html#keyboard);
+    navLink(text:Audio,link:monogameTuts.html#audio);
+  navDropdownEnd();
+
+  navDropdown(text:Shaders);
+    navLink(text:Shaders,link:monogameTuts1.html);
+    navLink(text:Matrices,link:monogameTuts1.html#matrices);
+    navLink(text:Inputs, Outputs & Samplers,link:monogameTuts1.html#io);
+    navLink(text:Shader Functions,link:monogameTuts1.html#shaderfuncs);
+    navLink(text:Loading the Shader,link:monogameTuts1.html#loading);
+    navLink(text:Drawing with the Shader,link:monogameTuts1.html#shaderdraw);
+  navDropdownEnd();
+
+  navDropdown(text:Cameras);
+    navLink(text:2D Camera,link:basic2dCamera.html);
+    navLink(text:-Camera Class,link:basic2dCamera.html#cameraclass);
+    navLink(text:-Position & Passing to the Shader,link:basic2dCamera.html#position);
+    navLink(text:-Intergrating the Camera,link:basic2dCamera.html#integration);
+    navLink(text:-Moving the Camera,link:basic2dCamera.html#moving);
+    navLink(text:3D Camera,link:);
+  navDropdownEnd();
+
+  navDropdown(text:Advanced Input);
+    navLink(text:OnPress & OnRelease,link:advancedInput.html#keyboardon);
+    navLink(text:Using the Controls class,link:advancedInput.html#controls);
+  navDropdownEnd();
+  
+  navDropdown(text:Coming Soon);    
+    navLink(text:RenderTargets & Culling,link:#);
+    navLink(text:3D Camera,link:#);
+  navDropdownEnd();  
+
+  navLink(text:Magellanic Games,link:index.html);
+  navLink(text:About,link:About.html);
+
+navBarEnd();
+
+addContainer;
+padding;
+
+addFooter(email:magellanicDev@gmail.com,date:27/08/2018,copy:Liam Charalambous,class:lightGreenText);
+rowStart;
+<a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
+rowEnd;
+padding;
