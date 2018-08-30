@@ -255,5 +255,5 @@ rowEnd;
 
 addImageCentered(TutorialImages/2dcamMove.gif);
 
-importPartial(Partials/navbarGuidesTmp.shbp);
+importPartial(Partials/navbarGuides.shbp);
 importPartial(Partials/footer.shbp);

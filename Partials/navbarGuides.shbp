@@ -1,4 +1,5 @@
 navBarStart(text:Monogame Guides,home:monogameTuts.html);
+ 
   navDropdown(text:Basics);
     navLink(text:Example Projects,link:monogameTuts.html#examples);
     navLink(text:Getting Started,link:monogameTuts.html#started);
@@ -6,20 +7,68 @@ navBarStart(text:Monogame Guides,home:monogameTuts.html);
     navLink(text:Controls (Keyboard),link:monogameTuts.html#keyboard);
     navLink(text:Audio,link:monogameTuts.html#audio);
   navDropdownEnd();
-  navDropdown(text:Shaders);
-    navLink(text:Shaders,link:monogameTuts1.html);
-    navLink(text:Matrices,link:monogameTuts1.html#matrices);
-    navLink(text:Inputs, Outputs & Samplers,link:monogameTuts1.html#io);
-    navLink(text:Shader Functions,link:monogameTuts1.html#shaderfuncs);
-    navLink(text:Loading the Shader,link:monogameTuts1.html#loading);
-    navLink(text:Drawing with the Shader,link:monogameTuts1.html#shaderdraw);
+
+  navDropdown(text:Graphics);
+
+    navSubmenuDropdownStart(text:Simple 2D Shader);
+
+      navLink(text:Shaders,link:monogameTuts1.html);
+      navLink(text:Matrices,link:monogameTuts1.html#matrices);
+      navLink(text:Inputs, Outputs & Samplers,link:monogameTuts1.html#io);
+      navLink(text:Shader Functions,link:monogameTuts1.html#shaderfuncs);
+      navLink(text:Loading the Shader,link:monogameTuts1.html#loading);
+      navLink(text:Drawing with the Shader,link:monogameTuts1.html#shaderdraw);
+
+    navSubmenuDropdownEnd();
+
+    navSubmenuDropdownStart(text:BasicEffect Shader);
+
+      navLink(text:Coming Soon,link:);
+
+    navSubmenuDropdownEnd();
+
+    navSubmenuDropdownStart(text:RenderTargets & Culling);
+      navLink(text:Coming Soon,link:);
+    navSubmenuDropdownEnd();
+
   navDropdownEnd();
-  navDropdown(text:Coming Soon);
-    navLink(text:Advanced Input,link:#);
-    navLink(text:RenderTargets & Culling,link:#);
-    navLink(text:2D Camera,link:#);
-    navLink(text:3D Camera,link:#);
-  navDropdownEnd();  
-  navLink(text:Magellanic Games,link:index.html);
+
+  navDropdown(text:Cameras);
+
+    navSubmenuDropdownStart(text:2D Camera);
+
+      navLink(text:2D Camera,link:basic2dCamera.html);
+      navLink(text:Camera Class,link:basic2dCamera.html#cameraclass);
+      navLink(text:Position & Passing to the Shader,link:basic2dCamera.html#position);
+      navLink(text:Intergrating the Camera,link:basic2dCamera.html#integration);
+      navLink(text:Moving the Camera,link:basic2dCamera.html#moving);
+
+    navSubmenuDropdownEnd();
+
+    navSubmenuDropdownStart(text:3D Camera);
+      navLink(text:Coming Soon,link:);
+    navSubmenuDropdownEnd();
+
+  navDropdownEnd();
+
+  navDropdown(text:Input);
+    navSubmenuDropdownStart(text:Advanced Keyboard Input);
+      navLink(text:OnPress & OnRelease,link:advancedInput.html);
+      navLink(text:Using the Controls class,link:advancedInput.html#controls);
+    navSubmenuDropdownEnd();
+  navDropdownEnd(); 
+
+  navDropdown(text:Magellanic Games);
+    navLink(text:Home,link:index.html);
+    navSubmenuDropdownStart(text:Projects);
+      navLink(text:Mr. Blocked,link:index.html#blocked);
+      navLink(text:Zombie Apocalyp-tic-80,link:index.html#zombie);
+      navLink(text:SpaceTrade Ascii Edition,link:index.html#spaceTrade);
+      navLink(text:Raycasting 3D Engine,link:index.html#raycast);
+    navSubmenuDropdownEnd();
+  navDropdownEnd();
   navLink(text:About,link:about.html);
+
 navBarEnd();
+
+addScript(navsubmenu.js);

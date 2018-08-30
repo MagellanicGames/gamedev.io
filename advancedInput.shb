@@ -149,5 +149,6 @@ rowEnd;
 addContainer;
 
 
-importPartial(Partials/navbarGuidesTmp.shbp);
+importPartial(Partials/navbarGuides.shbp);
 importPartial(Partials/footer.shbp);
+importPartial(Partials/submenuscript.shbp);
