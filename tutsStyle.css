@@ -102,6 +102,14 @@ a:visited{
 	color: #7577dc;
 }
 
+a.menu{
+	text-decoration: none;
+}
+
+a.submenu{
+	text-decoration: none;
+}
+
 a.navLink{
 	text-decoration: none;
 }
