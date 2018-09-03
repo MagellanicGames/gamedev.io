@@ -252,7 +252,7 @@ In the Game class, some more members need to be added.  Ensure your code looks a
       graphics.PreferredBackBufferWidth = screenWidth;
       graphics.PreferredBackBufferHeight = screenHeight;
 
-     <span class=code-class>Content</span>.RootDirectory = <span class=code-string>"Content"</span>; 
+      Content.RootDirectory = <span class=code-string>"Content"</span>; 
     }
 				</code>
 			</pre>
@@ -321,8 +321,8 @@ Use the ContentManager to load the shader to our Effect member:
 				 <code class="csharp whiteText">
 <span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>LoadContent()
 {
-  boxman = <span class=code-class>Content</span>.Load<<span class=code-class>Texture2D</span>>(<span class=code-string>"boxman"</span>);
-  shader = <span class=code-class>Content</span>.Load<<span class=code-class>Effect</span>>(<span class=code-string>"shader"</span>);
+  boxman =  Content.Load<<span class=code-class>Texture2D</span>>(<span class=code-string>"boxman"</span>);
+  shader =  Content.Load<<span class=code-class>Effect</span>>(<span class=code-string>"shader"</span>);
 }
 				</code>
 			</pre>
@@ -448,6 +448,13 @@ The shader.Parameters are the variables/data passed to the graphics card to do o
 <li><a href="advancedInput.html#controls"  class="navLink" >Using the Controls class</a></li><!--End of container-->
 </ul></li><!--End of container-->
 </ul></li><!--End of container-->
+<li class="dropdown" ><a href="#"  class="menu"  data-toggle="dropdown" >Content Loading<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
+<li class="dropdown-submenu" ><a href=""  class="submenu" >Directory Loading<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
+<li><a href="contentdir.html"  class="navLink" >Multiple Files</a></li><!--End of container-->
+<li><a href="contentdir.html#filenames"  class="navLink" >Extracting filename strings</a></li><!--End of container-->
+<li><a href="contentdir.html#loading"  class="navLink" >Putting it Together</a></li><!--End of container-->
+</ul></li><!--End of container-->
+</ul></li><!--End of container-->
 <li class="dropdown" ><a href="#"  class="menu"  data-toggle="dropdown" >Magellanic Games<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
 <li><a href="index.html"  class="navLink" >Home</a></li><!--End of container-->
 <li class="dropdown-submenu" ><a href=""  class="submenu" >Projects<span class="caret" ></span></a><ul class="dropdown-menu" ><!--End of container-->
@@ -468,7 +475,7 @@ The shader.Parameters are the variables/data passed to the graphics card to do o
 
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><footer><h6 class="lightGreenText" >Email: magellanicDev@gmail.com <span class="glyphicon glyphicon-envelope" ></span><br>
-Last Updated: 29/08/2018<br>
+Last Updated: 03/09/2018<br>
 Copyright: Liam Charalambous</h6>
 </footer>
 </div>

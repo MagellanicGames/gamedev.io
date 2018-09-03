@@ -1,0 +1,118 @@
+Content Loading - Monogame For Impatient Developers,tutsStyle.css
+
+addContainer;
+padding;
+heading(text:Loading Multiple Content Files,class:blueText largeFont textShadow,id:);
+rowStart;{class:lightGreenText}
+<p class="main">
+The content pipeline is fantastic, but it can get tedious having to define individual files and loading them in code.  A better way is to load an entire directory.<br>
+Create a class called ContentUtils...it doesn't have to be but that is the name I'll be using.  It'll be using entirely static functions so feel free to declare the class as such.<br>
+The first method retrieves a list of all the content files (.xnb) in a specified path.
+</p>
+rowEnd;
+
+
+codeStart;
+private   static   FileInfo [] RetrieveXnbFileInfo( string  directoryPath)
+{
+	 DirectoryInfo  dir = new DirectoryInfo(directoryPath);
+
+	 if (!dir.Exists)            
+		 Directory .CreateDirectory(directoryPath);
+
+	 FileInfo [] files = dir.GetFiles("*.xnb");
+	return files;
+}
+codeEnd;
+
+addContainer;
+
+
+rowStart;{class:lightGreenText}
+<p class="main">
+All thats happening here is checking that the directory exists, creating it if it doesn't and then getting a list of the files.  Of course, you may want to change this behaviour e.g. silently continue and not create, throw an exception etc.<br>
+My uses found this sufficient. 
+</p>
+rowEnd;
+subHeading(text:Extracting filename strings,class:blueText mediumFont textShadow,id:filenames);
+
+codeStart;
+
+public   static   List < string > RetrieveFileNames( ContentManager  content,  string  subDir)
+{
+	 List < string > result = new  List < string >();
+
+	 FileInfo [] files = RetrieveXnbFileInfo(content.RootDirectory + "/" + subDir);
+
+	foreach(var file in files)
+	{
+		 string  name = file.Name.Split('.')[0];
+		result.Add(n);
+	}
+
+	return result;
+}
+
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+So here, the code is simply getting the filenames for a specified sub-directory of your Content's root directory.  Typically the root directory is defined in the Game class' constructor.  If you haven't done this <span class=blueText>(though it is generated with the Monogame template)</span>, make sure to use the following code:
+</p>
+rowEnd;
+
+codeStart;
+ Content .RootDirectory = "MyContentDirectoryName";  
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+It is a good idea to add code to check for use of "/" at the end of a path when defining these functions.  I'm leaving such code out for clarity.
+</p>
+rowEnd;
+padding;
+
+subHeading(text:Putting it together,class:blueText mediumFont textShadow,id:loading);
+rowStart;{class:lightGreenText}
+<p class="main">
+Finally, the main function that will load all our glorious pictures and sound files:
+</p>
+rowEnd;
+
+codeStart;
+ public   static   Dictionary < string ,T> LoadContentDir<T>( ContentManager  Content, string  subDir)
+{          
+	string contentDir =  Content .RootDirectory + "/";
+			
+	 FileInfo [] files = RetrieveXnbFileInfo(contentDir + subDir);
+
+	 Dictionary < string , T> result = new  Dictionary < string , T>();
+			
+	 foreach (var file in files)
+	{
+		 string  name = file.Name.Split('.')[0];
+				
+		result.Add(name,Content.Load<T>(subDir + na,e));
+			  
+	}
+
+	Console.WriteLine(result.Count + " content files loaded from " + subDir);
+	return result;
+}
+codeEnd;
+
+
+addContainer;
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+So as you can see, the function will return to you a Dictionary with your Content assets. They'll be keyed by their name as defined by the Pipeline Tool (i.e. filename minus the extension).<br>
+You can use any key you like, but this guide just gives you a means to load assets a more convieniently.  I use this code as part of a system for dynamically loading sounds and music.  <a class="blueText" href="contentutils.html">Full source.</a>
+</p>
+rowEnd;
+
+addContainer;
+importPartial(Partials/navbarGuides.shbp);
+importPartial(Partials/footer.shbp);
+importPartial(Partials/submenuscript.shbp);

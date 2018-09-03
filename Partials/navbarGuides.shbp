@@ -58,6 +58,14 @@ navBarStart(text:Monogame Guides,home:monogameTuts.html);
     navSubmenuDropdownEnd();
   navDropdownEnd(); 
 
+  navDropdown(text:Content Loading);
+    navSubmenuDropdownStart(text:Directory Loading);
+      navLink(text:Multiple Files,link:contentdir.html);
+      navLink(text:Extracting filename strings,link:contentdir.html#filenames);
+      navLink(text:Putting it Together,link:contentdir.html#loading);
+    navSubmenuDropdownEnd();
+  navDropdownEnd();
+
   navDropdown(text:Magellanic Games);
     navLink(text:Home,link:index.html);
     navSubmenuDropdownStart(text:Projects);

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" >
+	<head>
+		<title>Monogame For Impatient Developers</title>
+		<link rel="shortcut icon"type="image/x-icon"href="favicon.ico"/>
+		<meta charset="utf-8" >
+		<meta name="viewport"  content="width=device-width, initial-scale=1 maximum-scale=1 user-scalable=no" >
+		<link rel="stylesheet"  href="tutsStyle.css" >
+		<link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+</head>
+
+<body class="bg" >
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+
+<span class=code-basic>static</span><span class=code-basic> class </span> ContentUtils
+{ 
+
+ <span class=code-basic>public</span>  <span class=code-basic>static</span> <span class=code-class>Dictionary</span><<span class=code-basic>string</span>,T> LoadContentDir<T>(<span class=code-class>ContentManager</span> Content,<span class=code-basic>string</span> subDir)
+{          
+	string contentDir = <span class=code-class>Content</span>.RootDirectory + <span class=code-string>"/"</span>;
+
+	<span class=code-class>FileInfo</span>[] files = RetrieveXnbFileInfo(contentDir + subDir);
+
+	<span class=code-class>Dictionary</span><<span class=code-basic>string</span>, T> result =<span class=code-basic> new </span><span class=code-class>Dictionary</span><<span class=code-basic>string</span>, T>();
+
+	 <span class=code-basic>foreach</span> (<span class=code-basic>var </span>file<span class=code-basic> in </span>files)
+	{
+		<span class=code-basic>string</span> name = file.Name.Split('.')[0];
+
+		result.Add(name,Content.Load<T>(subDir + na,e));
+
+	}
+
+	Console.WriteLine(result.Count + <span class=code-string>" content files loaded from "</span> + subDir);
+	<span class=code-basic>return </span>result;
+}
+
+<span class=code-basic>private</span>  <span class=code-basic>static</span> <span class=code-class>FileInfo</span>[] RetrieveXnbFileInfo(<span class=code-basic>string</span> directoryPath)
+{
+	<span class=code-class>DirectoryInfo</span> dir =<span class=code-basic> new </span>DirectoryInfo(directoryPath);
+
+	<span class=code-basic>if </span>(!dir.Exists)            
+		<span class=code-class>Directory</span>.CreateDirectory(directoryPath);
+
+	<span class=code-class>FileInfo</span>[] files = dir.GetFiles(<span class=code-string>"*.xnb"</span>);
+	<span class=code-basic>return </span>files;
+}
+
+<span class=code-basic>public</span>  <span class=code-basic>static</span> <span class=code-class>List</span><<span class=code-basic>string</span>> RetrieveFileNames(<span class=code-class>ContentManager</span> content, <span class=code-basic>string</span> subDir)
+{
+	<span class=code-class>List</span><<span class=code-basic>string</span>> result =<span class=code-basic> new </span><span class=code-class>List</span><<span class=code-basic>string</span>>();
+
+	<span class=code-class>FileInfo</span>[] files = RetrieveXnbFileInfo(content.RootDirectory + <span class=code-string>"/"</span> + subDir);
+
+	<span class=code-basic>foreach</span>(<span class=code-basic>var </span>file<span class=code-basic> in </span>files)
+	{
+		<span class=code-basic>string</span> name = file.Name.Split('.')[0];
+		result.Add(n);
+	}
+
+	<span class=code-basic>return </span>result;
+}
+
+}
+
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p style="font-size:50%" >Generated with SpeedyHtml.</p></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+</div><!--End of container-->
+</body>
+</html>

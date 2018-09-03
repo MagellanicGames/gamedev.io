@@ -1,0 +1,56 @@
+Monogame For Impatient Developers,tutsStyle.css
+
+codeStart;
+
+ static  class  ContentUtils
+{ 
+
+ public   static   Dictionary < string ,T> LoadContentDir<T>( ContentManager  Content, string  subDir)
+{          
+	string contentDir =  Content .RootDirectory + "/";
+			
+	 FileInfo [] files = RetrieveXnbFileInfo(contentDir + subDir);
+
+	 Dictionary < string , T> result = new  Dictionary < string , T>();
+			
+	 foreach (var file in files)
+	{
+		 string  name = file.Name.Split('.')[0];
+				
+		result.Add(name,Content.Load<T>(subDir + na,e));
+			  
+	}
+
+	Console.WriteLine(result.Count + " content files loaded from " + subDir);
+	return result;
+}
+
+private   static   FileInfo [] RetrieveXnbFileInfo( string  directoryPath)
+{
+	 DirectoryInfo  dir = new DirectoryInfo(directoryPath);
+
+	 if (!dir.Exists)            
+		 Directory .CreateDirectory(directoryPath);
+
+	 FileInfo [] files = dir.GetFiles("*.xnb");
+	return files;
+}
+
+public   static   List < string > RetrieveFileNames( ContentManager  content,  string  subDir)
+{
+	 List < string > result = new  List < string >();
+
+	 FileInfo [] files = RetrieveXnbFileInfo(content.RootDirectory + "/" + subDir);
+
+	foreach(var file in files)
+	{
+		 string  name = file.Name.Split('.')[0];
+		result.Add(n);
+	}
+
+	return result;
+}
+
+}
+
+codeEnd;

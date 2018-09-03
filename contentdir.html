@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" >
 	<head>
-		<title>Advanced Input - Monogame For Impatient Developers</title>
+		<title>Content Loading - Monogame For Impatient Developers</title>
 		<link rel="shortcut icon"type="image/x-icon"href="favicon.ico"/>
 		<meta charset="utf-8" >
 		<meta name="viewport"  content="width=device-width, initial-scale=1 maximum-scale=1 user-scalable=no" >
@@ -18,24 +18,14 @@
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><h1 id=""  class="blueText largeFont textShadow" >Advanced Input</h1></center></div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="borderBottom lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-In the <a class="blueText" href="monogameTuts.html#keyboard">Basics</a> we covered really basic keyboard input.  This guide will show how we can improve on that to have some keyboard controls that are more robust. Also, some much needed mouse input.<br>
-You can use the Basic or Shader tutorial as a base for this.  We'll be adding a new class and calling it in the Update method of the Game class.
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="keyboardon"  class="blueText mediumFont textShadow" >Keyboard OnPressed & OnReleased</h3></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><h1 id=""  class="blueText largeFont textShadow" >Loading Multiple Content Files</h1></center></div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-First up, create a new class called Controls:
+The content pipeline is fantastic, but it can get tedious having to define individual files and loading them in code.  A better way is to load an entire directory.<br>
+Create a class called ContentUtils...it doesn't have to be but that is the name I'll be using.  It'll be using entirely static functions so feel free to declare the class as such.<br>
+The first method retrieves a list of all the content files (.xnb) in a specified path.
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
@@ -46,17 +36,15 @@ First up, create a new class called Controls:
 		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
 			<pre class="code"> 
 				 <code class="csharp whiteText">
-<span class=code-basic>public</span> <span class=code-basic>static</span><span class=code-basic> class </span><span class=code-class>Controls</span>
+<span class=code-basic>private</span>  <span class=code-basic>static</span> <span class=code-class>FileInfo</span>[] RetrieveXnbFileInfo(<span class=code-basic>string</span> directoryPath)
 {
-	<span class=code-basic>private</span> <span class=code-basic>static</span> <span class=code-class>List</span><<span class=code-basic>bool</span>> mKeys =<span class=code-basic> new </span><span class=code-class>List</span><<span class=code-basic>bool</span>>();
+	<span class=code-class>DirectoryInfo</span> dir =<span class=code-basic> new </span>DirectoryInfo(directoryPath);
 
-	<span class=code-basic>static</span> <span class=code-class>Controls</span>()
-	{
-		<span class=code-basic>for</span>(<span class=code-basic>int </span>i = 0; i < ( <span class=code-basic>int </span>)Keys.F12; i++)
-		{
-			mKeys.Add(<span class=code-basic>false</span>);
-		}
-	}
+	<span class=code-basic>if </span>(!dir.Exists)            
+		<span class=code-class>Directory</span>.CreateDirectory(directoryPath);
+
+	<span class=code-class>FileInfo</span>[] files = dir.GetFiles(<span class=code-string>"*.xnb"</span>);
+	<span class=code-basic>return </span>files;
 }
 				</code>
 			</pre>
@@ -66,7 +54,47 @@ First up, create a new class called Controls:
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Next define an OnKeyPressed method that takes a Key enum
+All thats happening here is checking that the directory exists, creating it if it doesn't and then getting a list of the files.  Of course, you may want to change this behaviour e.g. silently continue and not create, throw an exception etc.<br>
+My uses found this sufficient. 
+</p>
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="filenames"  class="blueText mediumFont textShadow" >Extracting filename strings</h3></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+</div><!--End of container-->
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+
+<span class=code-basic>public</span>  <span class=code-basic>static</span> <span class=code-class>List</span><<span class=code-basic>string</span>> RetrieveFileNames(<span class=code-class>ContentManager</span> content, <span class=code-basic>string</span> subDir)
+{
+	<span class=code-class>List</span><<span class=code-basic>string</span>> result =<span class=code-basic> new </span><span class=code-class>List</span><<span class=code-basic>string</span>>();
+
+	<span class=code-class>FileInfo</span>[] files = RetrieveXnbFileInfo(content.RootDirectory + <span class=code-string>"/"</span> + subDir);
+
+	<span class=code-basic>foreach</span>(<span class=code-basic>var </span>file<span class=code-basic> in </span>files)
+	{
+		<span class=code-basic>string</span> name = file.Name.Split('.')[0];
+		result.Add(n);
+	}
+
+	<span class=code-basic>return </span>result;
+}
+
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+So here, the code is simply getting the filenames for a specified sub-directory of your Content's root directory.  Typically the root directory is defined in the Game class' constructor.  If you haven't done this <span class=blueText>(though it is generated with the Monogame template)</span>, make sure to use the following code:
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
@@ -77,22 +105,7 @@ Next define an OnKeyPressed method that takes a Key enum
 		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
 			<pre class="code"> 
 				 <code class="csharp whiteText">
-<span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> OnKeyPressed(Keys key)
-{
-	<span class=code-basic>int </span>k = ( <span class=code-basic>int </span>)key;
-	<span class=code-class><span class=code-class>Keyboard</span>State</span> keyState = <span class=code-class>Keyboard</span>.GetState();
-	<span class=code-basic>if </span>(keyState.IsKeyDown(key) == <span class=code-basic>true</span> && mKeys[k] == <span class=code-basic>false</span>)
-	{
-		mKeys[k] = <span class=code-basic>true</span>;
-		<span class=code-basic>return </span><span class=code-basic>true</span>;
-	}
-	<span class=code-basic>if </span>(keyState.IsKeyDown(key) == <span class=code-basic>false</span> && mKeys[k] == <span class=code-basic>true</span>)
-	{
-		mKeys[k] = <span class=code-basic>false</span>;
-		<span class=code-basic>return </span><span class=code-basic>false</span>;
-	}
-	<span class=code-basic>return </span><span class=code-basic>false</span>;
-}
+<span class=code-class>Content</span>.RootDirectory = <span class=code-string>"MyContentDirectoryName"</span>;  
 				</code>
 			</pre>
 		</div>
@@ -100,10 +113,23 @@ Next define an OnKeyPressed method that takes a Key enum
 </div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+It is a good idea to add code to check for use of "/" at the end of a path when defining these functions.  I'm leaving such code out for clarity.
+</p>
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><div class="row padding" ></div></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="loading"  class="blueText mediumFont textShadow" >Putting it together</h3></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-What the OnPressed function does is store what key has been pressed as well as returning if the queried key was pressed.<br>
-The logging of the previous state is integral to making the OnReleased functionality work.<br><br>
-Next define the OnReleased function.
+Finally, the main function that will load all our glorious pictures and sound files:
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
@@ -114,21 +140,24 @@ Next define the OnReleased function.
 		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
 			<pre class="code"> 
 				 <code class="csharp whiteText">
-<span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> OnKeyReleased(Keys key)
-{
-	<span class=code-basic>int </span>k = (<span class=code-basic>int </span>)key;
-	<span class=code-class><span class=code-class>Keyboard</span>State</span> keyState = <span class=code-class>Keyboard</span>.GetState();
-	<span class=code-basic>if </span>(keyState.IsKeyDown(key) && mKeys[k] == <span class=code-basic>false</span>)
+ <span class=code-basic>public</span>  <span class=code-basic>static</span> <span class=code-class>Dictionary</span><<span class=code-basic>string</span>,T> LoadContentDir<T>(<span class=code-class>ContentManager</span> Content,<span class=code-basic>string</span> subDir)
+{          
+	string contentDir = <span class=code-class>Content</span>.RootDirectory + <span class=code-string>"/"</span>;
+
+	<span class=code-class>FileInfo</span>[] files = RetrieveXnbFileInfo(contentDir + subDir);
+
+	<span class=code-class>Dictionary</span><<span class=code-basic>string</span>, T> result =<span class=code-basic> new </span><span class=code-class>Dictionary</span><<span class=code-basic>string</span>, T>();
+
+	 <span class=code-basic>foreach</span> (<span class=code-basic>var </span>file<span class=code-basic> in </span>files)
 	{
-		mKeys[k] = <span class=code-basic>true</span>;
-		<span class=code-basic>return </span><span class=code-basic>false</span>;
+		<span class=code-basic>string</span> name = file.Name.Split('.')[0];
+
+		result.Add(name,Content.Load<T>(subDir + na,e));
+
 	}
-	<span class=code-basic>if </span>(keyState.IsKeyDown(key) == <span class=code-basic>false</span> && mKeys[k] == <span class=code-basic>true</span>)
-	{
-		mKeys[k] = <span class=code-basic>false</span>;
-		<span class=code-basic>return </span><span class=code-basic>true</span>;
-	}
-	<span class=code-basic>return </span><span class=code-basic>false</span>;
+
+	Console.WriteLine(result.Count + <span class=code-string>" content files loaded from "</span> + subDir);
+	<span class=code-basic>return </span>result;
 }
 				</code>
 			</pre>
@@ -137,85 +166,9 @@ Next define the OnReleased function.
 </div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Essentially the OnReleased is the opposite to the OnPressed.  We check any recorded key presses and compare against what is currently being pressed (or not pressed).  This allows us to now trigger code based on either the press, or release of a key.<br><br>
-One important thing to note is that anywhere that you call OnPressed, you must also subsequentially call OnReleased else you'll end up with unexpected behaviour.  The reason being that if Onreleased is not called, it never stores that a key was released and so other code could activate based on the OnPressed.
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Finally, we can't forget the simple IsPressed function:
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-</div><!--End of container-->
-<div class="container-fluid">
-	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
-		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
-			<pre class="code"> 
-				 <code class="csharp whiteText">
-<span class=code-basic>public</span> <span class=code-basic>static</span> <span class=code-basic>bool</span> IsKeyPressed(Keys key)
-{
-	<span class=code-class><span class=code-class>Keyboard</span>State</span> keyState = <span class=code-class>Keyboard</span>.GetState();
-	<span class=code-basic>return </span>keyState.IsKeyDown(key);
-}
-				</code>
-			</pre>
-		</div>
-	</div>
-</div><!--End of container-->
-<div class="container-fluid" >
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText borderTop col-lg-8 col-md-8 col-sm-12 col-xs-12" ></div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="controls"  class="blueText mediumFont textShadow" >Using the Controls class</h3></div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-With that all done, move back over to the Game class' Update method and we'll make our newly defined methods move our image around.  Add the following code:
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-</div><!--End of container-->
-<div class="container-fluid">
-	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
-		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
-			<pre class="code"> 
-				 <code class="csharp whiteText">
-<span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Update(<span class=code-class>GameTime</span> gameTime)
-{
-	<span class=code-basic>float </span>dt = ( <span class=code-basic>float </span>)gameTime.ElapsedGameTime.TotalSeconds;
-	<span class=code-basic>float </span>speed = 200.0f;
-
-	<span class=code-basic>if </span>(<span class=code-class>Controls</span>.OnKeyPressed(Keys.Up))
-		boxmanPos.Y += speed * dt;
-
-	<span class=code-basic>if </span>(<span class=code-class>Controls</span>.OnKeyReleased(Keys.Down))
-		boxmanPos.Y -= speed * dt;
-
-	<span class=code-basic>if </span>(<span class=code-class>Controls</span>.IsKeyPressed(Keys.Right))
-		boxmanPos.X += speed * dt;
-
-	<span class=code-basic>base</span>.Update(gameTime);
-}
-				</code>
-			</pre>
-		</div>
-	</div>
-</div><!--End of container-->
-<div class="container-fluid" >
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class=main>
-So if you use the following code what should happen is when you press up, the sprite should move up once (ie. you have to keep tapping).<br>
-When pressing down, the sprite should only move once the key has been pressed and released.<br>
-If you hold down right, the sprite should keep moving (like in the basics tutorial). <a class="blueText" href="ControlsSource.html">Full source.</a>
+			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+So as you can see, the function will return to you a Dictionary with your Content assets. They'll be keyed by their name as defined by the Pipeline Tool (i.e. filename minus the extension).<br>
+You can use any key you like, but this guide just gives you a means to load assets a more convieniently.  I use this code as part of a system for dynamically loading sounds and music.  <a class="blueText" href="contentutils.html">Full source.</a>
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
