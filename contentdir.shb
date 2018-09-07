@@ -77,12 +77,12 @@ padding;
 subHeading(text:Putting it together,class:blueText mediumFont textShadow,id:loading);
 rowStart;{class:lightGreenText}
 <p class="main">
-Finally, the main function that will load all our glorious pictures and sound files:
+Finally, the main function that will load all our glorious pictures and sound files. Substitute T for you asset type. (Texture for example):
 </p>
 rowEnd;
 
 codeStart;
- public   static   Dictionary < string ,T> LoadContentDir<T>( ContentManager  Content, string  subDir)
+ public   static   Dictionary < string ,T> LoadContentDir< T >( ContentManager  Content, string  subDir)
 {          
 	string contentDir =  Content .RootDirectory + "/";
 			

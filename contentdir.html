@@ -129,7 +129,7 @@ It is a good idea to add code to check for use of "/" at the end of a path when 
 
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Finally, the main function that will load all our glorious pictures and sound files:
+Finally, the main function that will load all our glorious pictures and sound files. Substitute T for you asset type. (Texture for example):
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
@@ -140,7 +140,7 @@ Finally, the main function that will load all our glorious pictures and sound fi
 		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
 			<pre class="code"> 
 				 <code class="csharp whiteText">
- <span class=code-basic>public</span>  <span class=code-basic>static</span> <span class=code-class>Dictionary</span><<span class=code-basic>string</span>,T> LoadContentDir<T>(<span class=code-class>ContentManager</span> Content,<span class=code-basic>string</span> subDir)
+ <span class=code-basic>public</span>  <span class=code-basic>static</span> <span class=code-class>Dictionary</span><<span class=code-basic>string</span>,T> LoadContentDir< T >(<span class=code-class>ContentManager</span> Content,<span class=code-basic>string</span> subDir)
 {          
 	string contentDir = <span class=code-class>Content</span>.RootDirectory + <span class=code-string>"/"</span>;
 

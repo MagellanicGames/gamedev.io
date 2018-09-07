@@ -5,7 +5,7 @@ codeStart;
  static  class  ContentUtils
 { 
 
- public   static   Dictionary < string ,T> LoadContentDir<T>( ContentManager  Content, string  subDir)
+ public   static   Dictionary < string ,T> LoadContentDir< T >( ContentManager  Content, string  subDir)
 {          
 	string contentDir =  Content .RootDirectory + "/";
 			
