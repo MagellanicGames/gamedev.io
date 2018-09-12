@@ -21,6 +21,11 @@ navBarStart(text:Monogame Guides,home:monogameTuts.html);
 
     navSubmenuDropdownEnd();
 
+    navSubmenuDropdownStart(text:Text Rendering);
+      navLink(text:Starting,link:textdrawing.html#top);
+      navLink(text:Using the class,link:textdrawing.html#using);
+    navSubmenuDropdownEnd();
+
     navSubmenuDropdownStart(text:BasicEffect Shader);
 
       navLink(text:Coming Soon,link:);

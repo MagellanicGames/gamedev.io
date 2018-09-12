@@ -1,0 +1,150 @@
+Drawing Text with Spritefonts - Monogame For Impatient Developers,tutsStyle.css
+
+addContainer;
+padding;
+heading(text:Drawing Text,class:blueText largeFont textShadow,id:top);
+rowStart;{class:lightGreenText}
+<p class="main">
+This guide will go through the process of drawing text to the screen with a font of your choice.  So first thing you'll need is a font file (.ttf).  Put it in your Content folder and open up the Pipeline Tool.<br><br>
+Right-click -> Add -> New Item.
+</p>
+rowEnd;
+
+addImageCentered(TutorialImages/Text/01.png);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+<br>
+Select "SpriteFont Description" and give it a meaningful name.  This is the name that will be using the C# code to reference it.
+</p>
+rowEnd;
+
+addImageCentered(TutorialImages/Text/02.png);
+
+rowStart;{class:lightGreenText}
+<p class="main">
+<br>
+Now save and open up the created .spritefont file in a text editor.  You should see the following:
+</p>
+rowEnd;
+
+
+addImageCentered(TutorialImages/Text/03.png);
+
+
+rowStart;{class:lightGreenText}
+<p class="main">
+<br>
+Replace the "FontName" with your font's name.  You can change the size if you desire but you can always twiddle this later.  The text can still be scaled from within Monogame.  With experimentation you can find out which is the best size to use.
+<br><br>
+Next up, either create a new project or utilise an existing one.  Also, create a class called "Text".  Whether you want this to be a standard class or static is up to you.  I'm not advocating any kind of style, as these code samples should be easily composed into any project.
+</p>
+rowEnd;
+
+codeStart;
+public class  Text 
+{
+	 SpriteFont  mFont;
+	 SpriteBatch  mSpriteBatch;
+
+	public Text( ContentManager  content, SpriteBatch spriteBatch)
+	{
+		mFont = content.Load< SpriteFont > ("MyFont");
+		mSpriteBatch = spriteBatch;
+	}
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+mFont will hold our font loaded from the pipeline tool and then the spritebatch can either be newly created or one passed in from the main Game.cs class. 
+<br><br>
+Next up, our DrawString method.  
+</p>
+rowEnd;
+
+
+codeStart;
+
+public void DrawString( string  text,Vector2 pos, Color color, float scale, bool  center)
+{
+	mSpriteBatch.Begin();
+	 if (center)
+	{
+		Vector2 stringSize = mFont.MeasureString(text) * 0.5f;
+		mSpriteBatch.DrawString(mFont, text, pos - (stringSize * scale), color, 0.0f, Vector2.Zero, scale,SpriteEffects.None,0.0f);
+	}
+	 else 
+	{
+		mSpriteBatch.DrawString(mFont, text, pos, color, 0.0f, Vector2.Zero, scale,SpriteEffects.None,0.0f);
+	}
+	mSpriteBatch.End();
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText borderBottom}
+<p class="main">
+This is a basic version.  Optimisations can be made after this is working.<br>
+Obviously centering can be left out, but its a nice option to have depending on what you're wanting to draw text for.<br><br>
+One thing to note is the spritebatch.begin()/end() calls. These should really be called as little as possible, but for now, it'll do.<br>
+A simple change to this code would be to not add the SpriteBatch member and make sure you call DrawString between Begin() and End().  Having the SpriteBatch as part of the class is perfect if you just need a small amount of text drawn for debug or a quick menu.
+rowEnd;
+
+addContainer;
+subHeading(text:Using the Text class,class:blueText mediumFont textShadow,id:using);
+rowStart;{class:lightGreenText}
+<p class="main">
+With the Text class now implemented, lets give it a whirl.  Declare a Text member in your Game class (or wherever you want to use it).
+</p>
+rowEnd;
+
+codeStart;
+ Text  mText;
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+Initialise it:
+</p>
+rowEnd;
+
+codeStart;
+protected override void LoadContent()
+{
+	mText = new  Text  (Content, new   SpriteBatch (GraphicsDevice));
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+Finally, use it.
+</p>
+rowEnd;
+
+
+codeStart;
+
+protected override void Draw(GameTime gameTime)
+{
+	GraphicsDevice.Clear(Color.CornflowerBlue);
+	mText.DrawString("Hello",new Vector2(200,200),Color.Black,2,false);
+}
+codeEnd;
+
+addContainer;
+rowStart;{class:lightGreenText}
+<p class="main">
+You should see the same as below.  I altered the font size in the .spritefont file to 24.  I find the best clarity is having a slightly higher font size and then scaling it as desired.
+</p>
+rowEnd;
+
+addImageCentered(TutorialImages/Text/04.png);
+
+addContainer;
+importPartial(Partials/navbarGuides.shbp);
+importPartial(Partials/footer.shbp);
+importPartial(Partials/submenuscript.shbp);

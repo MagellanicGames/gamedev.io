@@ -7,4 +7,5 @@ start SpeedyHtmlBuilder.exe basic2dCamera.shb
 start SpeedyHtmlBuilder.exe 2dcameraSource.shb
 start SpeedyHtmlBuilder.exe contentdir.shb
 start SpeedyHtmlBuilder.exe contentutils.shb
+start SpeedyHtmlBuilder.exe textdrawing.shb
 start SpeedyHtmlBuilder.exe about.shb

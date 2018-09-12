@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" >
 	<head>
-		<title>Basic 2D Camera - Monogame For Impatient Developers</title>
+		<title>Drawing Text with Spritefonts - Monogame For Impatient Developers</title>
 		<link rel="shortcut icon"type="image/x-icon"href="favicon.ico"/>
 		<meta charset="utf-8" >
 		<meta name="viewport"  content="width=device-width, initial-scale=1 maximum-scale=1 user-scalable=no" >
@@ -18,23 +18,51 @@
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><h1 id=""  class="blueText largeFont textShadow" >Basic 2D Camera</h1></center></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><h1 id="top"  class="blueText largeFont textShadow" >Drawing Text</h1></center></div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="borderBottom lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-This chapter is a continuation of the <a class="blueText" href="monogameTuts1.html">shaders</a> guide.  Its advised you check that out first, but its not a necessity. This code should be easily modable into your own code.  This guide wraps up the bare matrices and adds a few convienience functions to allow basic manipulation of the Camera's movement.
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+This guide will go through the process of drawing text to the screen with a font of your choice.  So first thing you'll need is a font file (.ttf).  Put it in your Content folder and open up the Pipeline Tool.<br><br>
+Right-click -> Add -> New Item.
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="cameraclass"  class="blueText mediumFont textShadow" >Camera Class</h3></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><img src="TutorialImages/Text/01.png" ></center></div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Create a new class with the following imports and members:
+<br>
+Select "SpriteFont Description" and give it a meaningful name.  This is the name that will be using the C# code to reference it.
+</p>
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><img src="TutorialImages/Text/02.png" ></center></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+<br>
+Now save and open up the created .spritefont file in a text editor.  You should see the following:
+</p>
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><img src="TutorialImages/Text/03.png" ></center></div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+<br>
+Replace the "FontName" with your font's name.  You can change the size if you desire but you can always twiddle this later.  The text can still be scaled from within Monogame.  With experimentation you can find out which is the best size to use.
+<br><br>
+Next up, either create a new project or utilise an existing one.  Also, create a class called "Text".  Whether you want this to be a standard class or static is up to you.  I'm not advocating any kind of style, as these code samples should be easily composed into any project.
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
@@ -45,19 +73,16 @@ Create a new class with the following imports and members:
 		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
 			<pre class="code"> 
 				 <code class="csharp whiteText">
-<span class=code-basic>using </span>Microsoft.Xna.Framework;
-<span class=code-basic>using </span>Microsoft.Xna.Framework.Graphics;
-
-<span class=code-basic> class </span> <span class=code-class>Camera</span>
+<span class=code-basic>public</span><span class=code-basic> class </span><span class=code-class>Text</span>
 {
-    <span class=code-class>Matrix</span>      mProjection;
-    <span class=code-class>Matrix</span>      mView;
+	<span class=code-class>SpriteFont</span> mFont;
+	<span class=code-class>SpriteBatch </span> mSpriteBatch;
 
-    <span class=code-class>Vector3</span>     mPosition;
-    <span class=code-class>Vector3</span>     mUp;
-    <span class=code-class>Vector3</span>     mCenter;
-
-    <span class=code-class>Vector3</span>     mOffset;    
+	<span class=code-basic>public</span> Text(<span class=code-class>ContentManager</span> content,<span class=code-class>SpriteBatch </span>spriteBatch)
+	{
+		mFont = content.Load<<span class=code-class>SpriteFont</span>> (<span class=code-string>"MyFont"</span>);
+		mSpriteBatch = spriteBatch;
+	}
 }
 				</code>
 			</pre>
@@ -67,7 +92,9 @@ Create a new class with the following imports and members:
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-This camera will use orthagraphic projection.  Define the constructor like below.
+mFont will hold our font loaded from the pipeline tool and then the spritebatch can either be newly created or one passed in from the main Game.cs class. 
+<br><br>
+Next up, our DrawString method.  
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
@@ -78,18 +105,20 @@ This camera will use orthagraphic projection.  Define the constructor like below
 		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
 			<pre class="code"> 
 				 <code class="csharp whiteText">
-<span class=code-basic>public</span> <span class=code-class>Camera</span>(<span class=code-basic>int </span>width, <span class=code-basic>int </span>height, <span class=code-class>Vector3</span> pos, <span class=code-basic>float </span>zOffset = 10.0f)
-{    
-    mUp = <span class=code-class>Vector3</span>.Up;
-    mPosition = pos;
-    mOffset =<span class=code-basic> new </span><span class=code-class>Vector3</span>(0,0,zOffset);
-    mCenter = mPosition + mOffset;
 
-    <span class=code-basic>float </span>nearClip = 1.0f;
-    <span class=code-basic>float </span>farClip = -50.0f;
-
-    <span class=code-class>Matrix</span>.CreateOrthographic(width, height, nearClip, farClip,<span class=code-basic> out </span>mProjection);
-    mView = <span class=code-class>Matrix</span>.CreateLookAt(mPosition, mCenter, mUp);
+<span class=code-basic>public</span> <span class=code-basic>void </span>DrawString(<span class=code-basic>string</span> text,<span class=code-class>Vector2</span> pos, <span class=code-class>Color</span> color, <span class=code-basic>float </span>scale,<span class=code-basic>bool</span> center)
+{
+	mSpriteBatch.Begin();
+	<span class=code-basic>if </span>(center)
+	{
+		<span class=code-class>Vector2</span> stringSize = mFont.MeasureString(text) * 0.5f;
+		mSpriteBatch.DrawString(mFont, text, pos - (stringSize * scale), color, 0.0f, <span class=code-class>Vector2</span>.Zero, scale,SpriteEffects.None,0.0f);
+	}
+	<span class=code-basic>else</span>
+	{
+		mSpriteBatch.DrawString(mFont, text, pos, color, 0.0f, <span class=code-class>Vector2</span>.Zero, scale,SpriteEffects.None,0.0f);
+	}
+	mSpriteBatch.End();
 }
 				</code>
 			</pre>
@@ -99,21 +128,22 @@ This camera will use orthagraphic projection.  Define the constructor like below
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-The width and height are the dimensions of your viewport.  Obviously this can be whatever size you desire, but most of the time its best kept to the dimensions of your window/rendering area.<br>
-Even though the offset isn't used directly, its useful for preserving the position of the camera in relation to its focal point when panning/moving.<br><br>
-</p>
+This is a basic version.  Optimisations can be made after this is working.<br>
+Obviously centering can be left out, but its a nice option to have depending on what you're wanting to draw text for.<br><br>
+One thing to note is the spritebatch.begin()/end() calls. These should really be called as little as possible, but for now, it'll do.<br>
+A simple change to this code would be to not add the SpriteBatch member and make sure you call DrawString between Begin() and End().  Having the SpriteBatch as part of the class is perfect if you just need a small amount of text drawn for debug or a quick menu.
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="position"  class="blueText mediumFont textShadow" >Position & Passing to the Shader</h3></div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="using"  class="blueText mediumFont textShadow" >Using the Text class</h3></div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Obviously, one of the perks of a camera is it makes moving the view easier, so define a SetPosition function:
+With the Text class now implemented, lets give it a whirl.  Declare a Text member in your Game class (or wherever you want to use it).
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
@@ -124,11 +154,29 @@ Obviously, one of the perks of a camera is it makes moving the view easier, so d
 		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
 			<pre class="code"> 
 				 <code class="csharp whiteText">
-<span class=code-basic>public</span> <span class=code-basic>void </span>SetPosition(<span class=code-class>Vector3</span> pos)
+<span class=code-class>Text</span> mText;
+				</code>
+			</pre>
+		</div>
+	</div>
+</div><!--End of container-->
+<div class="container-fluid" >
+	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
+			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
+Initialise it:
+</p>
+</div>
+		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
+
+</div><!--End of container-->
+<div class="container-fluid">
+	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
+		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
+			<pre class="code"> 
+				 <code class="csharp whiteText">
+<span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>LoadContent()
 {
-    mPosition = pos;      
-    mCenter = mPosition + mOffset;   
-    mView = <span class=code-class>Matrix</span>.CreateLookAt(mPosition, mCenter, mUp);
+	mText =<span class=code-basic> new </span><span class=code-class>Text</span> (Content,<span class=code-basic> new </span> <span class=code-class>SpriteBatch </span>(GraphicsDevice));
 }
 				</code>
 			</pre>
@@ -138,7 +186,7 @@ Obviously, one of the perks of a camera is it makes moving the view easier, so d
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-The last method we'll add is PassParamters.  We'll define an Effect as a parameter, as this'll work with the shader from the <a class="blueText" href="monogameTuts1.html">shaders</a> guide.  
+Finally, use it.
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
@@ -149,10 +197,11 @@ The last method we'll add is PassParamters.  We'll define an Effect as a paramet
 		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
 			<pre class="code"> 
 				 <code class="csharp whiteText">
-<span class=code-basic>public</span> <span class=code-basic>void </span>PassParameters(<span class=code-class>Effect</span> effect)
+
+<span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Draw(GameTime gameTime)
 {
-    effect.Parameters[<span class=code-string>"View"</span>].SetValue(mView);
-    effect.Parameters[<span class=code-string>"Projection"</span>].SetValue(mProjection);           
+	GraphicsDevice.Clear(<span class=code-class>Color</span>.CornflowerBlue);
+	mText.DrawString(<span class=code-string>"Hello"</span>,new <span class=code-class>Vector2</span>(200,200),<span class=code-class>Color</span>.Black,2,<span class=code-basic>false</span>);
 }
 				</code>
 			</pre>
@@ -162,220 +211,17 @@ The last method we'll add is PassParamters.  We'll define an Effect as a paramet
 <div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
 			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Here's the code if you want to just use the default Monogame basic effect:
+You should see the same as below.  I altered the font size in the .spritefont file to 24.  I find the best clarity is having a slightly higher font size and then scaling it as desired.
 </p>
 </div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
-</div><!--End of container-->
-<div class="container-fluid">
-	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
-		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
-			<pre class="code"> 
-				 <code class="csharp whiteText">
-<span class=code-basic>public</span> <span class=code-basic>void </span>PassParameters(<span class=code-class>BasicEffect</span> effect)
-{
-    effect.View = mView;
-    effect.Projection = mProjection;           
-}
-				</code>
-			</pre>
-		</div>
-	</div>
-</div><!--End of container-->
-<div class="container-fluid" >
 	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Full source for the <a class="blueText" href="2dcameraSource.html">camera</a>.
-</p>
-</div>
+			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><img src="TutorialImages/Text/04.png" ></center></div>
 		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
 
 </div><!--End of container-->
 <div class="container-fluid" >
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="integration"  class="blueText mediumFont textShadow" >Integrating the Camera</h3></div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Now all thats left to do is use our camera.  In the Game class, define a Camera member and remove the Projection and View matrices:
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-</div><!--End of container-->
-<div class="container-fluid">
-	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
-		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
-			<pre class="code"> 
-				 <code class="csharp whiteText">
-<span class=code-basic>public</span><span class=code-basic> class </span><span class=code-class>Game1</span>  : <span class=code-class>Game</span>
-    {
-        <span class=code-class>GraphicsDeviceManager</span>   graphics;
-        <span class=code-class>Texture2D</span>               boxman;
-        <span class=code-class>Vector3</span>                 boxmanPos =<span class=code-basic> new </span><span class=code-class>Vector3</span>(0,0,0);
-
-        <span class=code-class>VertexBuffer</span>           spriteVertexBuffer;
-        <span class=code-class>Effect</span>                 shader;
-
-        <span class=code-class>Matrix</span>                  World;
-
-        <span class=code-class>Camera</span>                camera;
-
-        <span class=code-basic>int </span>screenWidth = 800;
-        <span class=code-basic>int </span>screenHeight = 600;
-				</code>
-			</pre>
-		</div>
-	</div>
-</div><!--End of container-->
-<div class="container-fluid" >
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Initialise method, note the removal of the View and Projection matrices:
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-</div><!--End of container-->
-<div class="container-fluid">
-	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
-		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
-			<pre class="code"> 
-				 <code class="csharp whiteText">
-<span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Initialize()
-{
-    camera =<span class=code-basic> new </span>Camera(screenWidth,screenHeight,<span class=code-class>Vector3</span>.Zero);
-
-    <span class=code-basic>float </span>width = 0.5f;
-    <span class=code-basic>float </span>height = 0.5f;
-    <span class=code-basic>float </span>repetitions = 1f;
-
-    <span class=code-basic>var </span>spriteVertices =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>[6];
-
-    spriteVertices[0] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(-width,height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,0));
-    spriteVertices[1] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(-width,-height,0f),    <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,repetitions));
-    spriteVertices[2] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(width,-height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(repetitions,repetitions));
-    spriteVertices[3] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(width,-height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(repetitions,repetitions));
-    spriteVertices[4] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(width,height,0f),  <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(repetitions,0));
-    spriteVertices[5] =<span class=code-basic> new </span><span class=code-class>VertexPositionNormalTexture</span>(<span class=code-basic> new </span><span class=code-class>Vector3</span>(-width,height,0f), <span class=code-class>Vector3</span>.Forward,<span class=code-basic> new </span><span class=code-class>Vector2</span>(0,0));
-
-    spriteVertexBuffer =<span class=code-basic> new </span>VertexBuffer(graphics.GraphicsDevice,<span class=code-basic>typeof</span>(<span class=code-class>VertexPositionNormalTexture</span>),6,<span class=code-basic>BufferUsage</span>.WriteOnly);
-    spriteVertexBuffer.Name = <span class=code-string>"Sprite Vertex Buffer"</span>;
-    spriteVertexBuffer.SetData<<span class=code-class>VertexPositionNormalTexture</span>>(spriteVertices);
-
-
-    GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
-
-    <span class=code-basic>base</span>.Initialize();
-}
-				</code>
-			</pre>
-		</div>
-	</div>
-</div><!--End of container-->
-<div class="container-fluid" >
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-Finally, the draw method.
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-</div><!--End of container-->
-<div class="container-fluid">
-	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
-		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
-			<pre class="code"> 
-				 <code class="csharp whiteText">
- <span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Draw(GameTime gameTime)
-{   
-    GraphicsDevice.Clear(<span class=code-class>Color</span>.CornflowerBlue);
-    World = <span class=code-class>Matrix</span>.Identity;
-    World *= <span class=code-class>Matrix</span>.CreateScale(32);
-    World *= <span class=code-class>Matrix</span>.CreateTranslation(boxmanPos);
-    shader.Parameters[<span class=code-string>"World"</span>].SetValue(World);
-
-    camera.PassParameters(shader);
-
-    shader.Parameters[<span class=code-string>"SpriteSheet"</span>].SetValue(boxman);
-
-    GraphicsDevice.SetVertexBuffer(spriteVertexBuffer);
-
-    <span class=code-basic>foreach</span>(<span class=code-class>EffectPass</span> pass<span class=code-basic> in </span>shader.CurrentTechnique.Passes)
-    {
-        pass.Apply();
-        GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,0,4);
-    }
-
-   <span class=code-basic>base</span>.Draw(gameTime);
-}
-				</code>
-			</pre>
-		</div>
-	</div>
-</div><!--End of container-->
-<div class="container-fluid" >
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText borderBottom col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-If you run, you should now see boxman once more drawn on screen as before.  
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-</div><!--End of container-->
-<div class="container-fluid" >
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><h3 id="moving"  class="blueText mediumFont textShadow" >Moving the camera</h3></div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-If we now alter our controls, we can move the camera instead of the sprite.
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-</div><!--End of container-->
-<div class="container-fluid">
-	<div class="row" ><div class="col-lg-2 col-md-2" ></div>
-		<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" >
-			<pre class="code"> 
-				 <code class="csharp whiteText">
-<span class=code-basic>protected</span> <span class=code-basic>override</span> <span class=code-basic>void </span>Update(GameTime gameTime)
-{
-    if(<span class=code-class>Keyboard</span>.GetState().IsKeyDown(Keys.Up))
-        camera.SetPosition(camera.GetPos() + <span class=code-class>Vector3</span>.Up);
-
-    if(<span class=code-class>Keyboard</span>.GetState().IsKeyDown(Keys.Down))
-        camera.SetPosition(camera.GetPos() + <span class=code-class>Vector3</span>.Down);
-
-    if(<span class=code-class>Keyboard</span>.GetState().IsKeyDown(Keys.Left))
-        camera.SetPosition(camera.GetPos() + <span class=code-class>Vector3</span>.Left);
-
-    if(<span class=code-class>Keyboard</span>.GetState().IsKeyDown(Keys.Right))
-        camera.SetPosition(camera.GetPos() + <span class=code-class>Vector3</span>.Right);
-
-    <span class=code-basic>base</span>.Update(gameTime);
-}
-				</code>
-			</pre>
-		</div>
-	</div>
-</div><!--End of container-->
-<div class="container-fluid" >
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class="lightGreenText col-lg-8 col-md-8 col-sm-12 col-xs-12" ><p class="main">
-So, because we're now moving the camera instead of the sprite, he should move in the opposite direction to which you're pressing. Ie: camera moves up, he'll appear to move down.
-</p>
-</div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
-	<div class="row" >		<div class="col-lg-2 col-md-2" ></div>
-			<div class=" col-lg-8 col-md-8 col-sm-12 col-xs-12" ><center><img src="TutorialImages/2dcamMove.gif" ></center></div>
-		<div class="col-lg-2 col-md-2" ></div>	</div><!--End of Row-->
-
 </div><!--End of container-->
 <nav class="navbar navbar-inverse navbar-fixed-top" >
 	<div class="container-fluid blackBack" >
