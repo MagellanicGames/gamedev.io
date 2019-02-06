@@ -4,7 +4,7 @@ padding;
 heading(text:About,class:blueText largeFont textShadow,id:);
 rowStart;{class:borderBottom lightGreenText}
 <p class="main">
-Hello and welcome to Magellanic Games.  I, Liam Charalambous (a.k.a Magellanic), am a software developer from southern England.  
+Hello and welcome to Magellanic Games, my name is Liam Charalambous (a.k.a Magellanic).
 I love making games and tools to make things easier.<br>
 My projects can viewed both here and on <a class="blueText" href="https://github.com/MagellanicGames">Github</a>.<br>  I also occasionally post content on Twitter, so feel free to follow me there.
 </p>
