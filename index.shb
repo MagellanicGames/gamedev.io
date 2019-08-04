@@ -1,11 +1,25 @@
 Magellanic,style.css
 
 addContainer;
+padding;
+addImageCentered(magellanicgameslogo.png);
 rowStart;{class:borderBottom}
 rowEnd;
-rowStart;{class:}
-<center><h1 id="blink" class="blueText largeFont textShadow">_</h1></center>
+
+addContainer;
+subHeading(text:Alien Night(Working title),class:blueText mediumFont textShadow,id:aliennight);
+addImage(aliennight.png);
+
+rowStart;{class:lightGreenText borderBottom}
+<p>A story-driven action/adventure game following Archie the security guard on an mysterious adventure trying to find his missing
+friend.<br>
+Follow weekly development logs on <a class="blueText" href="https://youtu.be/FAGHC5LVIlc">Youtube</a>.<br>
+<br><b>Release date:</b> TBC | <b>Platforms:</b> Windows 7/8/10, Linux, Mac
+
+</p>
+
 rowEnd;
+
 
 addContainer;
 subHeading(text:Repulser: Invasion of the Aspect,class:blueText mediumFont textShadow,id:repulser);
@@ -26,7 +40,10 @@ subHeading(text:Mr.Blocked,class:blueText mediumFont textShadow,id:blocked);
 addImage(mrblocked.gif);
 
 rowStart;{class:lightGreenText borderBottom}
-<p>Mr.Blocked is a puzzle game being developed using C# and Monogame.  Playable on Windows, Linux and Mac. While I squirrel away on the code, <a class="blueText" href="https://www.protodome.com">PROTODOME</a> draws the fab art and creates the levels. Click <a class="blueText" href="https://www.mrblocked.com">here</a> to view the game's website and find out more information. </p>
+<p>Mr.Blocked is a puzzle game being developed using C# and Monogame. 
+Playable on Windows, Linux and Mac. While I squirrel away on the code, <a class="blueText" href="https://www.protodome.com">PROTODOME</a> 
+draws the fab art and creates the levels.<br>
+<br><b>Release date:</b> On Hiatus | <b>Platforms:</b> Windows 7/8/10, Linux
 rowEnd;
 
 addContainer;
@@ -58,6 +75,5 @@ rowStart;{class:lightGreenText borderBottom}
  			 	</p>
 rowEnd;
 
-addScript(animate.js);
 importPartial(Partials/navbarMain.shbp);
 importPartial(Partials/footer.shbp);

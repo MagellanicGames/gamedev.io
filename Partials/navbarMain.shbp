@@ -1,6 +1,7 @@
 navBarStart(text:Magellanic Games,home:index.html);
  navDropdown(text:Projects);
- 	navLink(text:Repulser: Invasion of the Aspect,link:index.html#repulser);
+ 	  navLink(text:Alien Night,link:index.html#aliennight);
+ 	  navLink(text:Repulser: Invasion of the Aspect,link:index.html#repulser);
     navLink(text:Mr. Blocked,link:index.html#blocked);
     navLink(text:Zombie Apocalyp-tic-80,link:index.html#zombie);
     navLink(text:SpaceTrade Ascii Edition,link:index.html#spaceTrade);
