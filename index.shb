@@ -4,6 +4,11 @@ addContainer;
 padding;
 addImageCentered(magellanicgameslogo.png);
 rowStart;{class:borderBottom}
+<a class="navLink" href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw"><b class="blueText">Twitter</b></a> |
+<a class="navLink" href="https://www.youtube.com/channel/UCriN8sIki6zjkTlslplc09A"><b class="blueText">Youtube</b></a> | 
+<a class="navLink" href="https://www.reddit.com/r/magellanicgames/"><b class="blueText">Reddit</b></a> |
+<a class="navLink" href="https://github.com/MagellanicGames"><b class="blueText">github</b></a> |
+
 rowEnd;
 
 addContainer;

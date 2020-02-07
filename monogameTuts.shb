@@ -4,7 +4,12 @@ addContainer;
 padding;
 heading(text:Monogame for the Impatient Developer,class:blueText largeFont textShadow,id:blink);
 rowStart;{class:borderBottom lightGreenText}
+<a class="navLink" href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw"><b class="blueText">Twitter</b></a> |
+<a class="navLink" href="https://www.youtube.com/channel/UCriN8sIki6zjkTlslplc09A"><b class="blueText">Youtube</b></a> |
+<a class="navLink" href="https://www.reddit.com/r/magellanicgames/"><b class="blueText">Reddit</b></a> |
+<a class="navLink" href="https://github.com/MagellanicGames"><b class="blueText">github</b></a> |
 <p class="main">
+<br>
 This is a guide for those who want to learn Monogame but just want to know the bare essentials to get running.  The target audience are those who can already code or know C#.  Also if you are a game developer currently using something else and are simply wanting to get familiar with Monogame, this might be for you.<br><br>
 Whenever I look at a framework, engine or guide I like to see the results of what can be done using it.  Below are some examples of projects I have made.
 <br><a class="blueText" href="#started">Skip examples.</a>

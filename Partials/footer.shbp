@@ -1,8 +1,11 @@
 addContainer;
 padding;
 
-addFooter(email:magellanicDev@gmail.com,date:16/02/2019,copy:Magellanic Games LTD,class:lightGreenText);
+addFooter(email:magellanicDev@gmail.com,date:07/02/2020,copy:Magellanic Games LTD,class:lightGreenText);
 rowStart;
-<a class="navLink" href="https://www.facebook.com/MagellanicGames"><b class="blueText">Facebook</b> <span class="glyphicon glyphicon-thumbs-up"> </span></a>
+<a class="navLink" href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw"><b class="blueText">Twitter</b></a> |
+<a class="navLink" href="https://www.youtube.com/channel/UCriN8sIki6zjkTlslplc09A"><b class="blueText">Youtube</b></a> |
+<a class="navLink" href="https://www.reddit.com/r/magellanicgames/"><b class="blueText">Reddit</b></a> |
+<a class="navLink" href="https://github.com/MagellanicGames"><b class="blueText">github</b></a> |
 rowEnd;
 padding;
