@@ -24,9 +24,9 @@ Level up your skills, earn unique abilities and survive against waves of biologi
 rowEnd;
 addImage(splice_crisis.gif);
 rowStart;{class:lightGreenText borderBottom}
-Available to download <a class="blueText" href="https://magellanicgames.itch.io/splicecrisis-tg">here</a>. 
+<p>Available to download <a class="blueText" href="https://magellanicgames.itch.io/splicecrisis-tg">here</a>. 
 <br><b>Release date:</b> 11/06/20 | <b>Platforms:</b> Windows 7/8/10, Linux, Mac
-
+</p>
 rowEnd;
 
 
