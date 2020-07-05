@@ -12,6 +12,27 @@ rowStart;{class:borderBottom}
 rowEnd;
 
 addContainer;
+subHeading(text: ,class:blueText mediumFont textShadow,id:runeaugur);
+addImage(rune_augur_title.png);
+
+rowStart;{class:lightGreenText}
+<p>
+The kingdom of Lostacean is embroiled in war and desperate to turn the tide by any means possible.<br>
+Captain Rua comes to in the castle's lower quarter after delving too far into the Maester's plans.
+Everything is not as it seems.  Something has swept across the castle leaving death in it's wake.  
+Captain Rua must search, survive and escape the castle.  Maybe the dire situation of the Lostacean Kingdom can be salvaged with the capture of the Maester.
+<br><br>
+Embark on this short adventure.  Explore the castle, defend against the possessed and solve puzzles to survive the disaster.  Find clues and discover what transpired through written accounts.
+</p>
+rowEnd;
+addImage(rune_augur.gif);
+rowStart;{class:lightGreenText borderBottom}
+<p>Available to download <a class="blueText" href="https://magellanicgames.itch.io/rune-augur">here</a>. 
+<br><b>Release date:</b> 07/07/20 | <b>Platforms:</b> Windows 7/8/10, Linux, Mac
+</p>
+rowEnd;
+
+addContainer;
 subHeading(text: ,class:blueText mediumFont textShadow,id:splicecrisis);
 addImage(splice_crisis_title.png);
 
@@ -52,17 +73,6 @@ rowStart;{class:lightGreenText borderBottom}
  					<a class="blueText" href="https://tic.computer/">Tic-80</a> fantasy console.
  					Choose a weapon and blast your way through 10 levels.  Earn talents and collect upgrades from fallen foes. <b class="blueText">Play			
  					by clicking  <a href="https://magellanicgames.github.io/gamedev.io/zombies.html">here</a>.</b><p>
-rowEnd;
-
-addContainer;
-subHeading(text:Mr.Blocked,class:blueText mediumFont textShadow,id:blocked);
-addImage(mrblocked.gif);
-
-rowStart;{class:lightGreenText borderBottom}
-<p>Mr.Blocked is a puzzle game being developed using C# and Monogame. 
-Playable on Windows, Linux and Mac. While I squirrel away on the code, <a class="blueText" href="https://www.protodome.com">PROTODOME</a> 
-draws the fab art and creates the levels.<br>
-<br><b>Release date:</b> On Hiatus | <b>Platforms:</b> Windows 7/8/10, Linux
 rowEnd;
 
 importPartial(Partials/navbarMain.shbp);

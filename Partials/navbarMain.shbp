@@ -1,8 +1,8 @@
 navBarStart(text:Magellanic Games,home:index.html);
- navDropdown(text:Projects);
+ navDropdown(text:Games);
+    navLink(text:Rune Augur,link:index.html#runeaugur);
  	  navLink(text:Splice Crisis,link:index.html#splicecrisis);
  	  navLink(text:Repulser: Invasion of the Aspect,link:index.html#repulser);
-    navLink(text:Mr. Blocked,link:index.html#blocked);
     navLink(text:Zombie Apocalyp-tic-80,link:index.html#zombie);
   navDropdownEnd();
   navLink(text:Monogame Guides,link:monogameTuts.html);
