@@ -1,9 +1,9 @@
 navBarStart(text:Magellanic Games,home:index.html);
  navDropdown(text:Games);
+    navLink(text:Heir of Eminence,link:index.html#heir);
     navLink(text:Rune Augur,link:index.html#runeaugur);
  	  navLink(text:Splice Crisis,link:index.html#splicecrisis);
- 	  navLink(text:Repulser: Invasion of the Aspect,link:index.html#repulser);
-    navLink(text:Zombie Apocalyp-tic-80,link:index.html#zombie);
+ 	  navLink(text:Repulser: Invasion of the Aspect,link:index.html#repulser);    
   navDropdownEnd();
   navLink(text:Monogame Guides,link:monogameTuts.html);
   navLink(text:About,link:about.html);

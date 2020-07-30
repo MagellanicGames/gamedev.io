@@ -6,9 +6,28 @@ addImageCentered(magellanicgameslogo.png);
 rowStart;{class:borderBottom}
 <a class="navLink" href="https://twitter.com/MagellanicGames?ref_src=twsrc%5Etfw"><b class="blueText">Twitter</b></a> |
 <a class="navLink" href="https://www.youtube.com/channel/UCriN8sIki6zjkTlslplc09A"><b class="blueText">Youtube</b></a> | 
+<a class="navLink" href="https://magellanicgames.itch.io/"><b class="blueText">Itch</b></a> |
 <a class="navLink" href="https://www.reddit.com/r/magellanicgames/"><b class="blueText">Reddit</b></a> |
 <a class="navLink" href="https://github.com/MagellanicGames"><b class="blueText">github</b></a> |
 
+rowEnd;
+
+addContainer;
+subHeading(text: ,class:blueText mediumFont textShadow,id:heir);
+addImage(heir.png);
+
+rowStart;{class:lightGreenText}
+<p>
+In a land now now consumed by shadow, a soul is awoken with the task of cleansing the usurpers and reclaiming their power.
+<br><br>
+Delve through dungeons and caves slaying monsters and growing your power.  Find weapons and armour, then tailor your stats to your style of play.
+  Should you fail, simply try again....and then again.  If you still fail, drain the eminence of your foes until you overwhelm them
+</p>
+rowEnd;
+rowStart;{class:lightGreenText borderBottom}
+<p>Available to download <a class="blueText" href="https://magellanicgames.itch.io/heir-of-eminence">here</a>. 
+<br><b>Release date:</b> 30/07/20 | <b>Platforms:</b> Windows 7/8/10, Linux, Mac
+</p>
 rowEnd;
 
 addContainer;
