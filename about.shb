@@ -6,9 +6,9 @@ heading(text:About,class:blueText largeFont textShadow,id:);
 rowStart;{class:borderBottom lightGreenText}
 <p class="main">
 Hello and welcome to Magellanic Games, my name is Liam Charalambous (a.k.a Magellanic).
-I love making games and tools to make things easier.<br>
-My projects can viewed both here and on <a class="blueText" href="https://github.com/MagellanicGames">Github</a>.<br>
-I also occasionally post content on Twitter, so feel free to follow me there (link below).
+I love making games in the guise of years long gone.<br>
+My projects progress can followed on <a class="blueText" href="https://twitter.com/MagellanicGames">Twitter</a> and the games themselves downloaded 
+at <a class="blueText" href="https://magellanicgames.itch.io/">Itch.io</a>.<br>
 </p>
 <br>
 <h6 class="lightGreenText">

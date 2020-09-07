@@ -13,6 +13,30 @@ rowStart;{class:borderBottom}
 rowEnd;
 
 addContainer;
+subHeading(text: ,class:blueText mediumFont textShadow,id:office);
+addImage(office_title.png);
+
+rowStart;{class:lightGreenText}
+<p>
+Terrorists have invaded and taken hostages in the Emeraldalo Corporation's headquaters.  Agent Foldon is assigned to infiltrate the building,
+ dispatch the terrorists and rescue any surviving hostages.
+</p>
+
+rowEnd;
+addImage(office_point.gif);
+rowStart;{class:lightGreenText}
+<p>
+The game contains 6 levels of first-person arcade shooter action.  Navigate the building, finding secrets and working your way up through the building.
+Obtain 3 weapons, the pistol, sub-machine gun and shotgun to aid in your fight to the top of the building.</p>
+rowEnd;
+
+rowStart;{class:lightGreenText borderBottom}
+<p>Available to download <a class="blueText" href="https://magellanicgames.itch.io/office-point-rescue">here</a>. 
+<br><b>Release date:</b> 07/09/20 | <b>Platforms:</b> Windows 7/8/10, Linux, Mac
+</p>
+rowEnd;
+
+addContainer;
 subHeading(text: ,class:blueText mediumFont textShadow,id:heir);
 addImage(heir.png);
 
