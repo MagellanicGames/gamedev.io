@@ -13,6 +13,35 @@ rowStart;{class:borderBottom}
 rowEnd;
 
 addContainer;
+subHeading(text: ,class:blueText mediumFont textShadow,id:affliction);
+addImage(affliction_title.png);
+
+rowStart;{class:lightGreenText}
+<p>
+A tip off regarding illegal experiments leads to investigation of the Emeraldo Corporation's research sites.<br><br>
+
+Agent Red is assigned in verifying the claims and finds things are much worse than previously thought. 
+Her job is to gather as much intelligence as possible, rescue survivors and survive the monstrosities that lurk below.
+</p>
+
+rowEnd;
+addImage(affliction_large.gif);
+rowStart;{class:lightGreenText}
+<p>
+- 6 levels of first-person arcade shooter action.  Navigate the island complex, finding secrets and rescuing survivors.<br> 
+- Utilise 6 weapons to fight back foes - pistol, shotgun, double-barrel shotgun, double pistols, sub-machine gun and the mighty lightgun.<br>
+- 3 tuned difficulties.<br>
+- Save your progress - Return to the last level you reached with all your items, guns and ammo.  No need to play through in a single sitting.<br>
+</p>
+rowEnd;
+
+rowStart;{class:lightGreenText borderBottom}
+<p>Available to download <a class="blueText" href="https://magellanicgames.itch.io/affliction-rescue">here</a>. 
+<br><b>Release date:</b> 28/10/20 | <b>Platforms:</b> Windows 7/8/10, Linux
+</p>
+rowEnd;
+
+addContainer;
 subHeading(text: ,class:blueText mediumFont textShadow,id:office);
 addImage(office_title.png);
 

@@ -1,5 +1,6 @@
 navBarStart(text:Magellanic Games,home:index.html);
  navDropdown(text:Games);
+  navLink(text:Affliction Rescue,link:index.html#affliction);
     navLink(text:Office Point Rescue,link:index.html#office);
     navLink(text:Heir of Eminence,link:index.html#heir);
     navLink(text:Rune Augur,link:index.html#runeaugur);
